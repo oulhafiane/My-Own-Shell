@@ -1,0 +1,129 @@
+args.c:	new = (char*)malloc(sizeof(char) * ((ft_strlen(*str) -
+args.c:			return (-1);
+args.c:	if (check_vars(*line, env) == -1)
+args.c:		return (-1);
+args.c:			return (-1);
+builtin.c:	elem->cmd = (char*)malloc(sizeof(char) * (ft_strlen(cmd) + 1));
+builtin.c:	ft_strcpy(elem->cmd, cmd);
+builtin.c:	elem->f = f;
+builtin.c:	if (ft_strcmp(((t_builtin*)elem->content)->cmd, (char*)obj) == 0)
+builtin.c:		free(((t_builtin*)lst->content)->cmd);
+builtin.c:		free((t_builtin*)lst->content);
+builtin.c:		lst = lst->next;
+cursor.c:	if (direction == DIR_DEL || (direction == DIR_ADD && line->index >= 0))
+cursor.c:		tputs(tgoto(tgetstr("LE", NULL), 0, line->index + 1), 1, ft_putchar);
+cursor.c:	ft_printf(line->command);
+cursor.c:	line->index += step;
+cursor.c:	if (direction == DIR_RIGHT && line->index < line->top)
+cursor.c:		line->index++;
+cursor.c:	else if (direction == DIR_LEFT && line->index >= 0)
+cursor.c:		line->index--;
+cursor.c:	else if (direction == DIR_DEL && line->index >= 0)
+cursor.c:		add_del(DIR_DEL, line, 0, -1);
+edit_line.c:	line->top = -1;
+edit_line.c:	line->index = -1;
+edit_line.c:	line->command = (char*)ft_memalloc(sizeof(char) * BUF_S);
+edit_line.c:	if (line->index >= 0)
+edit_line.c:		ft_memmove(line->command + line->index,
+edit_line.c:				line->command + (line->index + 1),
+edit_line.c:				line->top - line->index);
+edit_line.c:	line->command[line->top--] = 0;
+edit_line.c:	ft_strncpy(tmp, line->command, line->index + 1);
+edit_line.c:	tmp[line->index + 1] = c;
+edit_line.c:	ft_strncpy(tmp + line->index + 2,
+edit_line.c:			line->command + line->index + 1, line->top - line->index);
+edit_line.c:	tmp[++line->top + 1] = '\0';
+edit_line.c:	free(line->command);
+edit_line.c:	line->command = tmp;
+env.c:		tmp = (t_env*)env->content;
+env.c:		if (ft_strcmp(tmp->name, "PATH") == 0)
+env.c:			return (ft_strsplit(tmp->value, ':'));
+env.c:		env = env->next;
+env.c:	elem->name = ft_strdup(name);
+env.c:	elem->value = ft_strdup(value);
+env.c:		tmp = (t_env*)lst->content;
+env.c:		env[i++] = ft_strjoin_pre(tmp->name, "=", tmp->value);
+env.c:		lst = lst->next;
+env.c:		free(((t_env*)lst->content)->name);
+env.c:		free(((t_env*)lst->content)->value);
+env.c:		free((t_env*)lst->content);
+env.c:		lst = lst->next;
+free.c:	env = (t_env*)elem->content;
+free.c:	free(env->name);
+free.c:	free(env->value);
+ft_cd.c:		env = (t_env*)lst->content;
+ft_cd.c:		if (ft_strcmp(env->name, "HOME") == 0)
+ft_cd.c:			return (env->value);
+ft_cd.c:		lst = lst->next;
+ft_cd.c:		env = (t_env*)cpy->content;
+ft_cd.c:		if (ft_strcmp(env->name, pwd) == 0)
+ft_cd.c:			free(env->value);
+ft_cd.c:			env->value = NULL;
+ft_cd.c:			env->value = getcwd(env->value, 0);
+ft_cd.c:		cpy = cpy->next;
+ft_cd.c:	ret = -1;
+ft_cd.c:	if (ret != -1)
+ft_cd.c:		return (-1);
+ft_cd.c:	else if (home != NULL && ft_strcmp(home, "-") == 0)
+ft_env.c:		env = (t_env*)lst->content;
+ft_env.c:		if (ft_strcmp(env->name, name) == 0)
+ft_env.c:			return (env->value);
+ft_env.c:		lst = lst->next;
+ft_env.c:		return (-1);
+ft_env.c:		return (-1);
+ft_env.c:		return (-1);
+ft_env.c:		return (-1);
+ft_env.c:	if (check_setenv_args(args, lst) == -1)
+ft_env.c:		env = (t_env*)cpy->content;
+ft_env.c:		if (ft_strcmp(env->name, *args) == 0)
+ft_env.c:			free(env->value);
+ft_env.c:			env->value = ft_strdup(args[1]);
+ft_env.c:		cpy = cpy->next;
+ft_env.c:	i = -1;
+ft_env.c:			if (ft_strcmp(((t_env*)cpy->content)->name, args[i]) == 0)
+ft_env.c:					*lst = cpy->next;
+ft_env.c:					previous->next = cpy->next;
+ft_env.c:			cpy = cpy->next;
+ft_env.c:		env = (t_env*)cpy->content;
+ft_env.c:		ft_printf("%s=%s\n", env->name, env->value);
+ft_env.c:		cpy = cpy->next;
+ft_pwd.c:		env = (t_env*)cpy->content;
+ft_pwd.c:		if (ft_strcmp(env->name, "PWD") == 0)
+ft_pwd.c:			ft_printf("%s\n", env->value);
+ft_pwd.c:		cpy = cpy->next;
+handlers.c:	free(line->command);
+handlers.c:	exit(-1);
+quotes.c:	if (stack->top > -1)
+quotes.c:		return (stack->quotes[stack->top]);
+quotes.c:	if (stack->top == stack->size - 1)
+quotes.c:		stack->quotes = (char*)ft_realloc(stack->quotes, stack->size * 2,
+quotes.c:				stack->size);
+quotes.c:		stack->size *= 2;
+quotes.c:	stack->quotes[++stack->top] = buf;
+quotes.c:	stack->top = -1;
+quotes.c:	stack->size = BUF_S;
+quotes.c:	stack->quotes = (char*)ft_memalloc(sizeof(char) * BUF_S);
+quotes.c:		stack->top--;
+quotes.c:	if (stack->top == -1)
+quotes.c:	return (-1);
+read_line.c:	ft_strdel(&line->command);
+read_line.c:	else if (buf == RIGHT_KEY && line->index < line->top)
+read_line.c:	else if (buf == LEFT_KEY && line->index >= 0)
+read_line.c:		if (line->index < line->top)
+read_line.c:			line->command[++(line->index)] = buf;
+read_line.c:			line->top++;
+read_line.c:				line->index = -1;
+read_line.c:				line->top = -1;
+read_line.c:	if (tcgetattr(0, &term) == -1)
+read_line.c:	if (init_termios(term) == -1)
+read_line.c:	if (init_terms() == -1)
+read_line.c:	if (tcsetattr(0, TCSANOW, &term) == -1)
+read_line.c:	return (line->command);
+shell.c:**	man fork -> for more info.
+shell.c:				((t_builtin*)bltin->content)->f(cmds + 1, env);
+terms.c:	if (tcgetattr(0, &term) == -1)
+terms.c:		return (-1);
+terms.c:	if (tcsetattr(0, TCSANOW, &term) == -1)
+terms.c:		return (-1);
+terms.c:		return (-1);
+terms.c:		return (-1);
