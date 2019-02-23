@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/23 19:00:34 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/02/23 20:51:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
-# define BUF_S 100
+# define BUF_S 10000
 
 typedef struct			s_builtin
 {
@@ -131,7 +131,7 @@ void					move_cursor(int direction, t_line *line);
 /*
 **	cursor2.c
 */
-int						get_current_row(void);
+int						get_current_row(int height);
 void					go_down_left(void);
 void					go_home(t_line *line, int col);
 void					go_end(t_line *line, int col);
@@ -161,7 +161,7 @@ int						is_piped(char **commands);
 int						full_path(char **cmd, char **path_env);
 
 //debug
-#define TERM_TTY "/dev/ttys003"
+#define TERM_TTY "/dev/ttys007"
 void	debug_msg(char *msg, ...);
 
 #endif

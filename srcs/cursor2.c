@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/22 22:52:46 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/23 19:13:50 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/02/23 20:53:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,34 @@ void	debug_msg(char *msg, ...)
 	close(fd);
 }
 
-int		get_current_row(void)
+int		get_current_row(int height)
 {
 	char	buf[8];
 	int		row;
+	int		step;
+	int		ok;
 
-	tputs("\E[6n", 1, ft_putchar);
-	read(0, buf, sizeof(buf));
-	row = buf[2] - '0';
-	if (ft_isdigit(buf[3]))
+	int cc = 0;
+	ok = 1;
+	while (ok)
 	{
-		row *= 10;
-		row += buf[3] - '0';
+		tputs("\E[6n", 1, ft_putchar);
+		ft_bzero(buf, sizeof(buf));
+		read(0, buf, sizeof(buf));
+		step = 0;
+		if (!ft_isdigit(buf[2]))
+			step = 1;
+		row = buf[2 + step] - '0';
+		if (ft_isdigit(buf[3 + step]))
+		{
+			row *= 10;
+			row += buf[3 + step] - '0';
+		}
+		if (row >= 0 && row <= height)
+			ok = 0;
+		//debug_msg("%d row now : %d --> %s\n", cc, row, buf+2);
+		cc++;
 	}
-//	debug_msg("row now : %d --> %s\n", row, buf+2);
 	return (row);
 }
 

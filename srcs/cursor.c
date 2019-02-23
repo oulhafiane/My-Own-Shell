@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/02/23 18:58:10 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/02/23 20:50:44 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,30 @@ static void	delete_current(t_line *line, int direction, int col)
 
 static void	add_current(t_line *line, char buf, int col)
 {
-	int		rows_still;
+	int		rows_to_end;
+	int		index;
+	int		height;
 
-	rows_still = 0;
+	rows_to_end = -1;
 	add_char(line, buf);
-//	debug_msg("top : %d <--> col : %d <--> modulo : %d\n",
-//			line->top + ft_strlen(MSG_PURE), col, (line->top + ft_strlen(MSG_PURE)) % col);
+//	debug_msg("top : %d <--> col : %d <--> modulo : %d\n ===> row_to_end : %d <===== count_rows : %d\n",
+//			line->top + ft_strlen(MSG_PURE), col, (line->top + ft_strlen(MSG_PURE)) % col, rows_to_end, tgetnum("li"));
+	if ((line->top + ft_strlen(MSG_PURE)) % col == col - 1)
+	{
+		tputs(tgetstr("sc", NULL), 1, ft_putchar);
+		index = line->index;
+		go_home(line, col);
+		line->index = index;
+		height = tgetnum("li");
+		rows_to_end = height - get_current_row(height) - (line->top / col);
+		tputs(tgetstr("rc", NULL), 1, ft_putchar);
+	}
 	tputs(tgetstr("sc", NULL), 1, ft_putchar);
 	ft_printf("%s", line->command + line->index + 1);
-	if ((line->top + ft_strlen(MSG_PURE)) % col == col - 1)
+	if (rows_to_end == 0 && (line->top + ft_strlen(MSG_PURE)) % col == col - 1)
 		go_down_left();
 	tputs(tgetstr("rc", NULL), 1, ft_putchar);
-	if ((line->top + ft_strlen(MSG_PURE)) % col == col - 1)
+	if (rows_to_end == 0 && (line->top + ft_strlen(MSG_PURE)) % col == col - 1)
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
 	go_right(line, col);
 }
