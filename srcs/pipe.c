@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/02/23 11:29:23 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/02/26 18:16:28 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	piping(char ***cmd, t_list **env, t_list *built_in, pid_t pid)
 				dup2(p[1], 1);
 				close(p[1]);
 			}
+			handle_redirection(&(*cmd));
 			close(p[0]);
 			execute_command(cmd, env, built_in);
 		}

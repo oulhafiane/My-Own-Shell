@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/23 11:16:26 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/02/28 16:12:17 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ static void	forkit(char *full_path, char **cmds, t_list **env)
 		signals();
 	}
 	else if (father == 0)
+	{
+		handle_redirection(&cmds);
 		execve(full_path, cmds, env_tab);
+	}
 }
 
 /*
@@ -148,12 +151,13 @@ static void	shell(t_list *lst, t_list **env, char *line)
 static void	run_shell(t_list *lst, t_list **env)
 {
 	t_list	**cmds;
+	char	copy[COPY_MAX];
 	char	**commands;
 	char	*line;
 	int		i;
 
 	cmds = init_cmds();
-	while(read_line(cmds) == 0)
+	while(read_line(cmds, copy) == 0)
 	{
 		//don't forget to join all list (lines) to one string.
 		line = ((t_line*)(*cmds)->content)->command;

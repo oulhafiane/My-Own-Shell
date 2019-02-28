@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   shell.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/23 20:51:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/02/28 18:42:14 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/stat.h>
 # include <sys/ioctl.h>
 # define BUF_S 10000
+# define COPY_MAX 1000
 
 typedef struct			s_builtin
 {
@@ -39,7 +40,8 @@ typedef struct			s_line
 	char				*command;
 	int					top;
 	int					index;
-	int					row;
+	int					copy_mode;
+	int					begin_copy;
 }						t_line;
 
 /*
@@ -98,7 +100,7 @@ void					ft_pwd(char **args, t_list **env);
 /*
 **	read_line.c
 */
-int						read_line(t_list **cmds);
+int						read_line(t_list **cmds, char *copy);
 
 /*
 **	cmds.c
@@ -137,6 +139,21 @@ void					go_home(t_line *line, int col);
 void					go_end(t_line *line, int col);
 
 /*
+**	cursor3.c
+*/
+void					go_up(t_line *line, int col);
+void					go_down(t_line *line, int col);
+void					next_word(t_line *line, int col, int direction);
+
+/*
+**	copy.c
+*/
+void					paste_text(t_line *line, char *copy);
+void					end_copy_mode(t_line *line, int keystrock, char *copy);
+void					begin_reset_mode(t_line *line);
+void					go_left_copy_mode(t_line *line, int col);
+
+/*
 **	handlers.c
 */
 void					child_handler(int sig);
@@ -160,8 +177,17 @@ int						is_piped(char **commands);
 */
 int						full_path(char **cmd, char **path_env);
 
+/*
+** redirection.c
+*/
+
+int						is_redirection(char *str, int *flag);
+void					redirect_in(char *filename);
+void					redirect_out(char *filename, int fd, int permission);
+void					handle_redirection(char ***cmds);
+
 //debug
-#define TERM_TTY "/dev/ttys007"
+#define TERM_TTY "/dev/ttys000"
 void	debug_msg(char *msg, ...);
 
 #endif

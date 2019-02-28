@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/22 22:52:46 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/23 20:53:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/02/25 20:26:51 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,9 @@ int		get_current_row(int height)
 			step = 1;
 		row = buf[2 + step] - '0';
 		if (ft_isdigit(buf[3 + step]))
-		{
-			row *= 10;
-			row += buf[3 + step] - '0';
-		}
+			row = (row * 10) + buf[3 + step] - '0';
 		if (row >= 0 && row <= height)
 			ok = 0;
-		//debug_msg("%d row now : %d --> %s\n", cc, row, buf+2);
 		cc++;
 	}
 	return (row);

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/23 19:00:45 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/02/27 15:08:43 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,15 @@
 # define DEL_KEY 2117294875
 # define HOME_KEY 4741915
 # define END_KEY 4610843
+# define EOT_KEY 4
 # define GO_UP 1096489755
 # define GO_DOWN 1113266971
-# define EOT_KEY 4
+# define GO_RIGHT 1130044187
+# define GO_LEFT 1146821403
+# define CTRL_SPACE 41154
+# define CTRL_X 8948194
+# define CTRL_C 42947
+# define CTRL_V 10127586
 # define NOTHING 0
 # define CURSORON 1
 # define SELECTED 2
@@ -37,5 +43,9 @@
 # define EACCESS 2
 # define EFILE 0
 # define SUCCESS 1
+# define STROUT 1
+# define STRERR 2
+# define STRAPP 4
+# define STRIN 8
 
 #endif

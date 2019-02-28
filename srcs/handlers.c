@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 13:10:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/02/23 18:39:33 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/02/25 22:09:29 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 static void	sig_handler(int sig)
 {
+	t_line	*line;
+
 	(void)sig;
+	init_terms();
+	line = (t_line*)(*get_t_cmds())->content;
+	go_end(line, tgetnum("co"));
 	ft_printf("\n");
 	ft_printf(MSG);
 	free_cmds();
