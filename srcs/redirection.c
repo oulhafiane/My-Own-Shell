@@ -6,41 +6,41 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/02/27 12:59:35 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/04 09:44:40 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 /*
- ** File name to redirect from
- */
+** File name to redirect from
+*/
 
 void	redirect_in(char *filename)
 {
 	int fd_in;
 
 	fd_in = open(filename, O_RDONLY);
-	if (fd_in != -1 && dup2(fd_in, 0) !=-1)
+	if (fd_in != -1 && dup2(fd_in, 0) != -1)
 		close(fd_in);
 }
 
 /*
- **	File name to redirect to
- */
+**	File name to redirect to
+*/
 
 void	redirect_out(char *filename, int fd, int permission)
 {
 	int fd_out;
 
-	fd_out = open(filename, permission | O_CREAT , 0644);
+	fd_out = open(filename, permission | O_CREAT, 0644);
 	if (fd_out != -1 && dup2(fd_out, fd) != -1)
 		close(fd_out);
 }
 
 /*
- ** Get the input from the strin
- */
+** Get the input from the strin
+*/
 
 void	redirect_in_app(char *del)
 {
@@ -55,16 +55,17 @@ void	redirect_in_app(char *del)
 	{
 		buf[ret] = '\0';
 		if (ft_strncmp(buf, del, ret - 1) == 0)
-			break;
+			break ;
 		ft_printf_fd(fd[1], "%s", buf);
 		ft_printf_fd(2, "> ");
 	}
 	close(fd[1]);
 	dup2(fd[0], 0);
 }
+
 /*
- ** Check if it is a redirection or not
- */
+** Check if it is a redirection or not
+*/
 
 int		is_redirection(char *str, int *flag)
 {
@@ -73,10 +74,11 @@ int		is_redirection(char *str, int *flag)
 	int		len;
 
 	is_quoted = (str != NULL && ((str[0] == '\"' || str[0] == '\''))) ? 1 : 0;
-	if (!is_quoted && (ptr = ft_strchr(str, '>'))) 
+	if (!is_quoted && (ptr = ft_strchr(str, '>')))
 	{
 		len = ft_strlen(str);
-		if ((len == 1 && ft_strcmp(str, ">") == 0) || (ptr > str && *(ptr - 1) == '1' && *(ptr + 1) == '\0'))
+		if ((len == 1 && ft_strcmp(str, ">") == 0) ||
+				(ptr > str && *(ptr - 1) == '1' && *(ptr + 1) == '\0'))
 			*flag |= STROUT;
 		else if (ptr > str && *(ptr - 1) == '2' && *(ptr + 1) == '\0')
 			*flag |= STRERR;
@@ -84,10 +86,12 @@ int		is_redirection(char *str, int *flag)
 			*flag |= STRAPP;
 		else if (ptr > str && *(ptr - 1) == '2' && *(ptr + 1) == '>')
 			*flag |= (STRERR | STRAPP);
-		else if ((len == 2 && str[0] == '&' && str[1] == '>') || 
-				(len == 4 && *(ptr - 1) == '2' && *(ptr + 1) == '&' && *(ptr + 2) == '1'))
+		else if ((len == 2 && str[0] == '&' && str[1] == '>') ||
+				(len == 4 && *(ptr - 1) == '2' && *(ptr + 1) == '&' &&
+				*(ptr + 2) == '1'))
 			*flag |= (STRERR | STROUT);
-		else if (len == 4 && *(ptr - 1) - '0' >= 0 && *(ptr - 1) - '0' <= 2 && *(ptr + 2) == '-')
+		else if (len == 4 && *(ptr - 1) - '0' >= 0 &&
+				*(ptr - 1) - '0' <= 2 && *(ptr + 2) == '-')
 			close(*(ptr - 1) - '0');
 	}
 	return (*flag);
@@ -107,6 +111,16 @@ int		is_redirection_in(char *str, int *flag)
 			*flag |= STRIN;
 		if (len == 2 && ft_strcmp(str, "<<") == 0)
 			*flag |= (STRIN | STRAPP);
+		if (len == 4)
+			if (*str >= '0' && *str <= '9' && *(str + 1) == '<' &&
+					*(str + 2) == '&' && *(str + 3) >= '0' && *(str + 3) <= '9')
+				if (dup2(*(str + 3) - 0, *str - '0') == -1)
+					*flag |= STRIN;
+		if (len == 2 && ft_strcmp(str, "<&") == 0)
+		{
+			ft_printf("21sh: file number expected\n");
+			exit(EXIT_FAILURE);
+		}
 	}
 	return (*flag);
 }
@@ -135,13 +149,12 @@ void	handle_flags(int flag, int flag_in, char *filename_in, char *filename)
 		redirect_in(filename_in);
 	else if (flag_in != 0 && (flag_in & ~(STRIN | STRAPP)) == 0)
 		redirect_in_app(filename_in);
-
 }
 
 /*
- ** Loop throughout the command list arguments \
- ** and see if there are any redirections or not
- */
+** Loop throughout the command list arguments \
+** and see if there are any redirections or not
+*/
 
 void	handle_redirection(char ***in)
 {
@@ -158,7 +171,8 @@ void	handle_redirection(char ***in)
 	filename_in = NULL;
 	while (*cmd)
 	{
-		if ((flag = is_redirection(*cmd, &flag)) >= 1 || (flag_in = is_redirection_in(*cmd, &flag_in)) >= 1)
+		if ((is_redirection(*cmd, &flag)) >= 1 ||
+				(is_redirection_in(*cmd, &flag_in)) >= 1)
 		{
 			if (*(cmd + 1) != NULL)
 			{
