@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/28 16:12:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/05 12:13:01 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,13 @@ static void	shell(t_list *lst, t_list **env, char *line)
 				exit(-1);
 			}
 			else if ((bltin = ft_lstsearch(lst, *cmds, &check_builtin)) != NULL)
+			{
+				int	stdout_copy = dup(1);
+				handle_redirection(&cmds);
 				((t_builtin*)bltin->content)->f(cmds + 1, env);
+				dup2(stdout_copy, 1);
+				close(stdout_copy);
+			}
 			else if (ft_strchr(*cmds, '/') != NULL)
 				exec_local(cmds, env);
 			else

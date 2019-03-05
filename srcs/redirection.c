@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/04 10:30:06 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/05 12:12:07 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int		is_redirection_in(char *str, int *flag)
 					*flag |= STRIN;
 		if (len == 2 && ft_strcmp(str, "<&") == 0)
 		{
-			ft_printf("21sh: file number expected\n");
+			ft_printf_fd(2, "21sh: file number expected\n");
 			exit(EXIT_FAILURE);
 		}
 	}
