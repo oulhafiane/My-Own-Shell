@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/28 18:42:14 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/05 12:52:30 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int					fix_line(char **line, t_list *env);
 void					free_builtin(t_list *lst);
 void					init_builtin(t_list **lst);
 int					check_builtin(t_list *elem, void *obj);
+void					run_builtin(t_list **env, char **cmds, t_list *bltin);
 
 /*
 **	env.c
