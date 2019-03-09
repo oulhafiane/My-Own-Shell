@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/05 12:52:30 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/09 14:41:07 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <sys/ioctl.h>
+# include <string.h>
 # define BUF_S 10000
 # define COPY_MAX 1000
 
@@ -186,6 +187,12 @@ int						is_redirection(char *str, int *flag);
 void					redirect_in(char *filename);
 void					redirect_out(char *filename, int fd, int permission);
 void					handle_redirection(char ***cmds);
+
+/*
+** quotes.c
+*/
+
+char					*init_quotes(char *line);
 
 //debug
 #define TERM_TTY "/dev/ttys000"

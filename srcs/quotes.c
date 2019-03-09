@@ -6,27 +6,103 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/02/20 10:38:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/09 14:41:40 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void		push_stack(char *flag_quote, char buf)
+int		is_special(char c)
 {
-	if (*flag_quote == NOTHING)
-		*flag_quote = buf;
-	else if (*flag_quote == buf)
-		*flag_quote = NOTHING;
+	char	*escapchar = " !@#$%^&*()-_+=,;.\"\n\t\v\f\r";
+	if (ft_strchr(escapchar, c))
+		return (1);
+	return (0);
 }
 
-int		check_stack(char flag_quote)
+char	*readline(char *line)
 {
-	if (flag_quote == NOTHING)
+	char	buf[1001];
+	int		ret;
+
+	while ((ret = read(0, buf, 100)) > 0)
+	{
+		buf[ret] = '\0';
+		line = ft_strjoin(line, buf);
+		if (ft_strchr(buf, '\n'))
+			break;
+	}
+	return (line);
+}
+
+/*
+** Remember to remove "getenv" function and replace it with local one
+** There is also strndup function
+*/
+
+// see comment
+int		handle_dollar(char **line, char **new_line, int *i)
+{
+	char *head;
+	char *env;
+	char *tmp;
+
+	if (is_special(*((*line) + 1)))
 		return (0);
-	if (flag_quote == SINGLE_QUOTE)
-		ft_printf("\nquotes> ");
-	else if (flag_quote == DOUBLE_QUOTE)
-		ft_printf("\ndouble quotes> ");
-	return (-1);
+	head = ++(*line);
+	while (*head && !is_special(*head))
+		head++;
+	tmp = strndup(*line, head - *line);
+	if ((env = getenv(tmp)) == NULL)
+		env = "";
+	free(tmp);
+	while (*env)
+		(*new_line)[(*i)++] = *env++;
+	*line = head;
+	return (1);
+}
+
+char	*handle_quotes(char *line, char *new_line)
+{
+	char	*start;
+	int		flag;
+	int		flag_d;
+	int		i;
+
+	flag = 0;
+	flag_d = 0;
+	i = 0;
+
+	start = line;
+	while (*line)
+	{
+		if (flag_d == 0 && *line == '\'')
+			flag ^= 1;
+		if (flag == 0 && *line == '\\')
+			ft_memmove(line, line + 1, ft_strlen(line));
+				if (flag == 0 && *line == '\"')
+					flag_d ^= 1;
+		if (flag_d && *line == '\\')
+			line++;
+		else if (flag_d && *line == '$' && handle_dollar(&line, &new_line, &i))
+			continue;
+		new_line[i++] = *line;
+		line++;
+	}
+	if (flag || flag_d)
+	{
+		write(1, "> ", 2);
+		line = readline(start);
+		return (handle_quotes(line, new_line));
+	}
+	new_line[i] = '\0';
+	return (new_line);
+}
+
+char	*init_quotes(char *line)
+{
+	char	new_line[1000];
+
+	ft_bzero(new_line, 1000);
+	return (line = handle_quotes(line, new_line));
 }
