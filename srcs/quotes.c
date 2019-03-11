@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/09 14:57:48 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/11 10:06:01 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ char	*readline(char *line)
 }
 
 /*
-** Remember to remove "getenv" function and replace it with local one
-** There is also strndup function
-*/
+ ** Remember to remove "getenv" function and replace it with local one
+ ** There is also strndup function
+ */
 
 // see comment
 int		handle_dollar(char **line, char **new_line, int *i)
@@ -52,7 +52,7 @@ int		handle_dollar(char **line, char **new_line, int *i)
 	head = ++(*line);
 	while (*head && !is_special(*head))
 		head++;
-	tmp = strndup(*line, head - *line);
+	tmp = ft_strndup(*line, head - *line);
 	if ((env = getenv(tmp)) == NULL)
 		env = "";
 	free(tmp);
@@ -62,7 +62,7 @@ int		handle_dollar(char **line, char **new_line, int *i)
 	return (1);
 }
 
-char	*handle_quotes(char *line, char *new_line)
+char	*handle_quotes(char *line, char *new_line, t_command_list *commands)
 {
 	char	*start;
 	int		flag;
@@ -77,11 +77,23 @@ char	*handle_quotes(char *line, char *new_line)
 	while (*line)
 	{
 		if (flag_d == 0 && *line == '\'')
-			flag ^= 1;
+		{
+			if((flag ^= 1) == 0)
+			{
+				push(commands, ft_strndup(new_line, i));
+				i = 0;
+			}
+		}
 		if (flag == 0 && *line == '\\')
 			ft_memmove(line, line + 1, ft_strlen(line));
 		if (flag == 0 && *line == '\"')
-			flag_d ^= 1;
+		{
+			if (flag_d ^= 1)
+			{
+				push(commands, ft_strndup(new_line, i));
+				i = 0;
+			}
+		}
 		if (flag_d == 0 && *line == '\\')
 			line++;
 		else if (flag_d && *line == '$' && handle_dollar(&line, &new_line, &i))
@@ -89,11 +101,13 @@ char	*handle_quotes(char *line, char *new_line)
 		new_line[i++] = *line;
 		line++;
 	}
+	push(commands, ft_strndup(new_line, i));
 	if (flag || flag_d)
 	{
 		write(1, "> ", 2);
 		line = readline(start);
-		return (handle_quotes(line, new_line));
+		free_list(commands);
+		return (handle_quotes(line, new_line, commands));
 	}
 	new_line[i] = '\0';
 	return (new_line);
@@ -101,9 +115,13 @@ char	*handle_quotes(char *line, char *new_line)
 
 char	*init_quotes(char *line)
 {
-	char	*new_line;
+	char			*new_line;
+	t_command_list	commands;
 
+	init_list(&commands);
 	new_line = ft_strnew(1000);
 	ft_bzero(new_line, 1000);
-	return (line = handle_quotes(line, new_line));
+	line = handle_quotes(line, new_line, &commands);
+	print_list(&commands);
+	return (line);
 }

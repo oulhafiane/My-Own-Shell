@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/09 14:41:07 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/11 10:02:47 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,19 @@ typedef struct			s_line
 	int					copy_mode;
 	int					begin_copy;
 }						t_line;
+
+typedef struct			s_command
+{
+	char				*argv;
+	struct s_command	*next;
+}						t_command;
+
+typedef struct			s_command_s
+{
+	struct s_command	*head;
+	struct s_command	*tail;
+	int					node_count;
+}						t_command_list;
 
 /*
 **	minishell.c
@@ -193,6 +206,16 @@ void					handle_redirection(char ***cmds);
 */
 
 char					*init_quotes(char *line);
+
+
+/*
+** lists.c
+*/
+
+void					init_list(t_command_list *ptr);
+void					push(t_command_list *ptr, char *command);
+void					free_list(t_command_list *ptr);
+void					print_list(t_command_list *ptr);
 
 //debug
 #define TERM_TTY "/dev/ttys000"
