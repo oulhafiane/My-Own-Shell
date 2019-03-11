@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/28 18:42:51 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/11 12:17:58 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	free_buffer(t_line *line)
 	init_terms();
 	go_home(line, tgetnum("co"));
 	tputs(tgetstr("ce", NULL), 1, ft_putchar);
-	free_cmds();
+	free_line();
 	exit_shell("exit\n");
 }
 
@@ -34,7 +34,7 @@ static void	print_newchar(t_line *line, int buf)
 		go_down_left();
 }
 
-static void	check_keys(int buf, t_line *line, char *copy)
+static void	check_keys(int buf, t_line *line)
 {
 	if (buf == EOT_KEY)
 		free_buffer(line);
@@ -46,9 +46,9 @@ static void	check_keys(int buf, t_line *line, char *copy)
 	else if (buf == CTRL_SPACE || buf == ESC_KEY)
 		begin_reset_mode(line);
 	else if (line->copy_mode == 1 && (buf == CTRL_X || buf == CTRL_C))
-		end_copy_mode(line, buf, copy);
+		end_copy_mode(line, buf);
 	else if (line->copy_mode == 0 && buf == CTRL_V)
-		paste_text(line, copy);
+		paste_text(line);
 	else if (ft_isprint(buf))
 	{
 		if (line->index >= line->top)
@@ -58,7 +58,7 @@ static void	check_keys(int buf, t_line *line, char *copy)
 	}
 }
 
-static void	get_line(t_list **cmds, char *copy)
+static void	get_line(t_line *line)
 {
 	int			buf;
 
@@ -67,14 +67,14 @@ static void	get_line(t_list **cmds, char *copy)
 	{
 		if (buf == RETURN_KEY)
 			break;
-		check_keys(buf, ((*cmds)->content), copy);
+		check_keys(buf, line);
 		buf = 0;
 	}
 	init_terms();
-	go_end((*cmds)->content, tgetnum("co"));
+	go_end(line, tgetnum("co"));
 }
 
-int			read_line(t_list **cmds, char *copy)
+int			read_line(t_line *line)
 {
 	struct termios	*term;
 
@@ -85,8 +85,9 @@ int			read_line(t_list **cmds, char *copy)
 		return (-1);
 	if (init_terms() == -1)
 		return (-1);
-	ft_printf(MSG);
-	get_line(cmds, copy);
+	if (line->print_msg)
+		ft_printf(MSG);
+	get_line(line);
 	ft_printf("\n");
 	if (tcsetattr(0, TCSANOW, term) == -1)
 		return (-1);

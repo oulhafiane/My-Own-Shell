@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/11 10:06:01 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/11 13:28:14 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,6 @@ int		is_special(char c)
 	if (ft_strchr(escapchar, c))
 		return (1);
 	return (0);
-}
-
-char	*readline(char *line)
-{
-	char	buf[1001];
-	int		ret;
-
-	while ((ret = read(0, buf, 100)) > 0)
-	{
-		buf[ret] = '\0';
-		line = ft_strjoin(line, buf);
-		if (ft_strchr(buf, '\n'))
-			break;
-	}
-	return (line);
 }
 
 /*
@@ -62,17 +47,22 @@ int		handle_dollar(char **line, char **new_line, int *i)
 	return (1);
 }
 
-char	*handle_quotes(char *line, char *new_line, t_command_list *commands)
+char	*handle_quotes(t_line *current_line, char *new_line, t_command_list *commands)
 {
-	char	*start;
 	int		flag;
 	int		flag_d;
 	int		i;
+	char	*line;
+	char	*start;
 
 	flag = 0;
 	flag_d = 0;
 	i = 0;
 
+	if (current_line->old_command != NULL)
+		line = ft_strjoin(current_line->old_command, current_line->command);
+	else
+		line = ft_strdup(current_line->command);
 	start = line;
 	while (*line)
 	{
@@ -80,40 +70,53 @@ char	*handle_quotes(char *line, char *new_line, t_command_list *commands)
 		{
 			if((flag ^= 1) == 0)
 			{
+				new_line[i++] = *line++;
 				push(commands, ft_strndup(new_line, i));
 				i = 0;
+				continue;
 			}
 		}
 		if (flag == 0 && *line == '\\')
 			ft_memmove(line, line + 1, ft_strlen(line));
 		if (flag == 0 && *line == '\"')
 		{
-			if (flag_d ^= 1)
+			if ((flag_d ^= 1) == 0)
 			{
+				new_line[i++] = *line++;
 				push(commands, ft_strndup(new_line, i));
 				i = 0;
+				continue;
 			}
 		}
 		if (flag_d == 0 && *line == '\\')
 			line++;
 		else if (flag_d && *line == '$' && handle_dollar(&line, &new_line, &i))
 			continue;
+		else if (!flag_d && !flag && ft_iswhitespace(*line))
+		{
+			push(commands, ft_strndup(new_line, i));
+			i = 0;
+		}
 		new_line[i++] = *line;
 		line++;
 	}
-	push(commands, ft_strndup(new_line, i));
+	free(start);
 	if (flag || flag_d)
 	{
 		write(1, "> ", 2);
-		line = readline(start);
+		current_line->old_command = ft_strjoin_pre_free(current_line->old_command, current_line->command, "\n");
+		free_line();
+		current_line = init_line();
+		current_line->print_msg = 0;
+		read_line(current_line);
 		free_list(commands);
-		return (handle_quotes(line, new_line, commands));
+		return (handle_quotes(current_line, new_line, commands));
 	}
 	new_line[i] = '\0';
 	return (new_line);
 }
 
-char	*init_quotes(char *line)
+char	*init_quotes(t_line *line)
 {
 	char			*new_line;
 	t_command_list	commands;
@@ -121,7 +124,7 @@ char	*init_quotes(char *line)
 	init_list(&commands);
 	new_line = ft_strnew(1000);
 	ft_bzero(new_line, 1000);
-	line = handle_quotes(line, new_line, &commands);
+	line->command = handle_quotes(line, new_line, &commands);
 	print_list(&commands);
-	return (line);
+	return (line->command);
 }

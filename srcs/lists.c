@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/11 10:07:33 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/11 13:26:45 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,3 +68,8 @@ void		print_list(t_command_list *ptr)
 		head = head->next;
 	}
 }
+/*
+char		**list_to_chars(t_command_list *ptr)
+{
+	
+}*/

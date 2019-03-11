@@ -1,54 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmds.c                                             :+:      :+:    :+:   */
+/*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/26 12:31:05 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/11 12:17:11 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-t_list	**get_t_cmds(void)
+t_line	*get_t_line(void)
 {
-	static t_list	*cmds = NULL;
+	static t_line	line;
 
-	return (&cmds);
+	return (&line);
 }
 
-void	free_cmds(void)
+void	free_line(void)
 {
-	t_list	**cmds;
-	//don't forget this
-	(void)cmds;
+	t_line	*line;
+
+	line = get_t_line();
+	free(line->command);
 }
 
-void	add_new_cmd(void)
+t_line	*init_line(void)
 {
-	t_list	**cmds;
-	t_line	*new;
+	t_line	*line;
 
-	cmds = get_t_cmds();
-	new = (t_line*)ft_memalloc(sizeof(t_line));
-	new->top = -1;
-	new->index = -1;
-	new->command = (char*)ft_memalloc(sizeof(char) * BUF_S);
-	ft_lstadd_end(cmds, ft_lstnew(new, 0));
-}
-
-t_list	**init_cmds(void)
-{
-	t_list	**cmds;
-
-	cmds = get_t_cmds();
-	if (*cmds != NULL)
-	{
-		free_cmds();
-		*cmds = NULL;
-	}
-	add_new_cmd();
-	return (cmds);
+	line = get_t_line();
+	line->top = -1;
+	line->index = -1;
+	line->print_msg = 1;
+	line->command = (char*)ft_memalloc(sizeof(char) * BUF_S);
+	return (line);
 }

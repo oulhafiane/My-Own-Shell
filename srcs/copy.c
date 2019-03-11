@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 18:34:39 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/28 18:57:37 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/11 12:04:35 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,36 +32,36 @@ static void	cut_text(t_line *line, int diff)
 	}
 }
 
-void		paste_text(t_line *line, char *copy)
+void		paste_text(t_line *line)
 {
 	int		i;
 	int		len;
 
-	len = ft_strlen(copy);
+	len = ft_strlen(line->copy);
 	i = -1;
 	while (++i < len)
-		move_cursor(copy[i], line);
+		move_cursor(line->copy[i], line);
 
 }
 
-void		end_copy_mode(t_line *line, int buf, char *copy)
+void		end_copy_mode(t_line *line, int buf)
 {
 	int		diff;
 
-	ft_bzero(copy, COPY_MAX);
+	ft_bzero(line->copy, COPY_MAX);
 	diff = (line->index + 2) - line->begin_copy;
 	if (diff >= 0 && diff >= COPY_MAX)
 		diff = COPY_MAX - 1;
 	else if (diff < 0 && diff * -1 >= COPY_MAX)
 		diff = (COPY_MAX - 1) * -1;
 	if (diff >= 0)
-		ft_strncpy(copy, line->command + line->begin_copy, diff);
+		ft_strncpy(line->copy, line->command + line->begin_copy, diff);
 	else
-		ft_strncpy(copy, line->command + line->index + 1, (diff - 3) * -1);
+		ft_strncpy(line->copy, line->command + line->index + 1, (diff - 3) * -1);
 	if (buf == CTRL_X)
 		cut_text(line, diff);
 	begin_reset_mode(line);
-	debug_msg("Ok Copied : %s\n", copy);
+	debug_msg("Ok Copied : %s\n", line->copy);
 }
 
 void		begin_reset_mode(t_line *line)

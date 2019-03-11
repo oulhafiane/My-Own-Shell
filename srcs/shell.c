@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/09 14:51:44 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/11 13:34:02 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ static void	shell(t_list *lst, t_list **env, char *line)
 	{
 		if (fix_line(&line, *env) == 1)
 		{
-			line = init_quotes(line);
+			line = init_quotes(get_t_line());
 			if((count = is_piped(cmds = ft_strsplit_ws(line))))
 			{
 				handle_piping(cmds, env, lst, count);
@@ -144,36 +144,33 @@ static void	shell(t_list *lst, t_list **env, char *line)
 				exec_cmd(cmds, get_path(*env), env);
 			ft_free_strtab(cmds);
 		}
-		free(line);
+		//free(line);
 	}
 }
 
 
 static void	run_shell(t_list *lst, t_list **env)
 {
-	t_list	**cmds;
-	char	copy[COPY_MAX];
+	t_line	*new_line;
 	char	**commands;
-	char	*line;
 	int		i;
 
-	cmds = init_cmds();
-	while(read_line(cmds, copy) == 0)
+	new_line = init_line();
+	new_line->old_command = NULL;
+	while(read_line(new_line) == 0)
 	{
-		//don't forget to join all list (lines) to one string.
-		line = ((t_line*)(*cmds)->content)->command;
 		i = -1;
-		commands = ft_strsplit(line, ';');
+		commands = ft_strsplit(new_line->command, ';');
 		while (commands[++i])
 			shell(lst, env, commands[i]);
-		free(line);
 		free(commands);	
-		free_cmds();
-		cmds = init_cmds();
+		free_line();
+		new_line = init_line();
+		free(new_line->old_command);
+		new_line->old_command = NULL;
 	}
-	free_cmds();
+	free_line();
 }
-
 
 /*
 **	The Main Function of Minishell

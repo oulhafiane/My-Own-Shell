@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin_rep.c                                   :+:      :+:    :+:   */
+/*   ft_strjoin_free.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 08:42:52 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/20 08:42:53 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/11 13:10:06 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ char	*ft_strjoin_rep(char *s1, char const *s2)
 	char	*tmp;
 
 	tmp = s1;
-	s1 = ft_strjoin(s1, s2);
+	if (s1 == NULL)
+		s1 = ft_strdup(s2);
+	else
+		s1 = ft_strjoin(s1, s2);
 	free(tmp);
 	return (s1);
 }

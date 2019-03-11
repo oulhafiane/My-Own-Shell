@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/11 10:02:47 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/11 12:55:18 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,13 @@ typedef struct			s_env
 typedef struct			s_line
 {
 	char				*command;
+	char				*old_command;
+	char				copy[COPY_MAX];
 	int					top;
 	int					index;
 	int					copy_mode;
 	int					begin_copy;
+	char				print_msg;
 }						t_line;
 
 typedef struct			s_command
@@ -115,15 +118,14 @@ void					ft_pwd(char **args, t_list **env);
 /*
 **	read_line.c
 */
-int						read_line(t_list **cmds, char *copy);
+int						read_line(t_line *line);
 
 /*
-**	cmds.c
+**	line.c
 */
-t_list					**get_t_cmds(void);
-void					free_cmds(void);
-void					add_new_cmd(void);
-t_list					**init_cmds(void);
+t_line					*get_t_line(void);
+void					free_line(void);
+t_line					*init_line(void);
 
 /*
 **	edit_line.c
@@ -163,8 +165,8 @@ void					next_word(t_line *line, int col, int direction);
 /*
 **	copy.c
 */
-void					paste_text(t_line *line, char *copy);
-void					end_copy_mode(t_line *line, int keystrock, char *copy);
+void					paste_text(t_line *line);
+void					end_copy_mode(t_line *line, int keystrock);
 void					begin_reset_mode(t_line *line);
 void					go_left_copy_mode(t_line *line, int col);
 
@@ -205,7 +207,7 @@ void					handle_redirection(char ***cmds);
 ** quotes.c
 */
 
-char					*init_quotes(char *line);
+char					*init_quotes(t_line *line);
 
 
 /*
@@ -218,7 +220,7 @@ void					free_list(t_command_list *ptr);
 void					print_list(t_command_list *ptr);
 
 //debug
-#define TERM_TTY "/dev/ttys000"
+#define TERM_TTY "/dev/ttys003"
 void	debug_msg(char *msg, ...);
 
 #endif
