@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/27 15:08:43 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/11 15:03:46 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define CURSORON 1
 # define SELECTED 2
 # define MSG_PURE "$> "
+# define MSG_QUOTE "> "
+# define GET_MSG(x) x == 1 ? MSG_PURE : MSG_QUOTE
 # define MSG "\033[32;1m" MSG_PURE "\033[0m"
 # define SINGLE_QUOTE 39
 # define DOUBLE_QUOTE 34

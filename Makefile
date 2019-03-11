@@ -39,7 +39,7 @@ clean:
 	@rm -rf $(OBJECT)
 	@make -C $(LIB)/libft clean
 
-fclean:clean
+fclean: clean
 	@rm -rf $(NAME)
 	@make -C $(LIB)/libft fclean
 

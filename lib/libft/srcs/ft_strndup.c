@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 08:32:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/11 09:23:18 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/11 15:57:34 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ char		*ft_strndup(const char *s1, size_t n)
 
 	string = NULL;
 	if (s1 && (len = ft_strlen(s1)))
-		if ((string = (char *)malloc(sizeof(char) * len + 1)) == NULL)
+	{
+		len = len > n ? n : len;
+		if ((string = (char *)ft_memalloc(sizeof(char) * len + 1)) == NULL)
 			return (NULL);
-	ft_strncat(string, (char *)s1, n);
+		ft_strncpy(string, (char *)s1, len);
+		string[len] = '\0';
+	}
 	return (string);
 }

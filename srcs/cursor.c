@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/02/28 16:56:57 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/11 15:05:39 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		go_left(t_line *line, int col)
 		go_left_copy_mode(line, col);
 	if (line->index < 0)
 		return ;
-	if ((line->index + ft_strlen(MSG_PURE)) % col == col - 1)
+	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
 	{
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
 		tputs(tgoto(tgetstr("ch", NULL), 0, col - 1), 1, ft_putchar);
@@ -40,7 +40,7 @@ void		go_right(t_line *line, int col)
 	if (line->copy_mode == 2 ||
 			(line->copy_mode == 1 && line->index > line->begin_copy))
 		tputs(tgetstr("me", NULL), 1, ft_putchar);
-	if ((line->index + ft_strlen(MSG_PURE) + 1) % col == 0)
+	if ((line->index + ft_strlen(GET_MSG(line->print_msg)) + 1) % col == 0)
 		go_down_left();
 }
 
@@ -67,7 +67,7 @@ static void	add_current(t_line *line, char buf, int col)
 
 	rows_to_end = -1;
 	add_char(line, buf);
-	if ((line->top + ft_strlen(MSG_PURE)) % col == col - 1)
+	if ((line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
 	{
 		tputs(tgetstr("sc", NULL), 1, ft_putchar);
 		index = line->index;
@@ -79,10 +79,10 @@ static void	add_current(t_line *line, char buf, int col)
 	}
 	tputs(tgetstr("sc", NULL), 1, ft_putchar);
 	ft_printf("%s", line->command + line->index + 1);
-	if (rows_to_end == 0 && (line->top + ft_strlen(MSG_PURE)) % col == col - 1)
+	if (rows_to_end == 0 && (line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
 		go_down_left();
 	tputs(tgetstr("rc", NULL), 1, ft_putchar);
-	if (rows_to_end == 0 && (line->top + ft_strlen(MSG_PURE)) % col == col - 1)
+	if (rows_to_end == 0 && (line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
 	go_right(line, col);
 }

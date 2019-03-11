@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 20:27:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/28 18:40:50 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/11 15:06:24 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	go_up(t_line *line, int col)
 {
 	int		i;
 
-	if (line->index - 1 > col - (long)ft_strlen(MSG_PURE))
+	if (line->index - 1 > col - (long)ft_strlen(GET_MSG(line->print_msg)))
 	{
 		if (line->copy_mode == 1)
 		{
@@ -30,7 +30,7 @@ void	go_up(t_line *line, int col)
 			line->index -= col;
 		}
 	}
-	else if (line->index + 1 >= col - (long)ft_strlen(MSG_PURE))
+	else if (line->index + 1 >= col - (long)ft_strlen(GET_MSG(line->print_msg)))
 		go_home(line, col);
 }
 
@@ -38,7 +38,7 @@ void	go_down(t_line *line, int col)
 {
 	int		i;
 
-	if (line->top + (long)ft_strlen(MSG_PURE) + 1 >= col)
+	if (line->top + (long)ft_strlen(GET_MSG(line->print_msg)) + 1 >= col)
 	{
 		i = -1;
 		while (++i < col && line->index < line->top)

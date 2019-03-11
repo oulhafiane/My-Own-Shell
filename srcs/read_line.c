@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/11 12:17:58 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/11 15:15:26 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	print_newchar(t_line *line, int buf)
 	line->top++;
 	init_terms();
 	col = tgetnum("co");
-	if ((line->index + ft_strlen(MSG_PURE)) % col == col - 1)
+	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
 		go_down_left();
 }
 

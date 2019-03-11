@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/11 13:28:14 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/11 15:45:06 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*handle_quotes(t_line *current_line, char *new_line, t_command_list *comman
 			line++;
 		else if (flag_d && *line == '$' && handle_dollar(&line, &new_line, &i))
 			continue;
-		else if (!flag_d && !flag && ft_iswhitespace(*line))
+		if (flag_d == 0 && flag == 0 && (*line == ' ' || *line == '\t'))
 		{
 			push(commands, ft_strndup(new_line, i));
 			i = 0;
