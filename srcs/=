@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/09 14:57:48 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/09 14:54:49 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ char	*readline(char *line)
 }
 
 /*
-** Remember to remove "getenv" function and replace it with local one
-** There is also strndup function
-*/
+ ** Remember to remove "getenv" function and replace it with local one
+ ** There is also strndup function
+ */
 
 // see comment
 int		handle_dollar(char **line, char **new_line, int *i)

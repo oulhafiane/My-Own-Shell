@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/05 12:53:30 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/09 14:51:44 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ static void	shell(t_list *lst, t_list **env, char *line)
 	{
 		if (fix_line(&line, *env) == 1)
 		{
+			line = init_quotes(line);
 			if((count = is_piped(cmds = ft_strsplit_ws(line))))
 			{
 				handle_piping(cmds, env, lst, count);
