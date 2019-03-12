@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/12 18:24:22 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/12 18:29:17 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,7 @@ void		print_list(t_command_list *ptr)
 	head = ptr->head;
 	while (head)
 	{
-		ft_printf("%s", head->argv);
-		if (head->next)
-			ft_printf("\n");
+		ft_printf("|%s|\n", head->argv);
 		head = head->next;
 	}
 }

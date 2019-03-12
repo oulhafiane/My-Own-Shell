@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/12 18:25:10 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/12 18:27:54 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ char		**init_quotes(t_line *line, t_command_list *commands)
 	new_line = ft_strnew(BUF_S);
 	ft_bzero(new_line, BUF_S);
 	handle_quote(line, new_line, commands, -1);
+	ft_printf("=============Rez Quotes=============\n");
 	print_list(commands);
+	ft_printf("=============Rez Quotes=============\n");
 	return (list_to_chars(commands));
 }
 
