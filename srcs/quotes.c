@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/12 11:41:20 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/12 15:06:24 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ char	*handle_quotes(t_line *current_line, char *new_line, t_command_list *comman
 		new_line[i++] = *line;
 		line++;
 	}
+	if (i > 1)
+		push(commands, ft_strndup(new_line, i));
 	if (flag || flag_d)
 	{
 		free(current_line->old_command);
