@@ -6,13 +6,13 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 08:42:52 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/11 13:10:06 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/12 10:37:31 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin_rep(char *s1, char const *s2)
+char	*ft_strjoin_free(char *s1, char const *s2)
 {
 	char	*tmp;
 

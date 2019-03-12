@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/11 15:15:26 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/12 10:52:21 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,11 @@ static void	get_line(t_line *line)
 	while (read(0, &buf, 4) >= 0)
 	{
 		if (buf == RETURN_KEY)
+		{
+			line->command[++(line->index)] = buf;
+			line->top++;
 			break;
+		}
 		check_keys(buf, line);
 		buf = 0;
 	}

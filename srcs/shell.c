@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/11 13:34:02 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/12 11:42:12 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,37 +114,33 @@ void		exec_cmd(char **cmds, char **path, t_list **env)
 **	free_strtab    : frees all strings (char**) returned by ft_strsplit_ws. 
 */
 
-static void	shell(t_list *lst, t_list **env, char *line)
+static void	shell(t_list *lst, t_list **env)
 {
-	char	**cmds;
-	t_list	*bltin;
-	int		count;
+	t_command_list	commands;
+	char			**cmds;
+	t_list			*bltin;
+	int				count;
 
-	if (line != NULL)
+	cmds = init_quotes(get_t_line(), &commands);
+	if (*cmds != NULL)
 	{
-		if (fix_line(&line, *env) == 1)
+		if((count = is_piped(cmds)))
 		{
-			line = init_quotes(get_t_line());
-			if((count = is_piped(cmds = ft_strsplit_ws(line))))
-			{
-				handle_piping(cmds, env, lst, count);
-				return ;
-			}
-			if (ft_strcmp(*cmds, "exit") == 0)
-			{
-				ft_free_strtab(cmds);
-				free(line);
-				exit(-1);
-			}
-			else if ((bltin = ft_lstsearch(lst, *cmds, &check_builtin)) != NULL)
-				run_builtin(env, cmds, bltin);
-			else if (ft_strchr(*cmds, '/') != NULL)
-				exec_local(cmds, env);
-			else
-				exec_cmd(cmds, get_path(*env), env);
-			ft_free_strtab(cmds);
+			handle_piping(cmds, env, lst, count);
+			return ;
 		}
-		//free(line);
+		if (ft_strcmp(*cmds, "exit") == 0)
+		{
+			ft_free_strtab(cmds);
+			exit(-1);
+		}
+		else if ((bltin = ft_lstsearch(lst, *cmds, &check_builtin)) != NULL)
+			run_builtin(env, cmds, bltin);
+		else if (ft_strchr(*cmds, '/') != NULL)
+			exec_local(cmds, env);
+		else
+			exec_cmd(cmds, get_path(*env), env);
+		ft_free_strtab(cmds);
 	}
 }
 
@@ -152,7 +148,6 @@ static void	shell(t_list *lst, t_list **env, char *line)
 static void	run_shell(t_list *lst, t_list **env)
 {
 	t_line	*new_line;
-	char	**commands;
 	int		i;
 
 	new_line = init_line();
@@ -160,10 +155,7 @@ static void	run_shell(t_list *lst, t_list **env)
 	while(read_line(new_line) == 0)
 	{
 		i = -1;
-		commands = ft_strsplit(new_line->command, ';');
-		while (commands[++i])
-			shell(lst, env, commands[i]);
-		free(commands);	
+		shell(lst, env);
 		free_line();
 		new_line = init_line();
 		free(new_line->old_command);

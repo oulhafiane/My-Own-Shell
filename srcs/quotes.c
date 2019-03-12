@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/11 16:24:37 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/12 11:41:20 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,31 +100,34 @@ char	*handle_quotes(t_line *current_line, char *new_line, t_command_list *comman
 		new_line[i++] = *line;
 		line++;
 	}
-	free(start);
 	if (flag || flag_d)
 	{
-		write(1, "> ", 2);
-		current_line->old_command = ft_strjoin_pre_free(current_line->old_command, current_line->command, "\n");
+		free(current_line->old_command);
+		current_line->old_command = start;
 		free_line();
 		current_line = init_line();
 		current_line->print_msg = 0;
+		ft_printf(GET_MSG(current_line->print_msg));
 		read_line(current_line);
 		free_list(commands);
 		return (handle_quotes(current_line, new_line, commands));
 	}
+	else
+		free(start);
 	new_line[i] = '\0';
 	return (new_line);
 }
 
-char	*init_quotes(t_line *line)
+char	**init_quotes(t_line *line, t_command_list *commands)
 {
 	char			*new_line;
-	t_command_list	commands;
 
-	init_list(&commands);
-	new_line = ft_strnew(1000);
-	ft_bzero(new_line, 1000);
-	line->command = handle_quotes(line, new_line, &commands);
-	print_list(&commands);
-	return (line->command);
+	init_list(commands);
+	new_line = ft_strnew(BUF_S);
+	ft_bzero(new_line, BUF_S);
+	handle_quotes(line, new_line, commands);
+	ft_printf("==========Rez Handle Quotes=======\n");
+	print_list(commands);
+	ft_printf("==========Rez Handle Quotes=======\n");
+	return (list_to_chars(commands));
 }

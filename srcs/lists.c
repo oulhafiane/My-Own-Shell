@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/11 15:17:38 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/12 11:39:20 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	push(t_command_list *listptr, char *command)
 {
 	t_command *new_node_ptr;
 
-	new_node_ptr = (t_command *)malloc(sizeof(t_command));
+	new_node_ptr = (t_command *)ft_memalloc(sizeof(t_command));
 	if (new_node_ptr == NULL)
 		return ;
 	new_node_ptr->argv = command;
@@ -68,8 +68,21 @@ void		print_list(t_command_list *ptr)
 		head = head->next;
 	}
 }
-/*
+
 char		**list_to_chars(t_command_list *ptr)
 {
-	
-}*/
+	char		**cmds;
+	t_command	*node;
+	int			i;
+
+	cmds = (char**)ft_memalloc(sizeof(char*) * (ptr->node_count + 1));
+	node = ptr->head;
+	i = 0;
+	while (node)
+	{
+		cmds[i++] = ft_trim(node->argv);
+		node = node->next;
+	}
+	cmds[i] = NULL;
+	return (cmds);
+}
