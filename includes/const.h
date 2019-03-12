@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/11 15:03:46 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/12 17:52:25 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@
 # define MSG "\033[32;1m" MSG_PURE "\033[0m"
 # define SINGLE_QUOTE 39
 # define DOUBLE_QUOTE 34
+# define DOLLAR_SIGN '$'
+# define BACK_SLASH '\\'
 # define ECMD 3
 # define EACCESS 2
 # define EFILE 0

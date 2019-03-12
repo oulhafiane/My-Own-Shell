@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/12 14:47:53 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/12 18:25:33 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,14 +206,20 @@ void					handle_redirection(char ***cmds);
 /*
 ** quotes.c
 */
+int						handle_dollar(char **line, char **new_line, int *i);
+char					**init_quotes(t_line *line, t_command_list *commands);
+void					is_match(char spliter, t_line *current, char *new_line, t_command_list *command, char *start);
+int						is_only_spaces(char *line);
 
-char					**init_quotes(t_line *linei, t_command_list *commands);
+/*
+** quotes2.c
+*/
+void					handle_quote(t_line *current, char *new_line, t_command_list *command, char flag);
 
 
 /*
 ** lists.c
 */
-
 void					init_list(t_command_list *ptr);
 void					push(t_command_list *ptr, char *command);
 void					free_list(t_command_list *ptr);
@@ -221,7 +227,7 @@ void					print_list(t_command_list *ptr);
 char					**list_to_chars(t_command_list *ptr);
 
 //debug
-#define TERM_TTY "/dev/ttys003"
+#define TERM_TTY "/dev/ttys002"
 void	debug_msg(char *msg, ...);
 
 #endif
