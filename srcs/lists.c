@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/12 18:29:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/12 18:57:24 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ char		**list_to_chars(t_command_list *ptr)
 	i = 0;
 	while (node)
 	{
-		cmds[i++] = ft_trim(node->argv);
+		//cmds[i++] = ft_trim(node->argv);
+		cmds[i++] = ft_strdup(node->argv);
 		node = node->next;
 	}
 	cmds[i] = NULL;

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/12 18:15:18 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/12 19:17:19 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ static char	check_quote(char **line, char *spliter)
 	int		flag;
 
 	flag = -1;
+	if (*spliter == 0 && ft_strncmp(*line, "\"\"", 2) == 0)
+	{
+		(*line) += 2;
+		return (0);
+	}
 	if ((*spliter != DOUBLE_QUOTE && **line == SINGLE_QUOTE) ||
 			(*spliter != SINGLE_QUOTE && **line == DOUBLE_QUOTE))
 	{
@@ -86,8 +91,10 @@ void		handle_quote(t_line *current, char *new_line, t_command_list *command, cha
 		else
 			handling_parsed_line(command, new_line, &i, flag);
 		new_line[i++] = *line++;
+		while (*line && spliter == 0 && ft_strchr(" \t", *line) && ft_strchr("\t ", *(line + 1)))
+			line++;
 		if (*line == '\0' && i > 1)
-			add_to_list(command, ft_strndup(new_line, i), &i);
+			add_to_list(command, ft_strndup(new_line, i - 1), &i);
 	}
 	is_match(spliter, current, new_line, command, start);
 }
