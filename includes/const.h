@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/12 17:52:25 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 17:37:20 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@
 # define STRERR 2
 # define STRAPP 4
 # define STRIN 8
+# define SPECIAL ";|"
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 15:37:18 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 17:49:25 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	add_to_list(t_command_list *command, char *line, int *index, int is_
 	free(line);
 }
 
-static char	check_quote(char **line, char *spliter)
+static char	check_quote(char **line, char *spliter, char *start)
 {
 	int		flag;
 
@@ -47,7 +47,7 @@ static char	check_quote(char **line, char *spliter)
 	}
 	if ((*spliter == 0 && **line == BACK_SLASH) || (**line == BACK_SLASH && *(*line + 1) == *spliter))
 		(*line)++;
-	if (*spliter == 0 && ft_strchr(" \t", **line))
+	if (*spliter == 0 && ((ft_strchr(" \t", **line) || ft_strchr(SPECIAL, **line)) || (*line > start && *(*line - 1) == '|')))
 		flag = 2;
 	return (flag);
 }
@@ -85,7 +85,7 @@ void		handle_quote(t_line *current, char *new_line, t_command_list *command, cha
 	start = line;
 	while (*line)
 	{
-		flag = check_quote(&line, &spliter);
+		flag = check_quote(&line, &spliter, start);
 		if (flag == 0)
 			continue;
 		else if (spliter != SINGLE_QUOTE && *line == DOLLAR_SIGN && handle_dollar(&line, &new_line, &i))
