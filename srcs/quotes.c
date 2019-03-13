@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 09:18:55 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 11:44:57 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			handle_dollar(char **line, char **new_line, int *i)
 	return (1);
 }
 
-char		**init_quotes(t_line *line, t_command_list *commands)
+t_command_list	*init_quotes(t_line *line, t_command_list *commands)
 {
 	char			*new_line;
 
@@ -49,10 +49,7 @@ char		**init_quotes(t_line *line, t_command_list *commands)
 	new_line = ft_strnew(BUF_S);
 	ft_bzero(new_line, BUF_S);
 	handle_quote(line, new_line, commands, -1);
-	ft_printf("=============Rez Quotes=============\n");
-	print_list(commands);
-	ft_printf("=============Rez Quotes=============\n");
-	return (list_to_chars(commands));
+	return (commands);
 }
 
 void		is_match(char spliter, t_line *current, char *new_line, t_command_list *command, char *start)
@@ -66,7 +63,7 @@ void		is_match(char spliter, t_line *current, char *new_line, t_command_list *co
 		current->print_msg = 0;
 		ft_printf(GET_MSG(current->print_msg));
 		read_line(current);
-		free_list(command);
+		free_list(command, 0);
 		handle_quote(current, new_line, command, -1);
 	}
 	else

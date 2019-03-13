@@ -6,20 +6,20 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 09:23:52 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 09:33:43 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	add_to_list(t_command_list *command, char *line, int *index)
+static void	add_to_list(t_command_list *command, char *line, int *index, int is_quoted)
 {
 	int i;
 
 	i = 0;
 	while (line[i] && (line[i] == '\t' || line[i] == ' '))
 		i++;
-	push(command, ft_strdup(&line[i]));
+	push(command, ft_strdup(&line[i]), is_quoted);
 	*index = 0;
 	free(line);
 }
@@ -57,7 +57,7 @@ static void	push_non_quoted(char *new_line, int *i, t_command_list *command)
 	char	*tmp;
 
 	if (is_only_spaces((tmp = ft_strndup(new_line, *i))))
-		add_to_list(command, tmp, i);
+		add_to_list(command, tmp, i, 0);
 	else
 		free(tmp);
 }
@@ -65,7 +65,7 @@ static void	push_non_quoted(char *new_line, int *i, t_command_list *command)
 static void	handling_parsed_line(t_command_list *command, char *new_line, int *i, char flag)
 {
 	if (flag == 1)
-		add_to_list(command, ft_strndup(new_line, *i), i);
+		add_to_list(command, ft_strndup(new_line, *i), i, 1);
 	else if (flag == 2)
 		push_non_quoted(new_line, i, command);
 }
@@ -95,7 +95,7 @@ void		handle_quote(t_line *current, char *new_line, t_command_list *command, cha
 		while (*line && spliter == 0 && ft_strchr(" \t", *line) && ft_strchr("\t ", *(line + 1)))
 			line++;
 		if (*line == '\0' && i > 1)
-			add_to_list(command, ft_strndup(new_line, i - 1), &i);
+			add_to_list(command, ft_strndup(new_line, i - 1), &i, 0);
 	}
 	is_match(spliter, current, new_line, command, start);
 }

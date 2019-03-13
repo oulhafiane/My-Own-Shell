@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/12 14:49:59 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/13 11:58:38 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,14 +114,13 @@ void		exec_cmd(char **cmds, char **path, t_list **env)
 **	free_strtab    : frees all strings (char**) returned by ft_strsplit_ws. 
 */
 
-static void	shell(t_list *lst, t_list **env)
+static void	shell(t_list *lst, t_list **env, t_command_list *command)
 {
-	t_command_list	commands;
 	char			**cmds;
 	t_list			*bltin;
 	int				count;
 
-	cmds = init_quotes(get_t_line(), &commands);
+	cmds = list_to_chars(command);
 	if (*cmds != NULL)
 	{
 		if((count = is_piped(cmds)))
@@ -147,15 +146,22 @@ static void	shell(t_list *lst, t_list **env)
 
 static void	run_shell(t_list *lst, t_list **env)
 {
-	t_line	*new_line;
-	int		i;
+	t_line			*new_line;
+	t_command_list	commands;
+	t_command_list	*cmds;
+	t_command_list	*cmd;
 
 	new_line = init_line();
 	new_line->old_command = NULL;
 	while(read_line(new_line) == 0)
 	{
-		i = -1;
-		shell(lst, env);
+		cmds = init_quotes(get_t_line(), &commands);
+		while (cmds->index)
+		{
+			cmd = separated_by_del(cmds, ';');
+			shell(lst, env, cmd);
+			free_list(cmd, 1);
+		}
 		free_line();
 		new_line = init_line();
 		free(new_line->old_command);

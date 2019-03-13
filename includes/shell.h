@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/12 18:25:33 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/13 11:53:10 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct			s_line
 typedef struct			s_command
 {
 	char				*argv;
+	int					is_quoted;
 	struct s_command	*next;
 }						t_command;
 
@@ -58,6 +59,7 @@ typedef struct			s_command_s
 {
 	struct s_command	*head;
 	struct s_command	*tail;
+	struct s_command	*index;
 	int					node_count;
 }						t_command_list;
 
@@ -207,7 +209,7 @@ void					handle_redirection(char ***cmds);
 ** quotes.c
 */
 int						handle_dollar(char **line, char **new_line, int *i);
-char					**init_quotes(t_line *line, t_command_list *commands);
+t_command_list			*init_quotes(t_line *line, t_command_list *commands);
 void					is_match(char spliter, t_line *current, char *new_line, t_command_list *command, char *start);
 int						is_only_spaces(char *line);
 
@@ -221,10 +223,11 @@ void					handle_quote(t_line *current, char *new_line, t_command_list *command, 
 ** lists.c
 */
 void					init_list(t_command_list *ptr);
-void					push(t_command_list *ptr, char *command);
-void					free_list(t_command_list *ptr);
+void					push(t_command_list *ptr, char *command, int is_quoted);
+void					free_list(t_command_list *ptr, int option);
 void					print_list(t_command_list *ptr);
 char					**list_to_chars(t_command_list *ptr);
+t_command_list			*separated_by_del(t_command_list *ptr, char del);
 
 //debug
 #define TERM_TTY "/dev/ttys002"
