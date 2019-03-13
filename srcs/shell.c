@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/13 11:58:38 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 14:38:06 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,9 @@ static void	shell(t_list *lst, t_list **env, t_command_list *command)
 	cmds = list_to_chars(command);
 	if (*cmds != NULL)
 	{
-		if((count = is_piped(cmds)))
+		if((count = is_piped(command)))
 		{
-			handle_piping(cmds, env, lst, count);
+			handle_piping(command, env, lst, count);
 			return ;
 		}
 		if (ft_strcmp(*cmds, "exit") == 0)

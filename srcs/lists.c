@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 11:59:53 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 15:51:36 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ void	free_list(t_command_list *ptr, int option)
 
 void		print_list(t_command_list *ptr)
 {
-	t_command *head;
+	t_command *current;
 
-	head = ptr->head;
-	while (head)
+	current = ptr->head;
+	while (current)
 	{
-		ft_printf("|%s|\n", head->argv);
-		head = head->next;
+		ft_printf("|%s|\n", current->argv);
+		current = current->next;
 	}
 }
 
@@ -91,8 +91,8 @@ char		**list_to_chars(t_command_list *ptr)
 	i = 0;
 	while (node)
 	{
-		//cmds[i++] = ft_trim(node->argv);
-		cmds[i++] = ft_strdup(node->argv);
+		if (node->is_quoted == 0 && is_only_spaces(node->argv))
+			cmds[i++] = ft_strdup(node->argv);
 		node = node->next;
 	}
 	cmds[i] = NULL;
@@ -104,7 +104,8 @@ t_command_list	*separated_by_del(t_command_list *ptr, char del)
 	t_command_list	*commands;
 	t_command		*current;
 
-	commands = (t_command_list *)malloc(sizeof(t_command_list));
+	if((commands = (t_command_list *)malloc(sizeof(t_command_list))) == NULL)
+		return (NULL);
 	init_list(commands);
 	current = ptr->head;
 	while (current && current != ptr->index)

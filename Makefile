@@ -10,7 +10,7 @@ SOURCE = $(wildcard $(SRC)/*.c)
 OBJECT = $(patsubst %, $(BIN)/%, $(notdir $(SOURCE:.c=.o)))
 
 CC = gcc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -g -Wall -Wextra -Werror
 CPP_FLAGS = -I$(INC) -I$(LIB)/libft/includes
 LIBFT = $(LIB)/libft/libft.a
 

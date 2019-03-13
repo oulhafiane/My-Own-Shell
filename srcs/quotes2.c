@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 09:33:43 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 15:37:18 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void		handle_quote(t_line *current, char *new_line, t_command_list *command, cha
 	char	spliter;
 	char	*start;
 	char	*line;
+	char	*tmp;
 
 	i = 0;
 	spliter = 0;
@@ -94,8 +95,8 @@ void		handle_quote(t_line *current, char *new_line, t_command_list *command, cha
 		new_line[i++] = *line++;
 		while (*line && spliter == 0 && ft_strchr(" \t", *line) && ft_strchr("\t ", *(line + 1)))
 			line++;
-		if (*line == '\0' && i > 1)
-			add_to_list(command, ft_strndup(new_line, i - 1), &i, 0);
+		if (*line == '\0' && i > 1 && is_only_spaces((tmp = ft_strndup(new_line, i - 1))))
+			add_to_list(command, tmp, &i, 0);
 	}
 	is_match(spliter, current, new_line, command, start);
 }

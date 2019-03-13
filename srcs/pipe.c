@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 12:03:47 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 15:41:56 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	execute_command(char ***cmd, t_list **env, t_list *built_in)
 	else if (error == EACCESS)
 		ft_printf_fd(2, "%s Permission denied\n", (*cmd)[0]);
 	else if (error == EFILE)
-		ft_printf_fd(2, "%s: command not found: %s\n", __FILE__, (*cmd)[0]);
+		ft_printf_fd(2, "21sh : command not found: %s\n", (*cmd)[0]);
 	exit(EXIT_FAILURE);
 }
 
@@ -65,55 +65,50 @@ void	piping(char ***cmd, t_list **env, t_list *built_in, pid_t pid)
 	}
 }
 
-int		is_piped(char **commands)
+int		is_piped(t_command_list *ptr)
 {
-	int i;
+	t_command	*current;
+	int			count;
 
-	i = 0;
-	while (*commands != NULL)
+	current = ptr->head;
+	count = 0;
+	while (current)
 	{
-		if (ft_strcmp(*commands, "|") == 0)
-			i++;
-		commands++;
+		if (!current->is_quoted && *current->argv == '|' && ft_strlen(current->argv) == 1)
+			count++;
+		current = current->next;
 	}
-	return (i);
+	return (count);
 }
 
-char	***get_commands(char **commands, int count)
+char		***get_command(t_command_list *command, int count)
 {
-	char	***cmd;
-	char	**head;
-	int		i;
+	char			***cmd;
+	int				i;
+	t_command_list	*tmp;
 
-	head = NULL;
 	i = 0;
 	if ((cmd = (char ***)malloc(sizeof(char **) * (count + 2))) == NULL)
 		return (NULL);
-	while (*commands != NULL)
+	while (command->index)
 	{
-		if (head == NULL)
-		{
-			head = commands;
-			cmd[i++] = commands;
-		}
-		if (ft_strcmp(*commands, "|") == 0)
-		{
-			*commands = NULL;
-			head = NULL;
-		}
-		commands++;
+		tmp = separated_by_del(command, '|');
+		if (tmp != NULL)
+			cmd[i++] = list_to_chars(tmp);
+		if (i <= count)
+			free_list(tmp, 1);
 	}
 	cmd[i] = NULL;
 	return (cmd);
 }
 
-void	handle_piping(char **commands, t_list **env, t_list *built_in, int count)
+void	handle_piping(t_command_list *command, t_list **env, t_list *built_in, int count)
 {
 	char	***cmds;
 	pid_t	pid;
 
 	pid = 0;
-	cmds = get_commands(commands, count);
+	cmds = get_command(command, count);
 	piping(cmds, env, built_in, pid);
 	free(cmds);
 }

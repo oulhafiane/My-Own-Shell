@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/13 11:53:10 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 15:38:11 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,8 +188,8 @@ int						check_stack(char flag_quote);
 /*
 **	pipe.c
 */
-void					handle_piping(char **command, t_list **env, t_list *built_in, int count);
-int						is_piped(char **commands);
+void					handle_piping(t_command_list *ptr, t_list **env, t_list *built_in, int count);
+int						is_piped(t_command_list *ptr);
 
 /*
 ** Path.c
@@ -230,7 +230,7 @@ char					**list_to_chars(t_command_list *ptr);
 t_command_list			*separated_by_del(t_command_list *ptr, char del);
 
 //debug
-#define TERM_TTY "/dev/ttys002"
+#define TERM_TTY "/dev/ttys003"
 void	debug_msg(char *msg, ...);
 
 #endif
