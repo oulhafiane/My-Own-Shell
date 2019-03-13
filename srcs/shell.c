@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/13 14:38:06 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 19:19:47 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,14 +120,15 @@ static void	shell(t_list *lst, t_list **env, t_command_list *command)
 	t_list			*bltin;
 	int				count;
 
-	cmds = list_to_chars(command);
-	if (*cmds != NULL)
+	if (command->head != NULL)
 	{
 		if((count = is_piped(command)))
 		{
 			handle_piping(command, env, lst, count);
 			return ;
 		}
+		if((cmds = list_to_chars(command)) == NULL)
+			return ;
 		if (ft_strcmp(*cmds, "exit") == 0)
 		{
 			ft_free_strtab(cmds);
@@ -160,7 +161,7 @@ static void	run_shell(t_list *lst, t_list **env)
 		{
 			cmd = separated_by_del(cmds, ';');
 			shell(lst, env, cmd);
-			free_list(cmd, 1);
+			//free_list(cmd, 0);
 		}
 		free_line();
 		new_line = init_line();

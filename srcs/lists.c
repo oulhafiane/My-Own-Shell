@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 15:51:36 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 19:19:33 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ void	free_list(t_command_list *ptr, int option)
 	{
 		tmp = head->next;
 		free(head->argv);
+		head->argv = NULL;
 		free(head);
+		head = NULL;
 		head = tmp;
 	}
 	if (option == 1)

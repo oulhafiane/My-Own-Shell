@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 15:41:56 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/13 19:19:42 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ char		***get_command(t_command_list *command, int count)
 		tmp = separated_by_del(command, '|');
 		if (tmp != NULL)
 			cmd[i++] = list_to_chars(tmp);
-		if (i <= count)
-			free_list(tmp, 1);
+		free_list(tmp, 1);
 	}
 	cmd[i] = NULL;
 	return (cmd);
