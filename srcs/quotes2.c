@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 18:56:45 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/14 14:29:07 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ static char	check_quote(char **line, char *spliter, char *start)
 	{
 		*spliter = *spliter == 0 ? **line : 0;
 		++(*line);
-		debug_msg("%s", *line);
 		if (*spliter == 0 && (ft_iswhitespace(**line) || **line == '\0' || **line == ';'))
 			flag = 1;
 		if (*spliter == 0 && (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE))
@@ -57,7 +56,8 @@ static void	push_non_quoted(char *new_line, int *i, t_command_list *command)
 {
 	char	*tmp;
 
-	if (is_only_spaces((tmp = ft_strndup(new_line, *i))))
+	tmp = ft_strndup(new_line, *i);
+	if (tmp && is_not_only_spaces(tmp))
 		add_to_list(command, tmp, i, 0);
 	else
 		free(tmp);
@@ -96,7 +96,7 @@ void		handle_quote(t_line *current, char *new_line, t_command_list *command, cha
 		new_line[i++] = *line++;
 		while (*line && spliter == 0 && ft_strchr(" \t", *line) && ft_strchr("\t ", *(line + 1)))
 			line++;
-		if (*line == '\0' && i > 1 && is_only_spaces((tmp = ft_strndup(new_line, i - 1))))
+		if (*line == '\0' && i > 1 && is_not_only_spaces((tmp = ft_strndup(new_line, i - 1))))
 			add_to_list(command, tmp, &i, 0);
 	}
 	is_match(spliter, current, new_line, command, start);

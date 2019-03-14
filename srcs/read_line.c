@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/12 10:52:21 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/14 18:20:41 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static void	print_newchar(t_line *line, int buf)
 
 static void	check_keys(int buf, t_line *line)
 {
+	char	*buf_c;
+
 	if (buf == EOT_KEY)
 		free_buffer(line);
 	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
@@ -56,11 +58,18 @@ static void	check_keys(int buf, t_line *line)
 		else
 			move_cursor(buf, line);
 	}
+	else
+	{
+		buf_c = (char*)&buf;
+		int i = -1;
+		while (++i < 4 && buf_c[i])
+			check_keys(buf_c[i], line);
+	}
 }
 
 static void	get_line(t_line *line)
 {
-	int			buf;
+	int		buf;
 
 	buf = 0;
 	while (read(0, &buf, 4) >= 0)

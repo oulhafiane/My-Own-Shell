@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 17:37:35 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/14 14:35:57 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void		is_match(char spliter, t_line *current, char *new_line, t_command_list *co
 		free(start);
 }
 
-int			is_only_spaces(char *line)
+int			is_not_only_spaces(char *line)
 {
 	while (*line)
 	{

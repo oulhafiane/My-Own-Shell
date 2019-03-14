@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/13 15:38:11 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/14 18:19:06 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ void					handle_redirection(char ***cmds);
 int						handle_dollar(char **line, char **new_line, int *i);
 t_command_list			*init_quotes(t_line *line, t_command_list *commands);
 void					is_match(char spliter, t_line *current, char *new_line, t_command_list *command, char *start);
-int						is_only_spaces(char *line);
+int						is_not_only_spaces(char *line);
 
 /*
 ** quotes2.c
@@ -230,7 +230,7 @@ char					**list_to_chars(t_command_list *ptr);
 t_command_list			*separated_by_del(t_command_list *ptr, char del);
 
 //debug
-#define TERM_TTY "/dev/ttys003"
+#define TERM_TTY "/dev/ttys005"
 void	debug_msg(char *msg, ...);
 
 #endif
