@@ -6,20 +6,11 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/14 18:20:41 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/14 19:22:32 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-static void	free_buffer(t_line *line)
-{
-	init_terms();
-	go_home(line, tgetnum("co"));
-	tputs(tgetstr("ce", NULL), 1, ft_putchar);
-	free_line();
-	exit_shell("exit\n");
-}
 
 static void	print_newchar(t_line *line, int buf)
 {
@@ -32,39 +23,6 @@ static void	print_newchar(t_line *line, int buf)
 	col = tgetnum("co");
 	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
 		go_down_left();
-}
-
-static void	check_keys(int buf, t_line *line)
-{
-	char	*buf_c;
-
-	if (buf == EOT_KEY)
-		free_buffer(line);
-	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
-			buf == DEL_KEY || buf == HOME_KEY || buf == END_KEY ||
-			buf == GO_UP || buf == GO_DOWN || buf == GO_RIGHT ||
-			buf == GO_LEFT)
-		move_cursor(buf, line);
-	else if (buf == CTRL_SPACE || buf == ESC_KEY)
-		begin_reset_mode(line);
-	else if (line->copy_mode == 1 && (buf == CTRL_X || buf == CTRL_C))
-		end_copy_mode(line, buf);
-	else if (line->copy_mode == 0 && buf == CTRL_V)
-		paste_text(line);
-	else if (ft_isprint(buf))
-	{
-		if (line->index >= line->top)
-			print_newchar(line, buf);
-		else
-			move_cursor(buf, line);
-	}
-	else
-	{
-		buf_c = (char*)&buf;
-		int i = -1;
-		while (++i < 4 && buf_c[i])
-			check_keys(buf_c[i], line);
-	}
 }
 
 static void	get_line(t_line *line)
@@ -85,6 +43,33 @@ static void	get_line(t_line *line)
 	}
 	init_terms();
 	go_end(line, tgetnum("co"));
+}
+
+void	check_keys(int buf, t_line *line)
+{
+	debug_msg("Haha %d\n", buf);
+	if (buf == EOT_KEY)
+		free_buffer(line);
+	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
+			buf == DEL_KEY || buf == HOME_KEY || buf == END_KEY ||
+			buf == GO_UP || buf == GO_DOWN || buf == GO_RIGHT ||
+			buf == GO_LEFT)
+		move_cursor(buf, line);
+	else if (buf == CTRL_SPACE || buf == ESC_KEY)
+		begin_reset_mode(line);
+	else if (line->copy_mode == 1 && (buf == CTRL_X || buf == CTRL_C))
+		end_copy_mode(line, buf);
+	else if (line->copy_mode == 0 && buf == CTRL_V)
+		paste_text(line);
+	else if (ft_isprint(buf) || ft_iswhitespace(buf))
+	{
+		if (line->index >= line->top)
+			print_newchar(line, buf);
+		else
+			move_cursor(buf, line);
+	}
+	else if (ft_isprint(*((char*)&buf)) || ft_iswhitespace(*((char*)&buf)))
+		paste_chars(&buf, line);
 }
 
 int			read_line(t_line *line)

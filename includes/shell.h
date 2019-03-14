@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/14 18:19:06 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/14 18:47:24 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void					ft_pwd(char **args, t_list **env);
 /*
 **	read_line.c
 */
+void					check_keys(int bif, t_line *line);
 int						read_line(t_line *line);
 
 /*
@@ -128,12 +129,14 @@ int						read_line(t_line *line);
 t_line					*get_t_line(void);
 void					free_line(void);
 t_line					*init_line(void);
+void					free_buffer(t_line *line);
 
 /*
 **	edit_line.c
 */
 void					delete_char(t_line *line);
 void					add_char(t_line *line, char c);
+void					paste_chars(int *buf, t_line *line);
 
 /*
 **	terms.c
