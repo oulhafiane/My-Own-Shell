@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/14 19:22:32 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/15 14:36:34 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,10 @@ void	check_keys(int buf, t_line *line)
 	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
 			buf == DEL_KEY || buf == HOME_KEY || buf == END_KEY ||
 			buf == GO_UP || buf == GO_DOWN || buf == GO_RIGHT ||
-			buf == GO_LEFT)
+			buf == GO_LEFT, buf == UP_KEY || buf == DOWN_KEY)
 		move_cursor(buf, line);
+	else if (buf == TAB_KEY)
+		handle_tab(line);
 	else if (buf == CTRL_SPACE || buf == ESC_KEY)
 		begin_reset_mode(line);
 	else if (line->copy_mode == 1 && (buf == CTRL_X || buf == CTRL_C))

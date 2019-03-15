@@ -6,12 +6,13 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/13 17:37:20 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/15 14:28:56 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONST_H
 # define CONST_H
+# define TAB_KEY 9
 # define UP_KEY 4283163
 # define DOWN_KEY 4348699
 # define RIGHT_KEY 4414235

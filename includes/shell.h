@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/14 18:47:24 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/15 14:34:20 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,8 +232,13 @@ void					print_list(t_command_list *ptr);
 char					**list_to_chars(t_command_list *ptr);
 t_command_list			*separated_by_del(t_command_list *ptr, char del);
 
+/*
+**	tab.c
+*/
+void					handle_tab(t_line *line);
+
 //debug
-#define TERM_TTY "/dev/ttys005"
+#define TERM_TTY "/dev/ttys004"
 void	debug_msg(char *msg, ...);
 
 #endif

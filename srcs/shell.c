@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/13 19:19:47 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/15 14:21:17 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,36 @@ void		exec_cmd(char **cmds, char **path, t_list **env)
 	ft_free_strtab(head_path);
 }
 
+static void	shell(t_list *blt, t_list **env, t_command_list *command)
+{
+	char			**cmds;
+	t_list			*bltin;
+	int				count;
+
+	if (command->head != NULL)
+	{
+		if((count = is_piped(command)))
+		{
+			handle_piping(command, env, blt, count);
+			return ;
+		}
+		if((cmds = list_to_chars(command)) == NULL)
+			return ;
+		if (ft_strcmp(*cmds, "exit") == 0)
+		{
+			ft_free_strtab(cmds);
+			exit(-1);
+		}
+		else if ((bltin = ft_lstsearch(blt, *cmds, &check_builtin)) != NULL)
+			run_builtin(env, cmds, bltin);
+		else if (ft_strchr(*cmds, '/') != NULL)
+			exec_local(cmds, env);
+		else
+			exec_cmd(cmds, get_path(*env), env);
+		ft_free_strtab(cmds);
+	}
+}
+
 /*
 **	The loop function of minishell
 **	it prints the minishell msg : My_Minishell $>
@@ -114,38 +144,7 @@ void		exec_cmd(char **cmds, char **path, t_list **env)
 **	free_strtab    : frees all strings (char**) returned by ft_strsplit_ws. 
 */
 
-static void	shell(t_list *lst, t_list **env, t_command_list *command)
-{
-	char			**cmds;
-	t_list			*bltin;
-	int				count;
-
-	if (command->head != NULL)
-	{
-		if((count = is_piped(command)))
-		{
-			handle_piping(command, env, lst, count);
-			return ;
-		}
-		if((cmds = list_to_chars(command)) == NULL)
-			return ;
-		if (ft_strcmp(*cmds, "exit") == 0)
-		{
-			ft_free_strtab(cmds);
-			exit(-1);
-		}
-		else if ((bltin = ft_lstsearch(lst, *cmds, &check_builtin)) != NULL)
-			run_builtin(env, cmds, bltin);
-		else if (ft_strchr(*cmds, '/') != NULL)
-			exec_local(cmds, env);
-		else
-			exec_cmd(cmds, get_path(*env), env);
-		ft_free_strtab(cmds);
-	}
-}
-
-
-static void	run_shell(t_list *lst, t_list **env)
+static void	run_shell(t_list *blt, t_list **env)
 {
 	t_line			*new_line;
 	t_command_list	commands;
@@ -160,7 +159,7 @@ static void	run_shell(t_list *lst, t_list **env)
 		while (cmds->index)
 		{
 			cmd = separated_by_del(cmds, ';');
-			shell(lst, env, cmd);
+			shell(blt, env, cmd);
 			//free_list(cmd, 0);
 		}
 		free_line();
@@ -181,18 +180,18 @@ static void	run_shell(t_list *lst, t_list **env)
 int		main(int ac, char **av, char **ev)
 {
 	t_list		*env;
-	t_list		*lst;
+	t_list		*blt;
 
 	(void)ac;
 	(void)av;
-	lst = NULL;
+	blt = NULL;
 	env = NULL;
 	init_env(&env, ev);
-	init_builtin(&lst);
+	init_builtin(&blt);
 	signals();
-	run_shell(lst, &env);
+	run_shell(blt, &env);
 	free_gnl(0);
 	free_env(env);
-	free_builtin(lst);
+	free_builtin(blt);
 	return (0);
 }
