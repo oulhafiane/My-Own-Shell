@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:45:59 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/16 18:12:27 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/16 18:55:01 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ void			jump_forward(t_command **command, t_duped *duped)
 {
 	*command = (*command)->next;
 	(*command)->is_skiped = 1;
-	duped->del = ft_strjoin((*command)->argv, "\n");
+	duped->del = ft_strdup((*command)->argv);
 }
 
 void			double_less(t_command **command, t_redirect *redirect)
@@ -241,7 +241,7 @@ void			double_less(t_command **command, t_redirect *redirect)
 		if (*((*command)->argv + 3) == '\0')
 			jump_forward(command, duped);
 		else
-			duped->del = ft_strjoin((*command)->argv + 3, "\n");
+			duped->del = ft_strdup((*command)->argv + 3);
 		duped->filed2 = -4;
 	}
 	else if (ft_strncmp((*command)->argv, DLESS, 2) == 0)
