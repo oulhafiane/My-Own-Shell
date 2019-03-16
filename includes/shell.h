@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/16 12:01:12 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/16 14:53:30 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ void					free_buffer(t_line *line);
 */
 void					delete_char(t_line *line);
 void					add_char(t_line *line, char c);
+void					print_char_inline(t_line *line, int buf);
 void					paste_chars(int *buf, t_line *line);
 
 /*
