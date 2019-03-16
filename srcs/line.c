@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/14 18:44:35 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/15 18:27:44 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_line	*init_line(void)
 	line->top = -1;
 	line->index = -1;
 	line->print_msg = 1;
+	//line->index_history = *line->tail_history;
 	line->command = (char*)ft_memalloc(sizeof(char) * BUF_S);
 	return (line);
 }

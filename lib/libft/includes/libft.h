@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 17:24:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/16 16:22:53 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/16 17:46:29 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct		s_list
 {
 	void			*content;
 	size_t			content_size;
+	struct s_list	*previous;
 	struct s_list	*next;
 }					t_list;
 

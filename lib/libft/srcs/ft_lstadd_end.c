@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 22:57:28 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/16 16:28:24 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/16 17:46:07 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,5 @@ void	ft_lstadd_end(t_list **alst, t_list *new)
 	while (cpy->next)
 		cpy = cpy->next;
 	cpy->next = new;
+	new->previous = cpy;
 }

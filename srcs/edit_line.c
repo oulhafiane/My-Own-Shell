@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/14 18:45:59 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/16 15:36:41 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,44 @@ void	add_char(t_line *line, char c)
 	line->command = tmp;
 }
 
+static void	print_newchar(t_line *line, int buf)
+{
+	int		col;
+
+	ft_putchar(buf);
+	line->command[++(line->index)] = buf;
+	line->top++;
+	init_terms();
+	col = tgetnum("co");
+	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
+		go_down_left();
+}
+
+void	print_char_inline(t_line *line, int buf)
+{
+	if (line->index >= line->top)
+		print_newchar(line, buf);
+	else
+		move_cursor(buf, line);
+}
+
 void	paste_chars(int *buf, t_line *line)
 {
 	char	*buf_c;
 	int		i;
+	int		j;
 
 	buf_c = (char*)buf;
 	i = -1;
-	while (++i < 4 && buf_c[i])
-		check_keys(buf_c[i], line);
+	while (++i < 4 && (ft_isprint(buf_c[i]) || ft_strchr(" \t\n", (buf_c[i])) != NULL))
+	{
+		if (buf_c[i] == '\t')
+		{
+			j = -1;
+			while (++j < 4)
+				move_cursor(' ', line);
+		}
+		else
+			move_cursor(buf_c[i], line);
+	}
 }
-

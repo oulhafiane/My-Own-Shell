@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/08 02:12:44 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/16 16:27:15 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/16 17:45:16 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_list	*ft_lstnew(void const *content, size_t content_size)
 	{
 		lst->content = NULL;
 		lst->content_size = 0;
+		lst->previous = NULL;
 		lst->next = NULL;
 		return (lst);
 	}
@@ -35,6 +36,7 @@ t_list	*ft_lstnew(void const *content, size_t content_size)
 		ft_memcpy(lst->content, content, content_size);
 	}
 	lst->content_size = content_size;
+	lst->previous = NULL;
 	lst->next = NULL;
 	return (lst);
 }

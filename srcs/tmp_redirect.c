@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:45:59 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/16 16:45:03 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/16 18:12:27 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,13 @@ void			simple_in_redirect(t_command **command, t_redirect *redirect)
 	}
 }
 
+void			jump_forward(t_command **command, t_duped *duped)
+{
+	*command = (*command)->next;
+	(*command)->is_skiped = 1;
+	duped->del = ft_strjoin((*command)->argv, "\n");
+}
+
 void			double_less(t_command **command, t_redirect *redirect)
 {
 	int		len;
@@ -228,21 +235,13 @@ void			double_less(t_command **command, t_redirect *redirect)
 	len = ft_strlen((*command)->argv);
 	duped->filed2 =  -2;
 	if (len == 2 || ft_strcmp((*command)->argv, DLESSDASH) == 0)
-	{
-		*command = (*command)->next;
-		(*command)->is_skiped = 1;
-		duped->del = ft_strdup((*command)->argv);
-	}
+		jump_forward(command, duped);	
 	else if (ft_strncmp((*command)->argv, "<<<", 3) == 0)
 	{
-		if ((*command)->argv + 4 == '\0')
-		{
-			*command = (*command)->next;
-			(*command)->is_skiped = 1;
-			duped->del = ft_strdup((*command)->argv + 4);
-		}
+		if (*((*command)->argv + 3) == '\0')
+			jump_forward(command, duped);
 		else
-			duped->del = ft_strdup((*command)->argv + 4);
+			duped->del = ft_strjoin((*command)->argv + 3, "\n");
 		duped->filed2 = -4;
 	}
 	else if (ft_strncmp((*command)->argv, DLESS, 2) == 0)

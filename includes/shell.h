@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/16 17:01:30 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/16 17:48:02 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ typedef struct			s_line
 	int					copy_mode;
 	int					begin_copy;
 	char				print_msg;
+	t_list				**tail_history;
+	t_list				*index_history;
+	char				*tmp_history;
 }						t_line;
 
 typedef struct			s_command
@@ -153,6 +156,7 @@ void					free_buffer(t_line *line);
 */
 void					delete_char(t_line *line);
 void					add_char(t_line *line, char c);
+void					print_char_inline(t_line *line, int buf);
 void					paste_chars(int *buf, t_line *line);
 
 /*
@@ -231,6 +235,7 @@ void					redirect_in_app(char *del, int option);
 */
 int						handle_dollar(char **line, char **new_line, int *i);
 t_command_list			*init_quotes(t_line *line, t_command_list *commands);
+char					*remove_new_line(char *line, int len);
 void					is_match(char spliter, t_line *current, char *new_line, t_command_list *command, char *start);
 int						is_not_only_spaces(char *line);
 
@@ -256,19 +261,25 @@ t_command_list			*separated_by_del(t_command_list *ptr, char del);
 void					handle_tab(t_line *line);
 
 /*
+**	history.c
+*/
+void					add_history(t_line *line, char *command);
+void					handle_history(int buf, t_line *line);
+
+/*
 ** tmp_redirect.c
 */
-
 t_redirect				*handle_redirect(t_command_list *command);
 
 /*
 ** t_redirect
 */
-
 void					free_duped(t_redirect *redirect);
 void					loop_dup(t_duped *current);
+
+
 //debug
-#define TERM_TTY "/dev/ttys006"
+#define TERM_TTY "/dev/ttys005"
 void	debug_msg(char *msg, ...);
 
 #endif
