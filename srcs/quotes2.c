@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/14 14:29:07 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/15 22:15:28 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ void		handle_quote(t_line *current, char *new_line, t_command_list *command, cha
 	line = current->old_command != NULL ?
 		ft_strjoin(current->old_command, current->command) : ft_strdup(current->command);
 	start = line;
+	free((*(current->tail_history))->content);
+	(*(current->tail_history))->content = remove_new_line(ft_strdup(start), ft_strlen(start));
 	while (*line)
 	{
 		flag = check_quote(&line, &spliter, start);

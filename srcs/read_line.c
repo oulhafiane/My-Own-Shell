@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/15 14:36:34 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/16 12:27:24 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ static void	get_line(t_line *line)
 	{
 		if (buf == RETURN_KEY)
 		{
+			move_cursor(END_KEY, line);
 			line->command[++(line->index)] = buf;
 			line->top++;
-			break;
+			break ;
 		}
 		check_keys(buf, line);
 		buf = 0;
@@ -45,16 +46,17 @@ static void	get_line(t_line *line)
 	go_end(line, tgetnum("co"));
 }
 
-void	check_keys(int buf, t_line *line)
+void		check_keys(int buf, t_line *line)
 {
-	debug_msg("Haha %d\n", buf);
+	debug_msg("haha : %d\n", buf);
 	if (buf == EOT_KEY)
 		free_buffer(line);
 	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
 			buf == DEL_KEY || buf == HOME_KEY || buf == END_KEY ||
-			buf == GO_UP || buf == GO_DOWN || buf == GO_RIGHT ||
-			buf == GO_LEFT, buf == UP_KEY || buf == DOWN_KEY)
+			buf == GO_UP || buf == GO_DOWN || buf == GO_RIGHT || buf == GO_LEFT)
 		move_cursor(buf, line);
+	else if (buf == UP_KEY || buf == DOWN_KEY)
+		handle_history(buf, line);
 	else if (buf == TAB_KEY)
 		handle_tab(line);
 	else if (buf == CTRL_SPACE || buf == ESC_KEY)
@@ -63,14 +65,14 @@ void	check_keys(int buf, t_line *line)
 		end_copy_mode(line, buf);
 	else if (line->copy_mode == 0 && buf == CTRL_V)
 		paste_text(line);
-	else if (ft_isprint(buf) || ft_iswhitespace(buf))
+	else if (ft_isprint(buf))
 	{
 		if (line->index >= line->top)
 			print_newchar(line, buf);
 		else
 			move_cursor(buf, line);
 	}
-	else if (ft_isprint(*((char*)&buf)) || ft_iswhitespace(*((char*)&buf)))
+	else if (ft_isprint(*((char*)&buf)))
 		paste_chars(&buf, line);
 }
 
@@ -87,6 +89,7 @@ int			read_line(t_line *line)
 		return (-1);
 	if (line->print_msg)
 		ft_printf(MSG);
+	line->tmp_history = NULL;
 	get_line(line);
 	ft_printf("\n");
 	if (tcsetattr(0, TCSANOW, term) == -1)

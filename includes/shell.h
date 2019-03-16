@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/15 14:34:20 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/16 12:01:12 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ typedef struct			s_line
 	int					copy_mode;
 	int					begin_copy;
 	char				print_msg;
+	t_list				**tail_history;
+	t_list				*index_history;
+	char				*tmp_history;
 }						t_line;
 
 typedef struct			s_command
@@ -213,6 +216,7 @@ void					handle_redirection(char ***cmds);
 */
 int						handle_dollar(char **line, char **new_line, int *i);
 t_command_list			*init_quotes(t_line *line, t_command_list *commands);
+char					*remove_new_line(char *line, int len);
 void					is_match(char spliter, t_line *current, char *new_line, t_command_list *command, char *start);
 int						is_not_only_spaces(char *line);
 
@@ -237,8 +241,14 @@ t_command_list			*separated_by_del(t_command_list *ptr, char del);
 */
 void					handle_tab(t_line *line);
 
+/*
+**	history.c
+*/
+void					add_history(t_line *line, char *command);
+void					handle_history(int buf, t_line *line);
+
 //debug
-#define TERM_TTY "/dev/ttys004"
+#define TERM_TTY "/dev/ttys005"
 void	debug_msg(char *msg, ...);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/15 14:21:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/16 12:27:23 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 **	free_strtab    : frees all strings (char**) returned by ft_strsplit_ws. 
 */
 
-static void	run_shell(t_list *blt, t_list **env)
+static void	run_shell(t_list *blt, t_list **env, t_list **history)
 {
 	t_line			*new_line;
 	t_command_list	commands;
@@ -152,10 +152,13 @@ static void	run_shell(t_list *blt, t_list **env)
 	t_command_list	*cmd;
 
 	new_line = init_line();
+	new_line->tail_history = history;
 	new_line->old_command = NULL;
 	while(read_line(new_line) == 0)
 	{
+		add_history(new_line, new_line->command);
 		cmds = init_quotes(get_t_line(), &commands);
+		free(new_line->tmp_history);
 		while (cmds->index)
 		{
 			cmd = separated_by_del(cmds, ';');
@@ -181,15 +184,17 @@ int		main(int ac, char **av, char **ev)
 {
 	t_list		*env;
 	t_list		*blt;
+	t_list		*history;
 
 	(void)ac;
 	(void)av;
 	blt = NULL;
 	env = NULL;
+	history = NULL;
 	init_env(&env, ev);
 	init_builtin(&blt);
 	signals();
-	run_shell(blt, &env);
+	run_shell(blt, &env, &history);
 	free_gnl(0);
 	free_env(env);
 	free_builtin(blt);
