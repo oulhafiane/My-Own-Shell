@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/13 19:19:42 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/16 17:34:02 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,14 @@ void	execute_command(char ***cmd, t_list **env, t_list *built_in)
 	exit(EXIT_FAILURE);
 }
 
-void	piping(char ***cmd, t_list **env, t_list *built_in, pid_t pid)
+void	piping(t_list *cmds, t_list **env, t_list *built_in, pid_t pid)
 {
-	int		p[2];
-	int		fd_in;
+	int			p[2];
+	int			fd_in;
+	t_redirect	*redirect;
 
 	fd_in = 0;
-	while (*cmd != NULL)
+	while (cmds != NULL)
 	{
 		pipe(p);
 		if ((pid = fork()) == -1)
@@ -46,21 +47,22 @@ void	piping(char ***cmd, t_list **env, t_list *built_in, pid_t pid)
 		else if (pid == 0)
 		{
 			dup2(fd_in, 0);
-			if (*(cmd + 1) != NULL)
+			if (cmds->next != NULL)
 			{
 				dup2(p[1], 1);
 				close(p[1]);
 			}
-			handle_redirection(&(*cmd));
+			redirect = (t_redirect *)cmds->content;
+			loop_dup(redirect->dup_head);
 			close(p[0]);
-			execute_command(cmd, env, built_in);
+			execute_command(&redirect->command, env, built_in);
 		}
 		else
 		{
 			wait(NULL);
 			close(p[1]);
 			fd_in = p[0];
-			cmd++;
+			cmds = cmds->next;
 		}
 	}
 }
@@ -81,12 +83,15 @@ int		is_piped(t_command_list *ptr)
 	return (count);
 }
 
-char		***get_command(t_command_list *command, int count)
+t_list		*get_command(t_command_list *command, int count)
 {
 	char			***cmd;
 	int				i;
 	t_command_list	*tmp;
+	t_list			*list_commands;
+	t_redirect		*redirect;
 
+	list_commands = NULL;
 	i = 0;
 	if ((cmd = (char ***)malloc(sizeof(char **) * (count + 2))) == NULL)
 		return (NULL);
@@ -94,20 +99,22 @@ char		***get_command(t_command_list *command, int count)
 	{
 		tmp = separated_by_del(command, '|');
 		if (tmp != NULL)
-			cmd[i++] = list_to_chars(tmp);
-		free_list(tmp, 1);
+		{
+			redirect = handle_redirect(tmp);
+			ft_lstadd_end(&list_commands, ft_lstnew(redirect, 0));
+			free_list(tmp, 1);
+		}
 	}
-	cmd[i] = NULL;
-	return (cmd);
+	return (list_commands);
 }
 
 void	handle_piping(t_command_list *command, t_list **env, t_list *built_in, int count)
 {
-	char	***cmds;
+	t_list	*list;
 	pid_t	pid;
 
 	pid = 0;
-	cmds = get_command(command, count);
-	piping(cmds, env, built_in, pid);
-	free(cmds);
+	list = get_command(command, count);
+	piping(list, env, built_in, pid);
+	//free(cmds);
 }

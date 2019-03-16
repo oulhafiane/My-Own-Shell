@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/14 14:28:00 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/16 17:40:40 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	push(t_command_list *listptr, char *command, int is_quoted)
 		return ;
 	new_node_ptr->argv = command;
 	new_node_ptr->is_quoted = is_quoted;
+	new_node_ptr->is_skiped = 0;
 	new_node_ptr->next = NULL;
 	if (listptr->node_count == 0)
 	{
@@ -58,7 +59,7 @@ void	free_list(t_command_list *ptr, int option)
 	while (head)
 	{
 		tmp = head->next;
-		free(head->argv);
+		//free(head->argv);
 		head->argv = NULL;
 		free(head);
 		head = NULL;
@@ -77,7 +78,7 @@ void		print_list(t_command_list *ptr)
 	current = ptr->head;
 	while (current)
 	{
-		ft_printf("|%s|\n", current->argv);
+		ft_printf_fd(2, "|%s|\n", current->argv);
 		current = current->next;
 	}
 }
@@ -93,7 +94,7 @@ char		**list_to_chars(t_command_list *ptr)
 	i = 0;
 	while (node)
 	{
-		if (node->argv && is_not_only_spaces(node->argv))
+		if (node->argv && is_not_only_spaces(node->argv) && node->is_skiped == 0)
 			cmds[i++] = ft_strdup(node->argv);
 		node = node->next;
 	}

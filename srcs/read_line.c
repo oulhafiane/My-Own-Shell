@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/15 14:36:34 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/15 20:33:52 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,12 @@ static void	get_line(t_line *line)
 
 void	check_keys(int buf, t_line *line)
 {
-	debug_msg("Haha %d\n", buf);
 	if (buf == EOT_KEY)
 		free_buffer(line);
 	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
 			buf == DEL_KEY || buf == HOME_KEY || buf == END_KEY ||
 			buf == GO_UP || buf == GO_DOWN || buf == GO_RIGHT ||
-			buf == GO_LEFT, buf == UP_KEY || buf == DOWN_KEY)
+			buf == GO_LEFT || buf == UP_KEY || buf == DOWN_KEY)
 		move_cursor(buf, line);
 	else if (buf == TAB_KEY)
 		handle_tab(line);

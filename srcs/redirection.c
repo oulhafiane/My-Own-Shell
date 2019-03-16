@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/05 12:12:07 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/16 14:38:54 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	redirect_out(char *filename, int fd, int permission)
 ** Get the input from the strin
 */
 
-void	redirect_in_app(char *del)
+void	redirect_in_app(char *del, int option)
 {
 	int		fd[2];
 	int		ret;
@@ -50,15 +50,21 @@ void	redirect_in_app(char *del)
 
 	if (pipe(fd) < 0)
 		exit(EXIT_FAILURE);
-	ft_printf_fd(2, "> ");
-	while ((ret = read(0, buf, BUF_S)) > 0)
-	{
-		buf[ret] = '\0';
-		if (ft_strncmp(buf, del, ret - 1) == 0)
-			break ;
-		ft_printf_fd(fd[1], "%s", buf);
+	if (option == 0)
 		ft_printf_fd(2, "> ");
+	if (option == 0)
+	{
+		while ((ret = read(0, buf, BUF_S)) > 0)
+		{
+			buf[ret] = '\0';
+			if (ft_strncmp(buf, del, ret - 1) == 0)
+				break ;
+			ft_printf_fd(fd[1], "%s", buf);
+			ft_printf_fd(2, "> ");
+		}
 	}
+	else if (option == 1)
+		ft_printf("%s", del);
 	close(fd[1]);
 	dup2(fd[0], 0);
 }
@@ -148,7 +154,7 @@ void	handle_flags(int flag, int flag_in, char *filename_in, char *filename)
 	if (flag_in != 0 && (flag_in & ~STRIN) == 0)
 		redirect_in(filename_in);
 	else if (flag_in != 0 && (flag_in & ~(STRIN | STRAPP)) == 0)
-		redirect_in_app(filename_in);
+		redirect_in_app(filename_in, 0);
 }
 
 /*

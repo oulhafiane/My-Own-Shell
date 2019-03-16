@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/05 12:53:05 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/15 16:53:56 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void		init_builtin(t_list **lst)
 	add_builtin(lst, "echo", &ft_echo);
 	add_builtin(lst, "cd", &ft_cd);
 	add_builtin(lst, "env", &ft_env);
-	add_builtin(lst, "pwd", &ft_pwd);
+	//add_builtin(lst, "pwd", &ft_pwd);
 	add_builtin(lst, "setenv", &ft_setenv);
 	add_builtin(lst, "unsetenv", &ft_unsetenv);
 }

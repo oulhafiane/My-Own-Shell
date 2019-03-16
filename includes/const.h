@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/15 14:28:56 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/16 14:56:18 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,17 @@
 # define STRAPP 4
 # define STRIN 8
 # define SPECIAL ";|"
+# define OUTPUT_REDI '>'
+# define INPUT_REDI '<'
+# define DLESS "<<"
+# define DGREAT ">>"
+# define LESSAND "<&"
+# define GREATAND ">&"
+# define GREATAND_R "&>"
+# define LESSGREAT "<>"
+# define DLESSDASH "<<-"
+# define AMPERSAND '&'
+# define WRITE_END 1
+# define READ_END 0
 
 #endif

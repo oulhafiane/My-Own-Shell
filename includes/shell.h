@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/15 14:34:20 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/16 17:01:30 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct			s_command
 {
 	char				*argv;
 	int					is_quoted;
+	int					is_skiped;
 	struct s_command	*next;
 }						t_command;
 
@@ -63,10 +64,26 @@ typedef struct			s_command_s
 	int					node_count;
 }						t_command_list;
 
+
+typedef struct			s_duped
+{
+		int					filed1;
+		int					filed2;
+		char				*del;
+		struct s_duped		*next;
+}						t_duped;
+
+typedef struct			s_redirect
+{
+		char				**command;
+		struct s_duped		*dup_head;
+		struct s_duped		*dup_tail;
+}						t_redirect;
+
 /*
 **	minishell.c
 */
-void					exec_cmd(char **cmds, char **path, t_list **env);
+void					exec_cmd(t_command_list *command, char **path, t_list **env);
 
 /*
 **	args.c
@@ -207,6 +224,7 @@ int						is_redirection(char *str, int *flag);
 void					redirect_in(char *filename);
 void					redirect_out(char *filename, int fd, int permission);
 void					handle_redirection(char ***cmds);
+void					redirect_in_app(char *del, int option);
 
 /*
 ** quotes.c
@@ -237,8 +255,20 @@ t_command_list			*separated_by_del(t_command_list *ptr, char del);
 */
 void					handle_tab(t_line *line);
 
+/*
+** tmp_redirect.c
+*/
+
+t_redirect				*handle_redirect(t_command_list *command);
+
+/*
+** t_redirect
+*/
+
+void					free_duped(t_redirect *redirect);
+void					loop_dup(t_duped *current);
 //debug
-#define TERM_TTY "/dev/ttys004"
+#define TERM_TTY "/dev/ttys006"
 void	debug_msg(char *msg, ...);
 
 #endif

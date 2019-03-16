@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/15 14:21:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/16 17:37:31 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,32 @@
 **	the parent waits the child to finish
 */
 
-static void	forkit(char *full_path, char **cmds, t_list **env)
+static void	forkit(char *full_path, char **cmds, t_list **env, t_command_list *command)
 {
-	int		status;
-	pid_t	father;
-	char	**env_tab;
+	int			status;
+	pid_t		father;
+	char		**env_tab;
+	t_duped		*current;
+	t_redirect	*redirect;
 
+	(void)cmds;
 	env_tab = env_to_tab(*env);
 	signal(SIGINT, child_handler);
+	redirect = handle_redirect(command);
+	current = redirect->dup_head;
 	father = fork();
 	if (father > 0)
 	{
 		wait(&status);
 		ft_free_strtab(env_tab);
 		signals();
+		free_duped(redirect);
 	}
 	else if (father == 0)
 	{
-		handle_redirection(&cmds);
-		execve(full_path, cmds, env_tab);
+		loop_dup(current);
+		execve(full_path, redirect->command, env_tab);
+		// Free t_redirect && t_duped
 	}
 }
 
@@ -51,12 +58,12 @@ static void	forkit(char *full_path, char **cmds, t_list **env)
 **	otherwise, it prints an error msg.
 */
 
-static void	exec_local(char **cmds, t_list **env)
+static void	exec_local(char **cmds, t_list **env, t_command_list *command)
 {
 	if (access(*cmds, F_OK) == 0)
 	{
 		if (access(*cmds, X_OK) == 0)
-			forkit(*cmds, cmds, env);
+			forkit(*cmds, cmds, env, command);
 		else
 			ft_printf_fd(2, "%s: Permission denied.\n", *cmds);
 	}
@@ -71,14 +78,17 @@ static void	exec_local(char **cmds, t_list **env)
 **	otherwise, it prints an error msg.
 */
 
-void		exec_cmd(char **cmds, char **path, t_list **env)
+void		exec_cmd(t_command_list *command, char **path, t_list **env)
 {
 	char	*full_path;
 	char	*error;
 	char	**head_path;
+	char	**cmds;
 
 	error = NULL;
 	head_path = path;
+	if((cmds = list_to_chars(command)) == NULL)
+		return ;
 	if (*cmds != NULL)
 	{
 		while (*path)
@@ -86,7 +96,7 @@ void		exec_cmd(char **cmds, char **path, t_list **env)
 			full_path = ft_strjoin_pre(*path, "/", *cmds);
 			if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
 			{
-				forkit(full_path, cmds, env);
+				forkit(full_path, cmds, env, command);
 				free_exec_cmd(error, full_path, head_path);
 				return ;
 			}
@@ -123,9 +133,9 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 		else if ((bltin = ft_lstsearch(blt, *cmds, &check_builtin)) != NULL)
 			run_builtin(env, cmds, bltin);
 		else if (ft_strchr(*cmds, '/') != NULL)
-			exec_local(cmds, env);
+			exec_local(cmds, env, command);
 		else
-			exec_cmd(cmds, get_path(*env), env);
+			exec_cmd(command, get_path(*env), env);
 		ft_free_strtab(cmds);
 	}
 }
