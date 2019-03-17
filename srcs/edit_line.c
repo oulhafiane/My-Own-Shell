@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/16 15:36:41 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/17 20:53:47 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ void	add_char(t_line *line, char c)
 {
 	char *tmp;
 
-	tmp = ft_strnew(BUF_S);
+	if (line->top + 2 >= line->buf_size)
+		line->buf_size *= 2;
+	tmp = ft_strnew(line->buf_size);
 	ft_strncpy(tmp, line->command, line->index + 1);
 	tmp[line->index + 1] = c;
 	ft_strncpy(tmp + line->index + 2,
@@ -38,8 +40,15 @@ void	add_char(t_line *line, char c)
 static void	print_newchar(t_line *line, int buf)
 {
 	int		col;
+	int		old_size;
 
 	ft_putchar(buf);
+	if (line->top + 2 >= line->buf_size)
+	{
+		old_size = line->buf_size;
+		line->buf_size *= 2;
+		line->command = ft_realloc(line->command, line->buf_size, old_size);
+	}
 	line->command[++(line->index)] = buf;
 	line->top++;
 	init_terms();

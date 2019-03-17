@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/16 17:44:41 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/17 22:48:07 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,8 @@ int			handle_dollar(char **line, char **new_line, int *i)
 
 t_command_list	*init_quotes(t_line *line, t_command_list *commands)
 {
-	char			*new_line;
-
 	init_list(commands);
-	new_line = ft_strnew(BUF_S);
-	ft_bzero(new_line, BUF_S);
-	handle_quote(line, new_line, commands, -1);
+	handle_quote(line, commands, -1);
 	return (commands);
 }
 
@@ -67,7 +63,7 @@ char		*remove_new_line(char *line, int len)
 	return (line);
 }
 
-void		is_match(char spliter, t_line *current, char *new_line, t_command_list *command, char *start)
+void		is_match(char spliter, t_line *current, t_command_list *command, char *start)
 {
 	int		flag_pip;
 	int		len;
@@ -84,7 +80,7 @@ void		is_match(char spliter, t_line *current, char *new_line, t_command_list *co
 		ft_printf(GET_MSG(current->print_msg));
 		read_line(current);
 		free_list(command, 0);
-		handle_quote(current, new_line, command, -1);
+		handle_quote(current, command, -1);
 	}
 	else
 		free(start);

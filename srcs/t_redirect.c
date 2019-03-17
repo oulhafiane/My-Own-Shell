@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 16:04:22 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/16 16:47:09 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/17 15:41:01 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void	free_duped(t_redirect *redirect)
 		free(duped);
 		duped = tmp;
 	}
+	//Added
+	ft_free_strtab(redirect->command);
+	free(redirect);
+	//
 }
 
 void	loop_dup(t_duped *current)

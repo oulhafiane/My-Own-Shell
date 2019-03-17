@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:45:59 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/16 19:04:09 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/17 16:59:26 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,14 @@ int				redir_out(char *filename, int perm)
 
 void			file_or_fdes(t_command **command, t_duped *duped)
 {
-	if (*(++(*command)->argv))
+	char	*tmp;
+
+	//Added
+	tmp = (*command)->argv;
+	(*command)->argv = ft_strdup(tmp + 1);
+	free(tmp);
+	//
+	if (*((*command)->argv))
 		duped->filed1 = redir_out((*command)->argv, O_WRONLY | O_TRUNC);
 	else
 	{
@@ -76,7 +83,6 @@ void			file_or_fdes(t_command **command, t_duped *duped)
 			duped->filed1 = redir_out((*command)->argv, O_WRONLY | O_TRUNC);
 		(*command)->is_skiped = 1;
 	}
-
 }
 
 void		reverse_agregate(t_command **command, t_duped *duped)
@@ -312,5 +318,5 @@ t_redirect		*handle_redirect(t_command_list *command)
 		current = current->next;
 	}
 	redirect->command = list_to_chars(command);
-	return (redirect);	
+	return (redirect);
 }

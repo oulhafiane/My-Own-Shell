@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/16 17:44:18 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/17 18:31:55 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int			read_line(t_line *line)
 		ft_printf(MSG);
 	line->tmp_history = NULL;
 	get_line(line);
+	free(line->tmp_history);
 	ft_printf("\n");
 	if (tcsetattr(0, TCSANOW, term) == -1)
 		return (-1);

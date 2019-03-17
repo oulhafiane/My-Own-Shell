@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/16 17:34:02 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/17 17:57:30 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,18 +83,19 @@ int		is_piped(t_command_list *ptr)
 	return (count);
 }
 
-t_list		*get_command(t_command_list *command, int count)
+t_list		*get_command(t_command_list *command)
 {
-	char			***cmd;
-	int				i;
+//	char			***cmd;
+//	int				i;
 	t_command_list	*tmp;
 	t_list			*list_commands;
 	t_redirect		*redirect;
 
 	list_commands = NULL;
-	i = 0;
-	if ((cmd = (char ***)malloc(sizeof(char **) * (count + 2))) == NULL)
+//	i = 0;
+/*	if ((cmd = (char ***)malloc(sizeof(char **) * (count + 2))) == NULL)
 		return (NULL);
+*/
 	while (command->index)
 	{
 		tmp = separated_by_del(command, '|');
@@ -108,13 +109,21 @@ t_list		*get_command(t_command_list *command, int count)
 	return (list_commands);
 }
 
-void	handle_piping(t_command_list *command, t_list **env, t_list *built_in, int count)
+void	free_cmd(void *command, size_t size)
+{
+	(void)size;
+	free_duped(command);
+}
+
+void	handle_piping(t_command_list *command, t_list **env, t_list *built_in)
 {
 	t_list	*list;
 	pid_t	pid;
 
 	pid = 0;
-	list = get_command(command, count);
+	//removed count
+	list = get_command(command);
 	piping(list, env, built_in, pid);
+	ft_lstdel(&list, &free_cmd);
 	//free(cmds);
 }

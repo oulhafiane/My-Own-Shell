@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/15 22:15:28 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/17 22:49:46 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,14 @@ static void	handling_parsed_line(t_command_list *command, char *new_line, int *i
 		push_non_quoted(new_line, i, command);
 }
 
-void		handle_quote(t_line *current, char *new_line, t_command_list *command, char flag)
+void		handle_quote(t_line *current, t_command_list *command, char flag)
 {
 	int		i;
 	char	spliter;
 	char	*start;
 	char	*line;
 	char	*tmp;
+	char	*new_line;
 
 	i = 0;
 	spliter = 0;
@@ -86,6 +87,7 @@ void		handle_quote(t_line *current, char *new_line, t_command_list *command, cha
 	start = line;
 	free((*(current->tail_history))->content);
 	(*(current->tail_history))->content = remove_new_line(ft_strdup(start), ft_strlen(start));
+	new_line = ft_strnew(ft_strlen(line));
 	while (*line)
 	{
 		flag = check_quote(&line, &spliter, start);
@@ -101,5 +103,6 @@ void		handle_quote(t_line *current, char *new_line, t_command_list *command, cha
 		if (*line == '\0' && i > 1 && is_not_only_spaces((tmp = ft_strndup(new_line, i - 1))))
 			add_to_list(command, tmp, &i, 0);
 	}
-	is_match(spliter, current, new_line, command, start);
+	free(new_line);
+	is_match(spliter, current, command, start);
 }

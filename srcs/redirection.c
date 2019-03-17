@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/16 18:54:17 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/17 19:22:16 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	redirect_in_app(char *del, int option)
 		ft_printf_fd(2, "> ");
 	if (option == 0)
 	{
+		//i think it must changed to our read_line() function
 		while ((ret = read(0, buf, BUF_S)) > 0)
 		{
 			buf[ret] = '\0';

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/16 17:48:02 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/17 22:46:06 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/stat.h>
 # include <sys/ioctl.h>
 # include <string.h>
-# define BUF_S 10000
+# define BUF_S 1
 # define COPY_MAX 1000
 
 typedef struct			s_builtin
@@ -41,6 +41,7 @@ typedef struct			s_line
 	char				*command;
 	char				*old_command;
 	char				copy[COPY_MAX];
+	int					buf_size;
 	int					top;
 	int					index;
 	int					copy_mode;
@@ -212,7 +213,7 @@ int						check_stack(char flag_quote);
 /*
 **	pipe.c
 */
-void					handle_piping(t_command_list *ptr, t_list **env, t_list *built_in, int count);
+void					handle_piping(t_command_list *ptr, t_list **env, t_list *built_in);
 int						is_piped(t_command_list *ptr);
 
 /*
@@ -236,13 +237,13 @@ void					redirect_in_app(char *del, int option);
 int						handle_dollar(char **line, char **new_line, int *i);
 t_command_list			*init_quotes(t_line *line, t_command_list *commands);
 char					*remove_new_line(char *line, int len);
-void					is_match(char spliter, t_line *current, char *new_line, t_command_list *command, char *start);
+void					is_match(char spliter, t_line *current, t_command_list *command, char *start);
 int						is_not_only_spaces(char *line);
 
 /*
 ** quotes2.c
 */
-void					handle_quote(t_line *current, char *new_line, t_command_list *command, char flag);
+void					handle_quote(t_line *current, t_command_list *command, char flag);
 
 
 /*
@@ -263,7 +264,7 @@ void					handle_tab(t_line *line);
 /*
 **	history.c
 */
-void					add_history(t_line *line, char *command);
+void					add_history(t_line *line);
 void					handle_history(int buf, t_line *line);
 
 /*
@@ -279,7 +280,7 @@ void					loop_dup(t_duped *current);
 
 
 //debug
-#define TERM_TTY "/dev/ttys005"
+#define TERM_TTY "/dev/ttys004"
 void	debug_msg(char *msg, ...);
 
 #endif

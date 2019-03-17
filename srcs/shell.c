@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/16 17:43:47 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/17 22:14:36 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 **	the parent waits the child to finish
 */
 
-static void	forkit(char *full_path, char **cmds, t_list **env, t_command_list *command)
+static void	forkit(char *full_path, t_list **env, t_command_list *command)
 {
 	int			status;
 	pid_t		father;
@@ -29,7 +29,8 @@ static void	forkit(char *full_path, char **cmds, t_list **env, t_command_list *c
 	t_duped		*current;
 	t_redirect	*redirect;
 
-	(void)cmds;
+	//Removed cmds
+	//
 	env_tab = env_to_tab(*env);
 	signal(SIGINT, child_handler);
 	redirect = handle_redirect(command);
@@ -39,8 +40,8 @@ static void	forkit(char *full_path, char **cmds, t_list **env, t_command_list *c
 	{
 		wait(&status);
 		ft_free_strtab(env_tab);
-		signals();
 		free_duped(redirect);
+		signals();
 	}
 	else if (father == 0)
 	{
@@ -63,7 +64,7 @@ static void	exec_local(char **cmds, t_list **env, t_command_list *command)
 	if (access(*cmds, F_OK) == 0)
 	{
 		if (access(*cmds, X_OK) == 0)
-			forkit(*cmds, cmds, env, command);
+			forkit(*cmds, env, command);
 		else
 			ft_printf_fd(2, "%s: Permission denied.\n", *cmds);
 	}
@@ -83,20 +84,21 @@ void		exec_cmd(t_command_list *command, char **path, t_list **env)
 	char	*full_path;
 	char	*error;
 	char	**head_path;
-	char	**cmds;
+	char	*binary_file;
 
 	error = NULL;
 	head_path = path;
-	if((cmds = list_to_chars(command)) == NULL)
-		return ;
-	if (*cmds != NULL)
+//	if((cmds = list_to_chars(command)) == NULL)
+//		return ;
+	binary_file = command->head->argv;
+	if (binary_file != NULL)
 	{
 		while (*path)
 		{
-			full_path = ft_strjoin_pre(*path, "/", *cmds);
+			full_path = ft_strjoin_pre(*path, "/", binary_file);
 			if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
 			{
-				forkit(full_path, cmds, env, command);
+				forkit(full_path, env, command);
 				free_exec_cmd(error, full_path, head_path);
 				return ;
 			}
@@ -105,7 +107,7 @@ void		exec_cmd(t_command_list *command, char **path, t_list **env)
 			path++;
 			free(full_path);
 		}
-		print_error(error, *cmds);
+		print_error(error, binary_file);
 	}
 	ft_free_strtab(head_path);
 }
@@ -114,13 +116,13 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 {
 	char			**cmds;
 	t_list			*bltin;
-	int				count;
 
 	if (command->head != NULL)
 	{
-		if((count = is_piped(command)))
+		if(is_piped(command))
 		{
-			handle_piping(command, env, blt, count);
+			//removed count
+			handle_piping(command, env, blt);
 			return ;
 		}
 		if((cmds = list_to_chars(command)) == NULL)
@@ -166,15 +168,19 @@ static void	run_shell(t_list *blt, t_list **env, t_list **history)
 	new_line->old_command = NULL;
 	while(read_line(new_line) == 0)
 	{
-		add_history(new_line, new_line->command);
+		add_history(new_line);
 		cmds = init_quotes(get_t_line(), &commands);
-		free(new_line->tmp_history);
 		while (cmds->index)
 		{
 			cmd = separated_by_del(cmds, ';');
 			shell(blt, env, cmd);
-			//free_list(cmd, 0);
+			//Added
+			free_list(cmd, 1);
+			//
 		}
+		//Added
+		free_list(&commands, 0);
+		//
 		free_line();
 		new_line = init_line();
 		free(new_line->old_command);

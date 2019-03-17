@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/15 18:27:44 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/17 22:22:42 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ t_line	*init_line(void)
 	line->top = -1;
 	line->index = -1;
 	line->print_msg = 1;
-	//line->index_history = *line->tail_history;
-	line->command = (char*)ft_memalloc(sizeof(char) * BUF_S);
+	if (line->buf_size < BUF_S)
+		line->buf_size = BUF_S + 1;
+	line->command = (char*)ft_memalloc(sizeof(char) * line->buf_size);
 	return (line);
 }
 
@@ -45,7 +46,7 @@ void	free_buffer(t_line *line)
 {
 	init_terms();
 	go_home(line, tgetnum("co"));
-	tputs(tgetstr("ce", NULL), 1, ft_putchar);
+	tputs(tgetstr("cd", NULL), 1, ft_putchar);
 	free_line();
 	exit_shell("exit\n");
 }
