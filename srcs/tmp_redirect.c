@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:45:59 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/17 16:59:26 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/18 11:22:36 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,10 @@ int				redir_out(char *filename, int perm)
 	return (fd_out);
 }
 
-void			file_or_fdes(t_command **command, t_duped *duped)
+void			file_or_fdes(t_command **command, t_duped *duped, char *tmp)
 {
-	char	*tmp;
-
-	//Added
-	tmp = (*command)->argv;
-	(*command)->argv = ft_strdup(tmp + 1);
-	free(tmp);
-	//
-	if (*((*command)->argv))
-		duped->filed1 = redir_out((*command)->argv, O_WRONLY | O_TRUNC);
+	if (*(++tmp))
+		duped->filed1 = redir_out(tmp, O_WRONLY | O_TRUNC);
 	else
 	{
 		if(!ft_strchr((*command = (*command)->next)->argv, '>'))
@@ -85,13 +78,13 @@ void			file_or_fdes(t_command **command, t_duped *duped)
 	}
 }
 
-void		reverse_agregate(t_command **command, t_duped *duped)
+void		reverse_agregate(t_command **command, t_duped *duped, char *tmp)
 {
 	duped->filed2 = 1;
-	if ((*command)->argv + 2 != '\0')
+	if (*(tmp + 2) != '\0')
 	{
-		++(*command)->argv;
-		file_or_fdes(command, duped);
+		++tmp;
+		file_or_fdes(command, duped, tmp);
 	}
 	else
 	{
@@ -111,29 +104,31 @@ void		agregate_redirect(t_command **command, t_redirect *redirect)
 	t_duped		*duped;
 	int			num;
 	t_command	*current;
+	char		*tmp;
 
 	current = *command;
+	tmp = current->argv;
 	num = 0;
 	current->is_skiped = 1;
 	duped = init_t_duped(redirect);
-	if(*current->argv && ft_isdigit(*current->argv))
+	if(*tmp && ft_isdigit(*tmp))
 	{
-		duped->filed2 = *current->argv - '0';
-		current->argv++;
-		if (*current->argv == OUTPUT_REDI && *(++current->argv) == AMPERSAND)
+		duped->filed2 = *tmp - '0';
+		tmp++;
+		if (*tmp && *tmp == OUTPUT_REDI && *(++tmp) == AMPERSAND)
 		{
-			if(is_number(++current->argv) && ft_isdigit(*current->argv) && *current->argv <= '2')
-				duped->filed1 = *current->argv - '0';
-			else if (*current->argv == '-')
+			if(is_number(++tmp) && ft_isdigit(*tmp) && *tmp <= '2')
+				duped->filed1 = *tmp - '0';
+			else if (*tmp == '-')
 				duped->filed1 = -2;
-			else if (is_number(current->argv) && (num = ft_atoi(current->argv)) > 2)
+			else if (is_number(tmp) && (num = ft_atoi(tmp)) > 2)
 				ft_printf_fd(2, "21sh : %d: Bad file descriptor\n", num);
 			else
-				ft_printf_fd(2, "21sh : %s: ambiguous redirect\n", current->argv);
+				ft_printf_fd(2, "21sh : %s: ambiguous redirect\n", tmp);
 		}
 	}
-	else if (strncmp(current->argv, GREATAND, 2) == 0 || strncmp(current->argv, GREATAND_R, 2) == 0)
-		reverse_agregate(command, duped);
+	else if (strncmp(tmp, GREATAND, 2) == 0 || strncmp(tmp, GREATAND_R, 2) == 0)
+		reverse_agregate(command, duped, tmp);
 }
 
 /*
@@ -145,6 +140,7 @@ void			simple_redirect(t_command **command, t_redirect *redirect)
 {
 	t_duped		*duped;
 	int			num;
+	char		*tmp;
 
 	num = 0;
 	(*command)->is_skiped = 1;
@@ -153,13 +149,13 @@ void			simple_redirect(t_command **command, t_redirect *redirect)
 	if (*(*command)->argv && ft_isdigit(*(*command)->argv))
 	{
 		duped->filed2 = *(*command)->argv - '0';
-		(*command)->argv++;
-		if (*(*command)->argv == OUTPUT_REDI)
-			file_or_fdes(command, duped);
+		tmp = (*command)->argv + 1;
+		if (*tmp == OUTPUT_REDI)
+			file_or_fdes(command, duped, tmp);
 	}
 	else if (*(*command)->argv && *(*command)->argv == OUTPUT_REDI)
 	{
-		file_or_fdes(command, duped);
+		file_or_fdes(command, duped, (*command)->argv);
 		duped->filed2 = 1;
 	}
 }
@@ -167,32 +163,30 @@ void			simple_redirect(t_command **command, t_redirect *redirect)
 void			double_great(t_command **command, t_redirect *redirect)
 {
 	t_duped		*duped;
+	char		*tmp;
 
 	(*command)->is_skiped = 1;
 	duped = init_t_duped(redirect);
-	if (ft_isdigit(*(*command)->argv))
+	tmp = (*command)->argv;
+	if (ft_isdigit(*tmp))
 	{
-		duped->filed2 = *(*command)->argv - '0';
-		(*command)->argv++;
+		duped->filed2 = *tmp++ - '0';
+		tmp++;
 	}
 	else
 		duped->filed2 = 1;
-	if (*(*command)->argv == OUTPUT_REDI && *(++(*command)->argv) == OUTPUT_REDI)
+	if (*tmp && *tmp == OUTPUT_REDI && *(++tmp) == OUTPUT_REDI)
 	{	
-		if (*(++(*command)->argv) != '\0')
-			duped->filed1 = redir_out((*command)->argv, O_WRONLY | O_APPEND);
-		else
+		if (*tmp && *(++tmp) != '\0')
+			duped->filed1 = redir_out(tmp, O_WRONLY | O_APPEND);
+		else if ((*command = (*command)->next) && (*command)->argv)
 		{
-			*command = (*command)->next;
-			if (*command && (*command)->argv)
-			{
 				duped->filed1 = redir_out((*command)->argv, O_WRONLY | O_APPEND);
 				(*command)->is_skiped = 1;
-			}
 		}
 	}
 	else
-		ft_printf_fd(2, "21sh : syntax error near unexpected token `%c'\n", *(*command)->argv);
+		ft_printf_fd(2, "21sh : syntax error near unexpected token `%c'\n", *tmp);
 }
 
 /*
@@ -210,17 +204,23 @@ int				redir_in(char *filename, int perm)
 void			simple_in_redirect(t_command **command, t_redirect *redirect)
 {
 	t_duped		*duped;
+	char		*tmp;
 
 	duped = init_t_duped(redirect);
 	duped->filed2 = 0;
 	(*command)->is_skiped = 1;
-	if (++(*command)->argv != '\0')
-		duped->filed1 = redir_in((*command)->argv, O_RDONLY);
+	tmp = (*command)->argv;
+	if (*tmp && *(++tmp) != '\0')
+	{
+		if((duped->filed1 = redir_in(tmp, O_RDONLY)) == -1)
+			ft_printf_fd(2, "21sh: %s: No such file or directory\n", tmp);
+	}
 	else
 	{
 		*command = (*command)->next;
 		(*command)->is_skiped = 1;
-		duped->filed2 = redir_in((*command)->argv, O_RDONLY);
+		if((duped->filed1 = redir_in((*command)->argv, O_RDONLY)) == -1)
+			ft_printf_fd(2, "21sh: %s: No such file or directory\n", (*command)->argv);
 	}
 }
 
@@ -263,27 +263,29 @@ void		less_and(t_command **command, t_redirect *redirect)
 {
 	t_duped		*duped;
 	t_command	*cmd;
+	char		*tmp;
 
 	duped = init_t_duped(redirect);
 	(*command)->is_skiped = 1;
 	duped->filed2 = 0;
-	if (ft_isdigit(*(*command)->argv))
+	tmp = (*command)->argv;
+	if (*tmp && ft_isdigit(*tmp))
 	{
-		duped->filed2 = *(*command)->argv - '0';
-		(*command)->argv++;
+		duped->filed2 = *tmp - '0';
+		tmp++;
 	}
-	if (*(*command)->argv == INPUT_REDI && *((*command)->argv + 1) == AMPERSAND)
+	if (*tmp && *tmp == INPUT_REDI && *(tmp + 1) == AMPERSAND)
 	{
-		(*command)->argv = (*command)->argv + 2;
-		if (*(*command)->argv && ft_isdigit(*(*command)->argv))
-			duped->filed1 = *(*command)->argv - '0';
-		else if (*(*command)->argv == '-')
+		tmp = tmp + 2;
+		if (*tmp && ft_isdigit(*tmp))
+			duped->filed1 = *tmp - '0';
+		else if (*tmp && *tmp == '-')
 			duped->filed1 = -2;
 		else
 		{
 			cmd = (*command)->next;
 			ft_printf_fd(2, "21sh: %s: ambiguous redirect\n", cmd->argv);
-			exit(EXIT_FAILURE);
+			duped->filed1 = -1;
 		}
 	}
 }

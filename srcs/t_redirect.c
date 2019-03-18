@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 16:04:22 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/17 15:41:01 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/18 10:48:10 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ void	free_duped(t_redirect *redirect)
 
 	while (duped)
 	{
+		if (duped->filed1 > 2)
+			close(duped->filed1);
+		if (duped->filed2 > 2)
+			close(duped->filed2);
 		tmp = duped->next;
 		free(duped->del);
 		free(duped);
@@ -36,6 +40,8 @@ void	loop_dup(t_duped *current)
 {
 	while (current)
 	{
+		if (current->filed2 >= 0 && current->filed1 < 0)
+			exit(EXIT_FAILURE);
 		if (current->filed1 != -1 && current->filed2 != -1)
 			dup2(current->filed1, current->filed2);
 		else if (current->filed1 == -2)

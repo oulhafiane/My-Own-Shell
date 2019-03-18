@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/17 16:49:46 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/18 10:43:28 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,13 +110,7 @@ t_command_list	*separated_by_del(t_command_list *ptr, char del)
 	if((commands = (t_command_list *)malloc(sizeof(t_command_list))) == NULL)
 		return (NULL);
 	init_list(commands);
-/*	current = ptr->head;
-	while (current && current != ptr->index)
-		current	= current->next;
-*/
-	//Replaced
 	current = ptr->index;
-	//
 	while (current)
 	{
 		if (*current->argv == del && ft_strlen(current->argv) == 1)
@@ -124,7 +118,6 @@ t_command_list	*separated_by_del(t_command_list *ptr, char del)
 			ptr->index = current->next;
 			break;
 		}
-		//added ft_strdup
 		push(commands, ft_strdup(current->argv), current->is_quoted);
 		current = current->next;
 	}
