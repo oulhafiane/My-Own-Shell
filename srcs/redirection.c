@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/18 13:02:25 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/18 15:22:17 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,8 @@ void	redirect_in_app(char *del, int option)
 		ft_printf_fd(2, "> ");
 	if (option == 0)
 	{
-		//free_line();
 		line = get_t_line();
-		debug_msg("tba3 lina hada : %s\n", line->command);
+		free_line();
 		line = init_line();
 		line->print_msg = 0;
 		read_line(line);
@@ -68,7 +67,9 @@ void	redirect_in_app(char *del, int option)
 			line->print_msg = 0;
 			read_line(line);
 		}
+		free_line();
 	}
+
 	else if (option == 1)
 		ft_printf_fd(fd[1], "%s\n", del);
 	close(fd[1]);

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/17 22:14:36 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/18 15:40:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ void		exec_cmd(t_command_list *command, char **path, t_list **env)
 
 	error = NULL;
 	head_path = path;
-//	if((cmds = list_to_chars(command)) == NULL)
-//		return ;
 	binary_file = command->head->argv;
 	if (binary_file != NULL)
 	{
@@ -129,6 +127,7 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 			return ;
 		if (ft_strcmp(*cmds, "exit") == 0)
 		{
+			free_line();
 			ft_free_strtab(cmds);
 			exit(-1);
 		}
@@ -174,13 +173,9 @@ static void	run_shell(t_list *blt, t_list **env, t_list **history)
 		{
 			cmd = separated_by_del(cmds, ';');
 			shell(blt, env, cmd);
-			//Added
 			free_list(cmd, 1);
-			//
 		}
-		//Added
 		free_list(&commands, 0);
-		//
 		free_line();
 		new_line = init_line();
 		free(new_line->old_command);
