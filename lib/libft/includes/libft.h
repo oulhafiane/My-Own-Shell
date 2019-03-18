@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 17:24:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/16 17:46:29 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/18 12:53:50 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int					get_next_line(const int fd, char **line);
 void				free_gnl(int fd);
 int					ft_printf(const char *format, ...);
 int					ft_printf_fd(int fd, const char *format, ...);
-int					ft_vprintf(int fd, const char *format, va_list ap);
+int					ft_vprintf(int fd, const char *format, va_list *ap);
 int					ft_nbrlen(int n);
 int					ft_iswhitespace(int c);
 void				ft_swap_pt(void **pt1, void **pt2);
@@ -156,7 +156,7 @@ int					ft_sqrt(int nb);
 /*
 ** Functions Created To Create Printf
 */
-void				free_printf(va_list *ap);
+void				free_printf(void);
 int					ft_atoi_pr(const char *str);
 void				ft_putnbr_base(uintmax_t nb, int flags[LEN]);
 void				ft_alloc_mem(char **s, int nb, int flag, int i);

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/01 18:35:42 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/01/23 13:22:08 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/18 12:53:26 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,10 @@ char	**get_static_str(void)
 	return (&s);
 }
 
-void	free_printf(va_list *ap)
+void	free_printf(void)
 {
 	char	**s;
 
-	va_end(*ap);
 	s = get_static_str();
 	free(*s);
 	*s = NULL;

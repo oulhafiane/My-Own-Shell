@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/18 10:51:04 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/18 13:02:25 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ void	redirect_out(char *filename, int fd, int permission)
 void	redirect_in_app(char *del, int option)
 {
 	int		fd[2];
-	int		ret;
-	char	buf[BUF_S];
+	t_line	*line;
 
 	if (pipe(fd) < 0)
 		exit(EXIT_FAILURE);
@@ -54,14 +53,20 @@ void	redirect_in_app(char *del, int option)
 		ft_printf_fd(2, "> ");
 	if (option == 0)
 	{
-		//i think it must changed to our read_line() function
-		while ((ret = read(0, buf, BUF_S)) > 0)
+		//free_line();
+		line = get_t_line();
+		debug_msg("tba3 lina hada : %s\n", line->command);
+		line = init_line();
+		line->print_msg = 0;
+		read_line(line);
+		while (ft_strncmp(line->command, del, line->top) != 0)
 		{
-			buf[ret] = '\0';
-			if (ft_strncmp(buf, del, ret - 1) == 0)
-				break ;
-			ft_printf_fd(fd[1], "%s", buf);
+			ft_printf_fd(fd[1], "%s", line->command);
 			ft_printf_fd(2, "> ");
+			free_line();
+			init_line();
+			line->print_msg = 0;
+			read_line(line);
 		}
 	}
 	else if (option == 1)

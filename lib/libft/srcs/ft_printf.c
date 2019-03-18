@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 19:04:39 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/23 18:40:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/18 12:54:20 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int			stock_char(char c, int print)
 	return (0);
 }
 
-int			ft_vprintf(int fd, const char *format, va_list ap)
+int			ft_vprintf(int fd, const char *format, va_list *ap)
 {
 	int			count;
 	int			flags[LEN];
@@ -71,8 +71,8 @@ int			ft_vprintf(int fd, const char *format, va_list ap)
 	{
 		if (*format == '%' && format[1] != '\0')
 		{
-			get_flags((char**)&format, ap, flags);
-			if (print_format(flags, ap) != -1)
+			get_flags((char**)&format, *ap, flags);
+			if (print_format(flags, *ap) != -1)
 				count += stock_char('\0', 1);
 			else
 				return (-1);
@@ -83,6 +83,7 @@ int			ft_vprintf(int fd, const char *format, va_list ap)
 			format++;
 	}
 	count += stock_char('\0', 1);
+	free_printf();
 	return (count);
 }
 
@@ -92,8 +93,8 @@ int			ft_printf_fd(int fd, const char *format, ...)
 	int			ret;
 
 	va_start(ap, format);
-	ret = ft_vprintf(fd, format, ap);
-	free_printf(&ap);
+	ret = ft_vprintf(fd, format, &ap);
+	va_end(ap);
 	return (ret);
 }
 
@@ -103,7 +104,7 @@ int			ft_printf(const char *format, ...)
 	int			ret;
 
 	va_start(ap, format);
-	ret = ft_vprintf(1, format, ap);
-	free_printf(&ap);
+	ret = ft_vprintf(1, format, &ap);
+	va_end(ap);
 	return (ret);
 }

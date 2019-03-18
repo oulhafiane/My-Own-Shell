@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 13:10:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/11 11:48:45 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/18 12:52:58 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void		exit_shell(char *format, ...)
 	term = get_termios();
 	tcsetattr(0, TCSANOW, term);
 	va_start(args, format);
-	ft_vprintf(2, format, args);
+	ft_vprintf(2, format, &args);
 	va_end(args);
 	exit(-1);
 }

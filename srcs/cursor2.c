@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/22 22:52:46 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/12 16:08:47 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/18 12:51:04 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	debug_msg(char *msg, ...)
 
 	va_start(ap, msg);
 	int fd = open(TERM_TTY, O_WRONLY);
-	ft_vprintf(fd, msg, ap);
+	ft_vprintf(fd, msg, &ap);
 	va_end(ap);
 	close(fd);
 }

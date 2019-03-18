@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/18 09:42:26 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/18 12:32:02 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@
 # include <string.h>
 # define BUF_S 1
 # define COPY_MAX 1000
+
+//debug
+#define TERM_TTY "/dev/ttys006"
+
+void	debug_msg(char *msg, ...);
+
 
 typedef struct			s_builtin
 {
@@ -277,10 +283,5 @@ t_redirect				*handle_redirect(t_command_list *command);
 */
 void					free_duped(t_redirect *redirect);
 void					loop_dup(t_duped *current);
-
-
-//debug
-#define TERM_TTY "/dev/ttys004"
-void	debug_msg(char *msg, ...);
 
 #endif
