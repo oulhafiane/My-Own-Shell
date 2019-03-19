@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:45:59 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/19 17:05:45 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/19 17:58:13 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,8 @@ void			simple_redirect(t_command **command, t_redirect *redirect)
 	{
 		duped->filed2 = *(*command)->argv - '0';
 		tmp = (*command)->argv + 1;
-		debug_msg("%s\n", tmp);
+		if (*tmp == INPUT_REDI)
+			duped->filed1 = ft_printf_fd(2, "21 sh : syntax error near unexprected token `%c'\n", *tmp) ? -4 : -4; 
 		if (*tmp == OUTPUT_REDI)
 			file_to_des(command, duped, tmp, 0);
 	}
@@ -217,7 +218,9 @@ void			simple_in_redirect(t_command **command, t_redirect *redirect)
 	tmp = (*command)->argv;
 	if (*tmp && *(++tmp) != '\0')
 	{
-		if((duped->filed1 = redir_in(tmp, O_RDONLY)) == -1)
+		if (*tmp == INPUT_REDI)
+			duped->filed1 = ft_printf_fd(2, "21sh : syntax error near unexprected token `%c'\n", *tmp) ? -4 : -4; 
+		else if((duped->filed1 = redir_in(tmp, O_RDONLY)) == -1)
 			ft_printf_fd(2, "21sh: %s: No such file or directory\n", tmp);
 	}
 	else
