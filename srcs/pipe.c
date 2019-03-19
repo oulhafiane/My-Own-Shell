@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/17 17:57:30 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/19 15:40:26 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,16 @@ void	piping(t_list *cmds, t_list **env, t_list *built_in, pid_t pid)
 			exit(EXIT_FAILURE);
 		else if (pid == 0)
 		{
-			dup2(fd_in, 0);
+			redirect = (t_redirect *)cmds->content;
+			if (!loop_dup2(redirect->dup_head))
+				dup2(fd_in, 0);
+			else
+				exit_shell("Ambiguous input redirect.\n");
 			if (cmds->next != NULL)
 			{
 				dup2(p[1], 1);
 				close(p[1]);
 			}
-			redirect = (t_redirect *)cmds->content;
 			loop_dup(redirect->dup_head);
 			close(p[0]);
 			execute_command(&redirect->command, env, built_in);

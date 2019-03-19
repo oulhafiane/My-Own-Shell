@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/18 18:26:41 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/19 15:10:05 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,11 +231,12 @@ int						full_path(char **cmd, char **path_env);
 ** redirection.c
 */
 
-int						is_redirection(char *str, int *flag);
-void					redirect_in(char *filename);
-void					redirect_out(char *filename, int fd, int permission);
-void					handle_redirection(char ***cmds);
 void					redirect_in_app(char *del, int option);
+void					less_great(t_command **command, t_redirect *redirect);
+void					less_and(t_command **command, t_redirect *redirect);
+void					double_less(t_command **command, t_redirect *redirect);
+void					jump_forward(t_command **command, t_duped *duped);
+int						redir_out(char *filename, int perm);
 
 /*
 ** quotes.c
@@ -283,5 +284,8 @@ t_redirect				*handle_redirect(t_command_list *command);
 */
 void					free_duped(t_redirect *redirect);
 void					loop_dup(t_duped *current);
+int						loop_dup2(t_duped *current);
+t_duped					*init_t_duped(t_redirect *redirect);
+t_redirect				*init_t_redirect(void);
 
 #endif

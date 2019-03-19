@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/19 12:21:35 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/19 17:05:47 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ static void	forkit(char *full_path, t_list **env, t_command_list *command)
 	t_duped		*current;
 	t_redirect	*redirect;
 
-	//Removed cmds
-	//
 	env_tab = env_to_tab(*env);
 	signal(SIGINT, child_handler);
 	redirect = handle_redirect(command);
@@ -122,7 +120,7 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 			handle_piping(command, env, blt);
 			return ;
 		}
-		if((cmds = list_to_chars(command)) == NULL)
+		if(*(cmds = list_to_chars(command)) == NULL)
 			return ;
 		if (ft_strcmp(*cmds, "exit") == 0)
 		{

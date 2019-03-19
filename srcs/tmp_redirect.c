@@ -6,52 +6,17 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:45:59 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/19 12:18:21 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/19 17:05:45 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-t_redirect		*init_t_redirect()
-{
-	t_redirect		*redirect;
-
-	redirect = (t_redirect *)malloc(sizeof(t_redirect));
-	redirect->command = NULL;
-	redirect->dup_head = NULL;
-	redirect->dup_tail = NULL;
-	return (redirect);
-}
-
-t_duped			*init_t_duped(t_redirect *redirect)
-{
-	t_duped		*node;
-
-	if((node = (t_duped *)malloc(sizeof(t_duped))) == NULL)
-		return (NULL);
-	node->filed1 = -1;
-	node->filed2 = -1;
-	node->del = NULL;
-	node->next = NULL;
-
-	if (redirect->dup_head == NULL)
-	{
-		redirect->dup_head = node;
-		redirect->dup_tail = node;
-	}
-	else
-	{
-		redirect->dup_tail->next = node;
-		redirect->dup_tail = node;
-	}
-	return (node);
-}
-
 int				is_number(char *str)
 {
 	while (*str)
 	{
-		if (ft_isalpha(*str))
+		if (!ft_isdigit(*str))
 			return (0);
 		str++;
 	}
@@ -66,6 +31,20 @@ int				redir_out(char *filename, int perm)
 	return (fd_out);
 }
 
+void			file_to_des(t_command **command, t_duped *duped, char *tmp, int perm)
+{
+	if (perm == 0)
+		perm = O_WRONLY | O_TRUNC;
+	if (*tmp && *(++tmp))
+		duped->filed1 = redir_out(tmp, perm);
+	else
+	{
+		if(!ft_strchr((*command = (*command)->next)->argv, '>'))
+			duped->filed1 = redir_out((*command)->argv, perm);
+		(*command)->is_skiped = 1;
+	}
+}
+
 void			file_or_fdes(t_command **command, t_duped *duped, char *tmp)
 {
 	int perm;
@@ -78,14 +57,7 @@ void			file_or_fdes(t_command **command, t_duped *duped, char *tmp)
 		tmp++;
 		perm = O_WRONLY | O_APPEND;
 	}
-	if (*tmp && *(++tmp))
-		duped->filed1 = redir_out(tmp, perm);
-	else
-	{
-		if(!ft_strchr((*command = (*command)->next)->argv, '>'))
-			duped->filed1 = redir_out((*command)->argv, perm);
-		(*command)->is_skiped = 1;
-	}
+	file_to_des(command, duped, tmp, perm);
 }
 
 void	redirect_err_out(t_command **command, t_redirect *redirect)
@@ -180,12 +152,13 @@ void			simple_redirect(t_command **command, t_redirect *redirect)
 	{
 		duped->filed2 = *(*command)->argv - '0';
 		tmp = (*command)->argv + 1;
+		debug_msg("%s\n", tmp);
 		if (*tmp == OUTPUT_REDI)
-			file_or_fdes(command, duped, tmp);
+			file_to_des(command, duped, tmp, 0);
 	}
 	else if (*(*command)->argv && *(*command)->argv == OUTPUT_REDI)
 	{
-		file_or_fdes(command, duped, (*command)->argv);
+		file_to_des(command, duped, (*command)->argv, 0);
 		duped->filed2 = 1;
 	}
 }
@@ -207,9 +180,9 @@ void			double_great(t_command **command, t_redirect *redirect)
 		duped->filed2 = 1;
 	if (*tmp && *tmp == OUTPUT_REDI && *(++tmp) == OUTPUT_REDI)
 	{	
-		if (*tmp && *(++tmp) != '\0' && *tmp != AMPERSAND)
+		if (*tmp && *(++tmp) != '\0' && *tmp != AMPERSAND && *tmp != OUTPUT_REDI)
 			duped->filed1 = redir_out(tmp, O_WRONLY | O_APPEND);
-		else if ((*command = (*command)->next) && (*command)->argv)
+		else if (*tmp != OUTPUT_REDI && (*command = (*command)->next) && (*command)->argv)
 		{
 				duped->filed1 = redir_out((*command)->argv, O_WRONLY | O_APPEND);
 				(*command)->is_skiped = 1;
@@ -254,103 +227,6 @@ void			simple_in_redirect(t_command **command, t_redirect *redirect)
 		if((duped->filed1 = redir_in((*command)->argv, O_RDONLY)) == -1)
 			ft_printf_fd(2, "21sh: %s: No such file or directory\n", (*command)->argv);
 	}
-}
-
-void			jump_forward(t_command **command, t_duped *duped)
-{
-	*command = (*command)->next;
-	(*command)->is_skiped = 1;
-	duped->del = ft_strdup((*command)->argv);
-}
-
-void			double_less(t_command **command, t_redirect *redirect)
-{
-	int		len;
-	t_duped	*duped;
-
-	duped = init_t_duped(redirect);
-	(*command)->is_skiped = 1;
-	len = ft_strlen((*command)->argv);
-	duped->filed2 =  -2;
-	if (len == 2 || ft_strcmp((*command)->argv, DLESSDASH) == 0)
-		jump_forward(command, duped);	
-	else if (ft_strncmp((*command)->argv, "<<<", 3) == 0)
-	{
-		if (*((*command)->argv + 3) == '\0')
-			jump_forward(command, duped);
-		else
-			duped->del = ft_strdup((*command)->argv + 3);
-		duped->filed2 = -4;
-	}
-	else if (ft_strncmp((*command)->argv, DLESS, 2) == 0)
-	{
-		if (len == 2)
-			duped->del = ft_strdup((*command)->argv + 2);
-		else if (*((*command)->argv + 2) == '-')
-			duped->del = ft_strdup((*command)->argv + 3);
-	}
-}
-
-void		less_and(t_command **command, t_redirect *redirect)
-{
-	t_duped		*duped;
-	t_command	*cmd;
-	char		*tmp;
-
-	duped = init_t_duped(redirect);
-	(*command)->is_skiped = 1;
-	duped->filed2 = 0;
-	tmp = (*command)->argv;
-	if (*tmp && ft_isdigit(*tmp))
-	{
-		duped->filed2 = *tmp - '0';
-		tmp++;
-	}
-	if (*tmp && *tmp == INPUT_REDI && *(tmp + 1) == AMPERSAND)
-	{
-		tmp = tmp + 2;
-		if (*tmp && ft_isdigit(*tmp))
-			duped->filed1 = *tmp - '0';
-		else if (*tmp && *tmp == '-')
-			duped->filed1 = -2;
-		else
-		{
-			cmd = (*command)->next;
-			ft_printf_fd(2, "21sh: %s: ambiguous redirect\n", cmd->argv);
-			duped->filed1 = -1;
-		}
-	}
-}
-
-void			less_great(t_command **command, t_redirect *redirect)
-{
-	char	*tmp;
-	t_duped	*duped;
-
-	tmp = (*command)->argv;
-	(*command)->is_skiped = 1;
-	duped = init_t_duped(redirect);
-	if (*tmp && ft_isdigit(*tmp))
-	{
-		duped->filed2 = *tmp - 0;
-		tmp++;
-	}
-	else if (*tmp && *tmp == INPUT_REDI)
-		duped->filed2 = 0;
-	if (*tmp && *tmp == INPUT_REDI)
-		if (*(++tmp) && *tmp == OUTPUT_REDI)
-		{
-			if (*(++tmp))
-				duped->filed1 = redir_out(tmp, O_RDWR);
-			else
-			{
-				if ((*command = (*command)->next) && (*command)->argv)
-				{
-					(*command)->is_skiped = 1;
-					duped->filed1 = redir_out((*command)->argv, O_RDWR);
-				}
-			}
-		}
 }
 
 void			parse_redirection(t_command **command, t_redirect *redirect)
