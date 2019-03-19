@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/18 15:40:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/19 12:21:35 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 	{
 		if(is_piped(command))
 		{
-			//removed count
 			handle_piping(command, env, blt);
 			return ;
 		}

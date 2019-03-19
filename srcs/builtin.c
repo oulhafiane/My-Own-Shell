@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/15 16:53:56 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/19 12:18:49 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,5 @@ void		free_builtin(t_list *lst)
 
 void		run_builtin(t_list **env, char **cmds, t_list *bltin)
 {
-	int stdout_copy;
-	
-	stdout_copy = dup(1);
-	handle_redirection(&cmds);
 	((t_builtin*)bltin->content)->f(cmds + 1, env);
- 	dup2(stdout_copy, 1);
-	close(stdout_copy);	
 }
