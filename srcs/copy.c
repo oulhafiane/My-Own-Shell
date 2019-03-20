@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 18:34:39 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/11 12:04:35 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/19 18:19:57 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void		end_copy_mode(t_line *line, int buf)
 	if (buf == CTRL_X)
 		cut_text(line, diff);
 	begin_reset_mode(line);
-	debug_msg("Ok Copied : %s\n", line->copy);
 }
 
 void		begin_reset_mode(t_line *line)

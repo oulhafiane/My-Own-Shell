@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/19 15:10:05 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/19 23:00:33 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/stat.h>
 # include <sys/ioctl.h>
 # include <string.h>
-# define BUF_S 10000
+# define BUF_S 1
 # define COPY_MAX 1000
 
 //debug
@@ -280,12 +280,17 @@ void					handle_history(int buf, t_line *line);
 t_redirect				*handle_redirect(t_command_list *command);
 
 /*
-** t_redirect
+** t_redirect.c
 */
 void					free_duped(t_redirect *redirect);
 void					loop_dup(t_duped *current);
 int						loop_dup2(t_duped *current);
 t_duped					*init_t_duped(t_redirect *redirect);
 t_redirect				*init_t_redirect(void);
+
+/*
+**	paste.c
+*/
+void					paste_chars(int *buf, t_line *line);
 
 #endif

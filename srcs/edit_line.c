@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/17 20:53:47 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/19 22:59:22 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,25 +63,4 @@ void	print_char_inline(t_line *line, int buf)
 		print_newchar(line, buf);
 	else
 		move_cursor(buf, line);
-}
-
-void	paste_chars(int *buf, t_line *line)
-{
-	char	*buf_c;
-	int		i;
-	int		j;
-
-	buf_c = (char*)buf;
-	i = -1;
-	while (++i < 4 && (ft_isprint(buf_c[i]) || ft_strchr(" \t\n", (buf_c[i])) != NULL))
-	{
-		if (buf_c[i] == '\t')
-		{
-			j = -1;
-			while (++j < 4)
-				move_cursor(' ', line);
-		}
-		else
-			move_cursor(buf_c[i], line);
-	}
 }
