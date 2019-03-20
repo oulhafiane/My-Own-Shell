@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/19 23:00:33 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/20 16:03:18 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/stat.h>
 # include <sys/ioctl.h>
 # include <string.h>
-# define BUF_S 1
+# define BUF_S 10000
 # define COPY_MAX 1000
 
 //debug
@@ -50,6 +50,7 @@ typedef struct			s_line
 	int					buf_size;
 	int					top;
 	int					index;
+	int					begin_row;
 	int					copy_mode;
 	int					begin_copy;
 	char				print_msg;

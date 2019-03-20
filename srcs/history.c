@@ -6,15 +6,33 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/17 22:51:21 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/20 17:54:08 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
+static void	print_history(t_line *line, char *new_line, char flag_free_line)
+{
+	int		i;
+
+	init_terms();
+	go_home(line, tgetnum("co"));
+	line->begin_row = get_current_row(tgetnum("li"));
+	tputs(tgetstr("cd", NULL), 1, ft_putchar);
+	if (flag_free_line)
+		free_line();
+	line = init_line();
+	i = -1;
+	while (new_line[++i])
+		print_char_inline(line, new_line[i]);
+	free(new_line);
+}
+
 static void	up_history(t_line *line)
 {
 	char	flag_tmp_history_saved;
+	char	*new_line;
 
 	flag_tmp_history_saved = 0;
 	if (line->index_history)
@@ -28,52 +46,29 @@ static void	up_history(t_line *line)
 	}
 	else
 		return ;
-	init_terms();
-	go_home(line, tgetnum("co"));
-	tputs(tgetstr("cd", NULL), 1, ft_putchar);
-	if (!flag_tmp_history_saved)
-		free_line();
-	line = init_line();
-	ft_strcpy(line->command, line->index_history->content);
-	ft_printf(line->command);
-	line->top = ft_strlen(line->command) - 1;
-	line->index = ft_strlen(line->command) - 1;
+	new_line = (char*)malloc(sizeof(char) * line->buf_size);
+	ft_strcpy(new_line, line->index_history->content);
+	print_history(line, new_line, !flag_tmp_history_saved);
 }
 
 static void	down_history(t_line *line)
 {
+	char	*new_line;
+
 	if (line->index_history)
 		line->index_history = line->index_history->next;
 	else
 		return ;
-	init_terms();
-	go_home(line, tgetnum("co"));
-	tputs(tgetstr("cd", NULL), 1, ft_putchar);
-	free_line();
-	line = init_line();
+	new_line = (char*)malloc(sizeof(char) * line->buf_size);
 	if (line->index_history)
-		ft_strcpy(line->command, line->index_history->content);
+		ft_strcpy(new_line, line->index_history->content);
 	else
 	{
-		ft_strcpy(line->command, line->tmp_history);
+		ft_strcpy(new_line, line->tmp_history);
 		free(line->tmp_history);
 		line->tmp_history = NULL;
 	}
-	ft_printf(line->command);
-	line->top = ft_strlen(line->command) - 1;
-	line->index = ft_strlen(line->command) - 1;
-}
-
-void	add_history(t_line *line)
-{
-	t_list	**history;
-	t_list	*new_history;
-
-	history = line->tail_history;
-	new_history = ft_lstnew(line->command, line->buf_size);
-	ft_lstadd_end(history, new_history);
-	*history = new_history;
-	line->index_history = NULL;
+	print_history(line, new_line, 1);
 }
 
 void	handle_history(int buf, t_line *line)
@@ -82,4 +77,21 @@ void	handle_history(int buf, t_line *line)
 		up_history(line);
 	else if (buf == DOWN_KEY)
 		down_history(line);
+}
+
+void	add_history(t_line *line)
+{
+	t_list	**history;
+	t_list	*new_history;
+
+	if (ft_str_isnull(line->command))
+	{
+	debug_msg("is null %s ? --> %d\n", line->command, ft_str_isnull(line->command));
+		return ;
+	}
+	history = line->tail_history;
+	new_history = ft_lstnew(line->command, line->buf_size);
+	ft_lstadd_end(history, new_history);
+	*history = new_history;
+	line->index_history = NULL;
 }

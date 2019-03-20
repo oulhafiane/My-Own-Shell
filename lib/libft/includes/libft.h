@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 17:24:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/18 12:53:50 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/20 17:49:25 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ char				*ft_strjoin_pre(char const *s1, char *delimiter,
 					char const *s2);
 int					ft_str_isalnum(char *str);
 int					ft_str_isalpha(char *str);
+int					ft_str_isnull(char *str);
 char				*ft_trim(char *src);
 
 /*

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/15 14:36:36 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/20 17:39:00 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,21 @@
 
 void		go_left(t_line *line, int col)
 {
+	char	tmp;
+
 	if (line->copy_mode == 1)
 		go_left_copy_mode(line, col);
 	if (line->index < 0)
 		return ;
-	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
-	{
-		tputs(tgetstr("up", NULL), 1, ft_putchar);
-		tputs(tgoto(tgetstr("ch", NULL), 0, col - 1), 1, ft_putchar);
-	}
+	tputs(tgoto(tgetstr("cm", NULL), 0, line->begin_row - 1), 1, ft_putchar);
+	if (line->print_msg)
+		ft_printf(MSG);
 	else
-		tputs(tgetstr("le", NULL), 1, ft_putchar);
+		ft_printf("> ");
+	tmp = line->command[line->index];
+	line->command[line->index] = '\0';
+	ft_printf(line->command);
+	line->command[line->index] = tmp;
 	line->index--;
 }
 
@@ -84,6 +88,8 @@ static void	add_current(t_line *line, char buf, int col)
 	tputs(tgetstr("rc", NULL), 1, ft_putchar);
 	if (rows_to_end == 0 && (line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
+	if (rows_to_end == 0 && (line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
+		line->begin_row--;
 	go_right(line, col);
 }
 

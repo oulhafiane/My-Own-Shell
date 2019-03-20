@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/19 22:28:13 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/20 16:24:42 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int			read_line(t_line *line)
 	if (line->print_msg)
 		ft_printf(MSG);
 	line->tmp_history = NULL;
+	line->begin_row = get_current_row(tgetnum("li"));
 	get_line(line);
 	free(line->tmp_history);
 	ft_printf("\n");
