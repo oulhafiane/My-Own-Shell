@@ -164,15 +164,18 @@ static void	run_shell(t_list *blt, t_list **env, t_list **history)
 	new_line->old_command = NULL;
 	while(read_line(new_line) == 0)
 	{
-		add_history(new_line);
-		cmds = init_quotes(get_t_line(), &commands);
-		while (cmds->index)
+		if (!ft_str_isnull(new_line->command))
 		{
-			cmd = separated_by_del(cmds, ';');
-			shell(blt, env, cmd);
-			free_list(cmd, 1);
+			add_history(new_line);
+			cmds = init_quotes(get_t_line(), &commands);
+			while (cmds->index)
+			{
+				cmd = separated_by_del(cmds, ';');
+				shell(blt, env, cmd);
+				free_list(cmd, 1);
+			}
+			free_list(&commands, 0);
 		}
-		free_list(&commands, 0);
 		free_line();
 		new_line = init_line();
 		free(new_line->old_command);

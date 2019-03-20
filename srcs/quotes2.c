@@ -88,8 +88,11 @@ void		handle_quote(t_line *current, t_command_list *command, char flag)
 	line = current->old_command != NULL ?
 		ft_strjoin(current->old_command, current->command) : ft_strdup(current->command);
 	start = line;
-	free((*(current->tail_history))->content);
-	(*(current->tail_history))->content = remove_new_line(ft_strdup(start), ft_strlen(start));
+	if ((*(current->tail_history)) != NULL)
+	{
+		free((*(current->tail_history))->content);
+		(*(current->tail_history))->content = remove_new_line(ft_strdup(start), ft_strlen(start));
+	}
 	new_line = ft_strnew(ft_strlen(line));
 	while (*line)
 	{

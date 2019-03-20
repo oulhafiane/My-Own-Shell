@@ -27,7 +27,7 @@ void	go_up(t_line *line, int col)
 		else
 		{
 			tputs(tgetstr("up", NULL), 1, ft_putchar);
-			line->index -= col;
+			update_index(line, -col);
 		}
 	}
 	else if (line->index + 1 >= col - (long)ft_strlen(GET_MSG(line->print_msg)))

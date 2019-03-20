@@ -18,7 +18,6 @@ static void	print_history(t_line *line, char *new_line, char flag_free_line)
 
 	init_terms();
 	go_home(line, tgetnum("co"));
-	line->begin_row = get_current_row(tgetnum("li"));
 	tputs(tgetstr("cd", NULL), 1, ft_putchar);
 	if (flag_free_line)
 		free_line();
@@ -84,11 +83,6 @@ void	add_history(t_line *line)
 	t_list	**history;
 	t_list	*new_history;
 
-	if (ft_str_isnull(line->command))
-	{
-	debug_msg("is null %s ? --> %d\n", line->command, ft_str_isnull(line->command));
-		return ;
-	}
 	history = line->tail_history;
 	new_history = ft_lstnew(line->command, line->buf_size);
 	ft_lstadd_end(history, new_history);

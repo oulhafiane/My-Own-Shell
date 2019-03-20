@@ -54,10 +54,7 @@ static void	print_newchar(t_line *line, int buf)
 	init_terms();
 	col = tgetnum("co");
 	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
-	{
 		go_down_left();
-		line->begin_row--;
-	}
 }
 
 void	print_char_inline(t_line *line, int buf)

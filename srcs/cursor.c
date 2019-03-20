@@ -14,29 +14,25 @@
 
 void		go_left(t_line *line, int col)
 {
-	char	tmp;
-
 	if (line->copy_mode == 1)
 		go_left_copy_mode(line, col);
 	if (line->index < 0)
 		return ;
-	tputs(tgoto(tgetstr("cm", NULL), 0, line->begin_row - 1), 1, ft_putchar);
-	if (line->print_msg)
-		ft_printf(MSG);
+	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
+	{
+		tputs(tgetstr("up", NULL), 1, ft_putchar);
+		tputs(tgoto(tgetstr("ch", NULL), 0, col - 1), 1, ft_putchar);
+	}
 	else
-		ft_printf("> ");
-	tmp = line->command[line->index];
-	line->command[line->index] = '\0';
-	ft_printf(line->command);
-	line->command[line->index] = tmp;
-	line->index--;
+		tputs(tgetstr("le", NULL), 1, ft_putchar);
+	update_index(line, -1);
 }
 
 void		go_right(t_line *line, int col)
 {
 	if (line->index >= line->top)
 		return ;
-	line->index++;
+	update_index(line, 1);
 	if (line->copy_mode == 2 ||
 			(line->copy_mode == 1 && line->index > line->begin_copy))
 		tputs(tgetstr("mr", NULL), 1, ft_putchar);
@@ -54,7 +50,7 @@ static void	delete_current(t_line *line, int direction, int col)
 		line->index++;
 	delete_char(line);
 	if (direction == DEL_KEY)
-		line->index--;
+		update_index(line, -1);
 	if (direction == BACK_KEY)
 		go_left(line, col);
 	tputs(tgetstr("cd", NULL), 1, ft_putchar);
@@ -88,8 +84,6 @@ static void	add_current(t_line *line, char buf, int col)
 	tputs(tgetstr("rc", NULL), 1, ft_putchar);
 	if (rows_to_end == 0 && (line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
-	if (rows_to_end == 0 && (line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
-		line->begin_row--;
 	go_right(line, col);
 }
 

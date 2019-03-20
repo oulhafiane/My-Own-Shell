@@ -71,7 +71,6 @@ int			read_line(t_line *line)
 	if (line->print_msg)
 		ft_printf(MSG);
 	line->tmp_history = NULL;
-	line->begin_row = get_current_row(tgetnum("li"));
 	get_line(line);
 	free(line->tmp_history);
 	ft_printf("\n");

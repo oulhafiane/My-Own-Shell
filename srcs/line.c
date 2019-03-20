@@ -34,6 +34,7 @@ t_line	*init_line(void)
 	line = get_t_line();
 	line->top = -1;
 	line->index = -1;
+	line->current_index = -1;
 	line->print_msg = 1;
 	if (line->buf_size < BUF_S)
 		line->buf_size = BUF_S + 1;

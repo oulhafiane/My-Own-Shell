@@ -25,7 +25,7 @@
 # define COPY_MAX 1000
 
 //debug
-#define TERM_TTY "/dev/ttys001"
+#define TERM_TTY "/dev/ttys005"
 
 void	debug_msg(char *msg, ...);
 
@@ -50,7 +50,7 @@ typedef struct			s_line
 	int					buf_size;
 	int					top;
 	int					index;
-	int					begin_row;
+	int				current_index;
 	int					copy_mode;
 	int					begin_copy;
 	char				print_msg;
@@ -195,6 +195,11 @@ void					go_end(t_line *line, int col);
 void					go_up(t_line *line, int col);
 void					go_down(t_line *line, int col);
 void					next_word(t_line *line, int col, int direction);
+
+/*
+**	cursor4.c
+*/
+void					update_index(t_line *line, char step);
 
 /*
 **	copy.c
