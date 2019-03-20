@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/19 23:00:33 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/20 14:53:46 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
 # include <sys/stat.h>
 # include <sys/ioctl.h>
 # include <string.h>
-# define BUF_S 1
+# define BUF_S 1000
 # define COPY_MAX 1000
 
 //debug
-#define TERM_TTY "/dev/ttys000"
+#define TERM_TTY "/dev/ttys001"
 
 void	debug_msg(char *msg, ...);
 
@@ -209,6 +209,7 @@ void					go_left_copy_mode(t_line *line, int col);
 void					child_handler(int sig);
 void					signals(void);
 void					exit_shell(char *format, ...);
+void					syntax_error(t_duped *duped, char *format, ...);
 
 /*
 **	quotes.c
@@ -221,6 +222,7 @@ int						check_stack(char flag_quote);
 */
 void					handle_piping(t_command_list *ptr, t_list **env, t_list *built_in);
 int						is_piped(t_command_list *ptr);
+void					execute_command(char ***cmd, t_list **env, t_list *built_in);
 
 /*
 ** Path.c
@@ -242,7 +244,6 @@ int						redir_out(char *filename, int perm);
 ** quotes.c
 */
 int						handle_dollar(char **line, char **new_line, int *i);
-t_command_list			*init_quotes(t_line *line, t_command_list *commands);
 char					*remove_new_line(char *line, int len);
 void					is_match(char spliter, t_line *current, t_command_list *command, char *start);
 int						is_not_only_spaces(char *line);
@@ -292,5 +293,37 @@ t_redirect				*init_t_redirect(void);
 **	paste.c
 */
 void					paste_chars(int *buf, t_line *line);
+
+/*
+**  redirect1.c
+*/
+
+int						is_number(char *str);
+int						redir_out(char *filename, int perm);
+void					file_to_des(t_command **command, t_duped *duped, char *tmp, int perm);
+void					file_or_fdes(t_command **command, t_duped *duped, char *tmp);
+void					redirect_err_out(t_command **command, t_redirect *redirect);
+
+/*
+**	redirect2.c
+*/
+
+void					reverse_agregate(t_command **c, t_duped *d, char *t, t_redirect *r);
+void					agregate_2_check(char *tmp, t_duped *duped, int num);
+void					agregate_redirect(t_command **c, t_redirect *r);
+void					simple_redirect(t_command **c, t_redirect *r);
+
+/*
+**	Pipe2.c
+*/
+
+void					piping(t_list *cmds, t_list **env, t_list *built_in);
+
+/*
+** quotes3.c
+*/
+
+int						handle_dollar(char **line, char **new_line, int *i);
+t_command_list			*init_quotes(t_line *line, t_command_list *commands);
 
 #endif

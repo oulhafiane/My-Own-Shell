@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 13:10:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/18 12:52:58 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/20 12:32:06 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,14 @@ void		exit_shell(char *format, ...)
 	ft_vprintf(2, format, &args);
 	va_end(args);
 	exit(-1);
+}
+
+void	syntax_error(t_duped *duped, char *format, ...)
+{
+	va_list	args;
+
+	va_start(args, format);
+	ft_vprintf(2, format, &args);
+	va_end(args);
+	duped->filed1 = -4;
 }
