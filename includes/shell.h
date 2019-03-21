@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/20 19:38:57 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/21 12:43:23 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define COPY_MAX 1000
 
 //debug
-#define TERM_TTY "/dev/ttys005"
+#define TERM_TTY "/dev/ttys001"
 
 void	debug_msg(char *msg, ...);
 
@@ -50,7 +50,8 @@ typedef struct			s_line
 	int					buf_size;
 	int					top;
 	int					index;
-	int				current_index;
+	int					current_index;
+	t_list				*new_lines;
 	int					copy_mode;
 	int					begin_copy;
 	char				print_msg;
@@ -200,6 +201,9 @@ void					next_word(t_line *line, int col, int direction);
 **	cursor4.c
 */
 void					update_index(t_line *line, char step);
+int						decision_down_left(t_line *line, int col);
+int						decision_top_down_left(t_line *line, int col);
+void					set_new_current_index(t_line *line);
 
 /*
 **	copy.c

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/20 17:39:00 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/21 13:46:00 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,15 @@
 
 void		go_left(t_line *line, int col)
 {
+//		debug_msg("============\n");
+//		debug_msg("index : %d \ncurrent : %d\n", line->index, line->current_index);
+//		debug_msg("============\n");
 	if (line->copy_mode == 1)
 		go_left_copy_mode(line, col);
 	if (line->index < 0)
 		return ;
-	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
+//	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
+	if (decision_down_left(line, col))
 	{
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
 		tputs(tgoto(tgetstr("ch", NULL), 0, col - 1), 1, ft_putchar);
@@ -26,6 +30,16 @@ void		go_left(t_line *line, int col)
 	else
 		tputs(tgetstr("le", NULL), 1, ft_putchar);
 	update_index(line, -1);
+	if (line->command[line->index + 1] == '\n')
+	{
+		set_new_current_index(line);
+		tputs(tgetstr("up", NULL), 1, ft_putchar);
+		int step = *((int*)line->new_lines->content);
+		if (line->index == line->current_index)
+			step -= 3;
+		tputs(tgoto(tgetstr("ch", NULL), 0, col - step), 1, ft_putchar);
+		line->new_lines = line->new_lines->previous;
+	}
 }
 
 void		go_right(t_line *line, int col)
@@ -40,8 +54,12 @@ void		go_right(t_line *line, int col)
 	if (line->copy_mode == 2 ||
 			(line->copy_mode == 1 && line->index > line->begin_copy))
 		tputs(tgetstr("me", NULL), 1, ft_putchar);
-	if ((line->index + ft_strlen(GET_MSG(line->print_msg)) + 1) % col == 0)
+	if (decision_down_left(line, col))
 		go_down_left();
+		//debug_msg("============\n");
+		//debug_msg("index : %d \ncurrent : %d\n", line->index, line->current_index);
+		//debug_msg("char : %c -> %d\n", line->command[line->index], line->command[line->index]);
+		//debug_msg("============\n");
 }
 
 static void	delete_current(t_line *line, int direction, int col)
@@ -50,7 +68,7 @@ static void	delete_current(t_line *line, int direction, int col)
 		line->index++;
 	delete_char(line);
 	if (direction == DEL_KEY)
-		update_index(line, -1);
+		line->index--;
 	if (direction == BACK_KEY)
 		go_left(line, col);
 	tputs(tgetstr("cd", NULL), 1, ft_putchar);
@@ -63,26 +81,29 @@ static void	add_current(t_line *line, char buf, int col)
 {
 	int		rows_to_end;
 	int		index;
+	int		current_index;
 	int		height;
 
 	rows_to_end = -1;
 	add_char(line, buf);
-	if ((line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
+	if (decision_top_down_left(line, col))
 	{
 		tputs(tgetstr("sc", NULL), 1, ft_putchar);
 		index = line->index;
+		current_index = line->current_index;
 		go_home(line, col);
 		line->index = index;
+		line->current_index = current_index;
 		height = tgetnum("li");
 		rows_to_end = height - get_current_row(height) - (line->top / col);
 		tputs(tgetstr("rc", NULL), 1, ft_putchar);
 	}
 	tputs(tgetstr("sc", NULL), 1, ft_putchar);
 	ft_printf("%s", line->command + line->index + 1);
-	if (rows_to_end == 0 && (line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
+	if (rows_to_end == 0 && decision_top_down_left(line, col))
 		go_down_left();
 	tputs(tgetstr("rc", NULL), 1, ft_putchar);
-	if (rows_to_end == 0 && (line->top + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
+	if (rows_to_end == 0 && decision_top_down_left(line, col))
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
 	go_right(line, col);
 }

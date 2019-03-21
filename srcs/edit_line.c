@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/20 16:14:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/21 13:12:35 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static void	print_newchar(t_line *line, int buf)
 {
 	int		col;
 	int		old_size;
+	t_list	*new_newline;
 
 	ft_putchar(buf);
 	if (line->top + 2 >= line->buf_size)
@@ -49,11 +50,21 @@ static void	print_newchar(t_line *line, int buf)
 		line->buf_size *= 2;
 		line->command = ft_realloc(line->command, line->buf_size, old_size);
 	}
-	line->command[++(line->index)] = buf;
-	line->top++;
+	line->command[line->index + 1] = buf;
 	init_terms();
 	col = tgetnum("co");
-	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
+	if (buf == '\n')
+	{
+		int	*diff;
+		diff = (int*)malloc(sizeof(int));
+		*diff = col - ((line->current_index + 1) % col);
+		new_newline = ft_lstnew(diff, 0);
+		ft_lstadd_end(&(line->new_lines), new_newline);
+		line->new_lines = new_newline;
+	}
+	update_index(line, 1);
+	line->top++;
+	if (decision_down_left(line, col))
 		go_down_left();
 }
 
