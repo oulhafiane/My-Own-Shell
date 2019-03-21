@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/20 17:59:25 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/21 12:44:07 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	forkit(char *full_path, t_list **env, t_command_list *command)
 	}
 	else if (father == 0)
 	{
-		loop_dup(current);
+		loop_dup(current, 1);
 		execve(full_path, redirect->command, env_tab);
 		// Free t_redirect && t_duped
 	}
@@ -129,7 +129,7 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 			exit(-1);
 		}
 		else if ((bltin = ft_lstsearch(blt, *cmds, &check_builtin)) != NULL)
-			run_builtin(env, cmds, bltin);
+			run_builtin(env, bltin, command);
 		else if (ft_strchr(*cmds, '/') != NULL)
 			exec_local(cmds, env, command);
 		else

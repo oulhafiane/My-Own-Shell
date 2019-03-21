@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/20 12:38:11 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 13:08:24 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@
 # define LESSGREAT "<>"
 # define DLESSDASH "<<-"
 # define AMPERSAND '&'
+# define TILDA '~'
 # define WRITE_END 1
 # define READ_END 0
 # define ERROR_MSG "21sh :syntax error near unexprected token"

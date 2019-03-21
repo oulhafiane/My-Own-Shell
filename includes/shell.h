@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/21 12:43:23 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/21 13:47:23 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 
 //debug
 #define TERM_TTY "/dev/ttys001"
-
 void	debug_msg(char *msg, ...);
 
 
@@ -108,7 +107,7 @@ int					fix_line(char **line, t_list *env);
 void					free_builtin(t_list *lst);
 void					init_builtin(t_list **lst);
 int					check_builtin(t_list *elem, void *obj);
-void					run_builtin(t_list **env, char **cmds, t_list *bltin);
+void					run_builtin(t_list **env, t_list *bltin, t_command_list *cmd);
 
 /*
 **	env.c
@@ -294,7 +293,7 @@ t_redirect				*handle_redirect(t_command_list *command);
 ** t_redirect.c
 */
 void					free_duped(t_redirect *redirect);
-void					loop_dup(t_duped *current);
+int						loop_dup(t_duped *current, int option);
 int						loop_dup2(t_duped *current);
 t_duped					*init_t_duped(t_redirect *redirect);
 t_redirect				*init_t_redirect(void);
@@ -335,5 +334,6 @@ void					piping(t_list *cmds, t_list **env, t_list *built_in);
 
 int						handle_dollar(char **line, char **new_line, int *i);
 t_command_list			*init_quotes(t_line *line, t_command_list *commands);
+int						handle_tilda(char **line, char **new_line, int *i);
 
 #endif

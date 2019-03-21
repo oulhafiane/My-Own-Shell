@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:50:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/20 14:52:42 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 13:45:05 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,29 @@ int				handle_dollar(char **line, char **new_line, int *i)
 	free(tmp);
 	while (*env)
 		(*new_line)[(*i)++] = *env++;
+	*line = head;
+	return (1);
+}
+
+int				handle_tilda(char **line, char **new_line, int *i)
+{
+	char	*head;
+	char	*home;
+	int		j;
+
+	j = 0;
+	if (ft_isalpha(*((*line) + 1)))
+		return (0);
+	head = ++(*line);
+	if (head[0] == '/' || head[0] == '\0')
+	{
+		if ((home = getenv("HOME")) == NULL)
+				home = "";
+	}
+	else
+		return (0);
+	while (head[j])
+		(*new_line)[(*i)++] = head[j++];
 	*line = head;
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/20 15:08:10 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 13:08:31 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ void		handle_quote(t_line *current, t_command_list *command, char flag)
 		if (flag == 0)
 			continue;
 		else if (spliter != SINGLE_QUOTE && *line == DOLLAR_SIGN && handle_dollar(&line, &new_line, &i))
+			continue;
+		else if (!spliter && *line == TILDA && handle_tilda(&line, &new_line, &i))
 			continue;
 		else
 			handling_parsed_line(command, new_line, &i, flag);
