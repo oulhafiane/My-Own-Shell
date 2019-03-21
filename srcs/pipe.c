@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 12:07:27 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 16:46:40 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@ void	execute_command(char ***cmd, t_list **env, t_list *built_in)
 	path = get_path(*env);
 	if ((bltin = ft_lstsearch(built_in, (*cmd)[0], &check_builtin)))
 		((t_builtin*)bltin->content)->f((*cmd)[1], env);
-	else if ((error = full_path(&(*cmd)[0], path) == SUCCESS))
+	else if ((error = full_path(&(*cmd)[0], path)) == SUCCESS)
 		execve((*cmd)[0], *cmd, env_tab);
+	else if (error == ERROR_DIR)
+		ft_printf_fd(2, "%s Is a Directory.\n", (*cmd)[0]);
 	else if (error == EACCESS)
 		ft_printf_fd(2, "%s Permission denied\n", (*cmd)[0]);
 	else if (error == EFILE)
-		ft_printf_fd(2, "21sh : command not found: %s\n", (*cmd)[0]);
+		ft_printf_fd(2, "21sh : %s: command not found\n", (*cmd)[0], error);
 	exit(EXIT_FAILURE);
 }
 

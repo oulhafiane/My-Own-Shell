@@ -6,12 +6,13 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/21 13:08:24 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 15:47:46 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONST_H
 # define CONST_H
+# define M_ISDIR(m)	((m & 0170000) == 0040000)
 # define TAB_KEY 9
 # define UP_KEY 4283163
 # define DOWN_KEY 4348699
@@ -44,6 +45,7 @@
 # define DOUBLE_QUOTE 34
 # define DOLLAR_SIGN '$'
 # define BACK_SLASH '\\'
+# define ERROR_DIR 5
 # define ECMD 3
 # define EACCESS 2
 # define EFILE 0

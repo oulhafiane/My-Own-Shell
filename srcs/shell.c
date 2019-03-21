@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/21 12:44:07 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 18:51:19 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,22 @@ static void	forkit(char *full_path, t_list **env, t_command_list *command)
 **	otherwise, it prints an error msg.
 */
 
+int is_directory(const char *path)
+{
+	struct stat statbuf;
+	  if (stat(path, &statbuf) != 0)
+		  return (0);
+	 return (M_ISDIR(statbuf.st_mode));
+}
+
 static void	exec_local(char **cmds, t_list **env, t_command_list *command)
 {
+
 	if (access(*cmds, F_OK) == 0)
 	{
-		if (access(*cmds, X_OK) == 0)
+		if (is_directory(*cmds))
+			ft_printf_fd(2, "%s: Is a Directory.\n", *cmds);
+		else if (access(*cmds, X_OK) == 0)
 			forkit(*cmds, env, command);
 		else
 			ft_printf_fd(2, "%s: Permission denied.\n", *cmds);
@@ -168,6 +179,7 @@ static void	run_shell(t_list *blt, t_list **env, t_list **history)
 		{
 			add_history(new_line);
 			cmds = init_quotes(get_t_line(), &commands);
+			handle_asterisk(&commands);
 			while (cmds->index)
 			{
 				cmd = separated_by_del(cmds, ';');

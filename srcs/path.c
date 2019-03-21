@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/22 19:11:37 by amoutik           #+#    #+#             */
-/*   Updated: 2019/02/23 10:54:31 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 16:45:17 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int			is_accessible(char *full_path)
 {
-	if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
+	if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0
+			&& !is_directory(full_path))
 		return (1);
 	return (0);
 }
@@ -33,7 +34,7 @@ int			full_path(char **cmd, char **path_env)
 			free(*cmd);
 			*cmd = full_path;
 			return (SUCCESS);
-		}
+		}	
 		else if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == -1)
 			return (EACCESS);
 		path_env++;
@@ -43,5 +44,7 @@ int			full_path(char **cmd, char **path_env)
 		return (SUCCESS);
 	else if (access(*cmd, F_OK) == 0 && access(*cmd, X_OK) == -1)
 		return (EACCESS);
+	if (is_directory(*cmd))
+		return (ERROR_DIR);
 	return (EFILE);
 }
