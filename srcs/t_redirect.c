@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 16:04:22 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/20 12:34:08 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 12:45:59 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,14 @@ int		loop_dup2(t_duped *current)
 	return (0);
 }
 
-void	loop_dup(t_duped *current)
+int		loop_dup(t_duped *current, int option)
 {
 	while (current)
 	{
-		if (current->filed2 >= 0 && current->filed1 < 0)
+		if (option && current->filed2 >= 0 && current->filed1 < 0)
 			exit(EXIT_FAILURE);
+		else if (!option && current->filed2 >= 0 && current->filed1 < 0)
+			return (0);
 		if (current->filed1 != -1 && current->filed2 != -1)
 			dup2(current->filed1, current->filed2);
 		else if (current->filed1 == -2)
@@ -101,4 +103,5 @@ void	loop_dup(t_duped *current)
 		}
 		current = current->next;
 	}
+	return (1);
 }

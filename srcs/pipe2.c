@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:17:20 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/20 14:44:08 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 12:11:11 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void		piping(t_list *cmds, t_list **env, t_list *built_in)
 				dup2(fd[1], 1);
 				close(fd[1]);
 			}
-			loop_dup(redirect->dup_head);
+			loop_dup(redirect->dup_head, 1);
 			close(fd[0]);
 			execute_command(&redirect->command, env, built_in);
 		}

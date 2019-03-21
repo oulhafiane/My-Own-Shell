@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/19 12:18:49 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/21 12:45:57 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,20 @@ void		free_builtin(t_list *lst)
 ** Running a builtin command
 */
 
-void		run_builtin(t_list **env, char **cmds, t_list *bltin)
+void		run_builtin(t_list **env, t_list *bltin, t_command_list *command)
 {
-	((t_builtin*)bltin->content)->f(cmds + 1, env);
+	t_redirect	*redirect;
+	int stdout_copy;
+	int	stdin_copy;
+		
+	stdout_copy = dup(1);
+	stdin_copy = dup(0);
+	redirect = handle_redirect(command);
+	if (loop_dup(redirect->dup_head, 0))
+		((t_builtin*)bltin->content)->f(redirect->command + 1, env);
+	dup2(stdout_copy, 1);
+	dup2(stdin_copy, 0);
+	close(stdin_copy);
+	close(stdout_copy);
+	free_duped(redirect);
 }
