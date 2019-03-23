@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/22 15:33:36 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/23 12:22:31 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,8 +140,6 @@ void			double_less(t_command **command, t_redirect *redirect)
 			duped->del = ft_strdup((*command)->argv + 2);
 	}
 }
-
-#include <stdio.h>
 
 void			jump_forward(t_command **command, t_duped *duped)
 {

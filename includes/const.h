@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/21 15:47:46 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/23 12:23:40 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,6 @@
 # define WRITE_END 1
 # define READ_END 0
 # define ERROR_MSG "21sh :syntax error near unexprected token"
-# define FN_EXIST "No such file or directory\n"
+# define FN_EXIST "No such file or directory"
 
 #endif

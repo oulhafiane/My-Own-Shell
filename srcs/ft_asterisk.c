@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 16:48:58 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/22 18:53:38 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/23 14:18:47 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ void			handle_asterisk(t_command_list *command)
 			change_node(command, &prev, &cmd, &target);
 		}
 		else
+		{
+			closedir(directory);
 			break;
+		}
 		closedir(directory);
 	}
 }
