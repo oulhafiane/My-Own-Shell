@@ -23,7 +23,10 @@ void	delete_char(t_line *line)
 
 void	add_char(t_line *line, char c)
 {
-	char *tmp;
+	char	*tmp;
+	int	col;
+	t_list	*new_newline;
+	int	*diff;
 
 	if (line->top + 2 >= line->buf_size)
 		line->buf_size *= 2;
@@ -35,6 +38,20 @@ void	add_char(t_line *line, char c)
 	tmp[++line->top + 1] = '\0';
 	free(line->command);
 	line->command = tmp;
+	if (c == '\n')
+	{
+		init_terms();
+		col = tgetnum("co");
+		diff = (int*)malloc(sizeof(int));
+		*diff = col - ((line->current_index + 1) % col);
+		new_newline = ft_lstnew(diff, 0);
+		if (line->new_lines == NULL)
+			line->head_newlines = new_newline;
+		ft_lstadd_end(&(line->new_lines), new_newline);
+		line->new_lines = new_newline;
+	}
+	else
+		update_newlines(line, -1);
 }
 
 static void	print_newchar(t_line *line, int buf)
@@ -59,6 +76,8 @@ static void	print_newchar(t_line *line, int buf)
 		diff = (int*)malloc(sizeof(int));
 		*diff = col - ((line->current_index + 1) % col);
 		new_newline = ft_lstnew(diff, 0);
+		if (line->new_lines == NULL)
+			line->head_newlines = new_newline;
 		ft_lstadd_end(&(line->new_lines), new_newline);
 		line->new_lines = new_newline;
 	}
