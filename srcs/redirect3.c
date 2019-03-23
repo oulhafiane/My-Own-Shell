@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:45:59 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 12:01:58 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/22 18:55:08 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		double_great(t_command **command, t_redirect *redirect)
 	if (*tmp && *tmp == OUTPUT_REDI && *(++tmp) == OUTPUT_REDI)
 	{
 		if (*tmp && *(++tmp) != '\0' &&
-			*tmp != AMPERSAND && *tmp != OUTPUT_REDI)
+			*tmp != AMPERSAND && *tmp != OUTPUT_REDI && *tmp != INPUT_REDI)
 			duped->filed1 = redir_out(tmp, O_WRONLY | O_APPEND);
 		else if (*tmp != OUTPUT_REDI &&
 			(*command = (*command)->next) && (*command)->argv)

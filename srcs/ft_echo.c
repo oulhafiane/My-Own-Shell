@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:48:01 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/18 14:42:29 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/22 15:17:30 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ void		ft_echo(char **args, t_list **env)
 	(void)env;
 	while (*args)
 	{
-		ft_printf("%s ", *args);
+		ft_printf("%s", *args);
+		if (*(args + 1))
+			ft_putchar(' ');
 		args++;
 	}
 	ft_printf("\n");
