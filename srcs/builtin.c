@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/21 14:49:31 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/23 17:59:39 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,18 @@ void		run_builtin(t_list **env, t_list *bltin, t_command_list *command)
 	t_redirect	*redirect;
 	int stdout_copy;
 	int	stdin_copy;
+	int	stderr_copy;
 		
 	stdout_copy = dup(1);
 	stdin_copy = dup(0);
+	stderr_copy = dup(2);
 	redirect = handle_redirect(command);
 	if (loop_dup(redirect->dup_head, 0))
 		((t_builtin*)bltin->content)->f(redirect->command + 1, env);
 	dup2(stdout_copy, 1);
 	dup2(stdin_copy, 0);
+	dup2(stderr_copy, 2);
+	close(stderr_copy);
 	close(stdin_copy);
 	close(stdout_copy);
 	free_duped(redirect);

@@ -6,61 +6,78 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 16:48:58 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 18:58:29 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/23 14:18:47 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-t_command		*target_t_command(t_command_list *command)
+t_command		*target_t_command(t_command_list *command, t_command **prev, t_command **next)
 {
 	t_command *current;
 
-	current = command->head;
+	if (*next == NULL)
+		current = command->head;
+	else
+		current = *next;
 	while (current)
 	{
 		if (!current->is_quoted && ft_strchr(current->argv, '*'))
+		{
+			*next = current->next;
 			return (current);
+		}
+		*prev = current;
 		current = current->next;
 	}
+	*next = NULL;
 	return (NULL);
 }
 
-void			push_target(t_command_list *list, t_command *current, char *command)
+void			change_node(t_command_list *command, t_command **prev, t_command_list *cmd, t_command **target)
 {
-	t_command	*new_node;
+	t_command	*tmp;
 
-	new_node = (t_command *)ft_memalloc(sizeof(t_command));
-	if (new_node)
-		return ;
-	new_node->argv = command;
-	new_node->is_quoted = 0;
-	new_node->is_skiped = 0;
-	new_node->next = current->next;
-	current->next = new_node;
-	list->node_count++;
+	tmp = cmd->tail;
+	(*prev)->next = cmd->head;
+	cmd->tail = (*target)->next;
+	command->tail = cmd->tail;
+	*prev = tmp;
+	free((*target)->argv);
+	free(*target);
 }
 
 void			handle_asterisk(t_command_list *command)
 {
 	t_command	*target;
 	t_command_list	cmd;
+	t_command	*prev;
+	t_command	*next;
 
+	prev = NULL;
+	next = NULL;
 	DIR	*directory;
 	struct	dirent *dp;
-	if((directory = opendir(".")) == NULL)
-		ft_printf_fd(2, "No match found\n");
-	target = target_t_command(command);
-	if (target)
+	while (1)
 	{
-		init_list(&cmd);
-		while ((dp = readdir(directory)) != NULL)
+		if((directory = opendir(".")) == NULL)
+			ft_printf_fd(2, "No match found\n");
+		target = target_t_command(command, &prev, &next);
+		if (target)
 		{
-			if (dp->d_name[0] != '.')
-				push(&cmd, ft_strdup(dp->d_name), 0);
+			init_list(&cmd);
+			while ((dp = readdir(directory)) != NULL)
+			{
+				if (dp->d_name[0] != '.')
+					push(&cmd, ft_strdup(dp->d_name), 1);
+			}
+			change_node(command, &prev, &cmd, &target);
 		}
-		cmd.tail = target->next;
-		target->next = cmd.head;
-		command->tail = cmd.tail;
+		else
+		{
+			closedir(directory);
+			break;
+		}
+		closedir(directory);
 	}
 }
