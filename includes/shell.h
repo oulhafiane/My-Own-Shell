@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/22 15:19:10 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/24 23:50:51 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define COPY_MAX 1000
 
 //debug
-#define TERM_TTY "/dev/ttys002"
+#define TERM_TTY "/dev/ttys001"
 void	debug_msg(char *msg, ...);
 
 
@@ -203,6 +203,7 @@ void					next_word(t_line *line, int col, int direction);
 **	cursor4.c
 */
 void					update_index(t_line *line, char step);
+int						decision_up_right(t_line *line, int col);
 int						decision_down_left(t_line *line, int col);
 int						decision_top_down_left(t_line *line, int col);
 void					set_new_current_index(t_line *line);

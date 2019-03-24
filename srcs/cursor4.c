@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 17:39:00 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/21 12:45:34 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/25 00:01:30 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,36 @@
 
 void	update_index(t_line *line, char step)
 {
+	int		top;
+	int		index;
+
 	line->index += step;
 	line->current_index += step;
-	if (line->command[line->index] == '\n')
+	if (step == 1 && line->command[line->index] == '\n')
 		line->current_index = -1;
+	else if (step == -1 && line->command[line->index + 1] == '\n')
+	{
+		index = line->index;
+		while (index >= 0 && line->command[index] != '\n')
+			index--;
+		top = -1;
+		while (line->command[++index] != '\0' && line->command[index] != '\n')
+			top++;
+		line->current_index = top;
+	}
+}
+
+int		decision_up_right(t_line *line, int col)
+{
+	int		marge;
+
+	marge = 0;
+	if (line->index == line->current_index)
+		marge = ft_strlen(GET_MSG(line->print_msg));
+	if ((line->current_index + marge) % col == col - 1)
+		return (1);
+	else
+		return (0);
 }
 
 int		decision_down_left(t_line *line, int col)
@@ -63,17 +89,12 @@ int		decision_top_down_left(t_line *line, int col)
 	int		index;
 
 	marge = 0;
-	if (line->index == line->current_index)
-		top = line->top;
-	else
-	{
-		index = line->index;
-		while (index >= 0 && line->command[index] != '\n')
-			index--;
-		top = -1;
-		while (line->command[++index] != '\0' && line->command[index] != '\n')
-			top++;
-	}
+	index = line->index;
+	while (index >= 0 && line->command[index] != '\n')
+		index--;
+	top = -1;
+	while (line->command[++index] != '\0' && line->command[index] != '\n')
+		top++;
 	if (line->index == line->current_index)
 		marge = ft_strlen(GET_MSG(line->print_msg));
 	if ((top + marge) % col == col - 1)
@@ -103,7 +124,7 @@ void	update_newlines(t_line *line, char step)
 	if (line->new_lines != NULL && line->new_lines->next != NULL)
 		targeted_newline = line->new_lines->next;
 	else if (line->new_lines == NULL && line->head_newlines != NULL)
-		targeted_newline = line->head_newlines->content;
+		targeted_newline = line->head_newlines;
 	if (targeted_newline == NULL)
 		return ;
 	*((int*)targeted_newline->content) += step;

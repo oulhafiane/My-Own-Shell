@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 13:12:35 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/25 00:01:07 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static void	print_newchar(t_line *line, int buf)
 	int		col;
 	int		old_size;
 	t_list	*new_newline;
+	int		*diff;
 
 	ft_putchar(buf);
 	if (line->top + 2 >= line->buf_size)
@@ -72,7 +73,6 @@ static void	print_newchar(t_line *line, int buf)
 	col = tgetnum("co");
 	if (buf == '\n')
 	{
-		int	*diff;
 		diff = (int*)malloc(sizeof(int));
 		*diff = col - ((line->current_index + 1) % col);
 		new_newline = ft_lstnew(diff, 0);

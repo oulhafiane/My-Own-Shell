@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 13:46:00 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/03/25 00:01:04 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,7 @@ void		go_left(t_line *line, int col)
 		go_left_copy_mode(line, col);
 	if (line->index < 0)
 		return ;
-//	if ((line->index + ft_strlen(GET_MSG(line->print_msg))) % col == col - 1)
-	if (decision_down_left(line, col))
-	{
-		tputs(tgetstr("up", NULL), 1, ft_putchar);
-		tputs(tgoto(tgetstr("ch", NULL), 0, col - 1), 1, ft_putchar);
-	}
-	else
-		tputs(tgetstr("le", NULL), 1, ft_putchar);
-	update_index(line, -1);
-	if (line->command[line->index + 1] == '\n')
+	if (line->command[line->index] == '\n')
 	{
 		set_new_current_index(line);
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
@@ -37,6 +28,14 @@ void		go_left(t_line *line, int col)
 		tputs(tgoto(tgetstr("ch", NULL), 0, col - step), 1, ft_putchar);
 		line->new_lines = line->new_lines->previous;
 	}
+	else if (decision_up_right(line, col))
+	{
+		tputs(tgetstr("up", NULL), 1, ft_putchar);
+		tputs(tgoto(tgetstr("ch", NULL), 0, col - 1), 1, ft_putchar);
+	}
+	else
+		tputs(tgetstr("le", NULL), 1, ft_putchar);
+	update_index(line, -1);
 }
 
 void		go_right(t_line *line, int col)
@@ -51,7 +50,7 @@ void		go_right(t_line *line, int col)
 	if (line->copy_mode == 2 ||
 			(line->copy_mode == 1 && line->index > line->begin_copy))
 		tputs(tgetstr("me", NULL), 1, ft_putchar);
-	if (decision_down_left(line, col))
+	if (line->command[line->index] != '\n' && decision_down_left(line, col))
 		go_down_left();
 	if (line->command[line->index] == '\n' && line->new_lines != NULL)
 		line->new_lines = line->new_lines->next;
