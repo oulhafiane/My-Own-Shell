@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/21 18:51:19 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/25 10:29:09 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 
 static void	forkit(char *full_path, t_list **env, t_command_list *command)
 {
-	int			status;
 	pid_t		father;
 	char		**env_tab;
 	t_duped		*current;
@@ -36,7 +35,7 @@ static void	forkit(char *full_path, t_list **env, t_command_list *command)
 	father = fork();
 	if (father > 0)
 	{
-		wait(&status);
+		wait(NULL);
 		ft_free_strtab(env_tab);
 		free_duped(redirect);
 		signals();
@@ -97,7 +96,7 @@ void		exec_cmd(t_command_list *command, char **path, t_list **env)
 
 	error = NULL;
 	head_path = path;
-	binary_file = command->head->argv;
+	binary_file = get_first_non_empty(command);
 	if (binary_file != NULL)
 	{
 		while (*path)

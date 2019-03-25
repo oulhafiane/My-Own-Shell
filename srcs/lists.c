@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 18:58:31 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/25 10:29:31 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,22 @@ void		print_list(t_command_list *ptr)
 	}
 }
 
+char		*get_first_non_empty(t_command_list *ptr)
+{
+	t_command	*current;
+	
+	current = ptr->head;
+	while (current)
+	{
+		if (ft_strlen(current->argv) != 0 && !current->is_quoted)
+			return (current->argv);
+		else if (!ft_strlen(current->argv) && current->is_quoted)
+			return (current->argv);
+		current = current->next;
+	}
+	return (ptr->head->argv);
+}
+
 char		**list_to_chars(t_command_list *ptr)
 {
 	char		**cmds;
@@ -94,7 +110,7 @@ char		**list_to_chars(t_command_list *ptr)
 	i = 0;
 	while (node)
 	{
-		if (node->argv && is_not_only_spaces(node->argv) && node->is_skiped == 0)
+		if (node->argv && is_not_only_spaces(node->argv) && node->is_skiped == 0 && ft_strlen(node->argv) != 0)
 			cmds[i++] = ft_strdup(node->argv);
 		node = node->next;
 	}

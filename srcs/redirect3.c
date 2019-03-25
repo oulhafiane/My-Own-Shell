@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:45:59 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/22 18:55:08 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/03/25 09:05:30 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,6 @@ t_redirect	*handle_redirect(t_command_list *command)
 		current = current->next;
 	}
 	redirect->command = list_to_chars(command);
+	debug_msg("%s\n", redirect->command[0]);
 	return (redirect);
 }
