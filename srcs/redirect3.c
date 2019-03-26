@@ -114,6 +114,5 @@ t_redirect	*handle_redirect(t_command_list *command)
 		current = current->next;
 	}
 	redirect->command = list_to_chars(command);
-	debug_msg("%s\n", redirect->command[0]);
 	return (redirect);
 }
