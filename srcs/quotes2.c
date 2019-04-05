@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/05 17:47:59 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/05 17:56:31 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static char	check_quote(char **line, char *spliter, char *start)
 			flag = 1;
 		if (*spliter == 0 && (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE))
 			return (0);
-        if (*spliter && (*line - 2) >= start && *(*line - 2) == '<')
+        if (*spliter && (*line - 2) >= start && ft_strchr("<>", *(*line - 2)))
             flag = 2;
 	}
 	if ((*spliter == 0 && **line == BACK_SLASH)
