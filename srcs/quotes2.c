@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/05 16:58:15 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/05 17:47:59 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ static void	add_to_list(t_command_list *command,
 	i = 0;
 	while (!is_quoted && line[i] && (line[i] == '\t' || line[i] == ' '))
 		i++;
-    if (line[i] == '\t' || line[i] == ' ')
-        i++;
-	push(command, ft_strdup(&line[i]), is_quoted);
+    push(command, ft_strdup(&line[i]), is_quoted);
 	*index = 0;
 	free(line);
 }
@@ -46,6 +44,8 @@ static char	check_quote(char **line, char *spliter, char *start)
 			flag = 1;
 		if (*spliter == 0 && (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE))
 			return (0);
+        if (*spliter && (*line - 2) >= start && *(*line - 2) == '<')
+            flag = 2;
 	}
 	if ((*spliter == 0 && **line == BACK_SLASH)
 		|| (**line == BACK_SLASH && *(*line + 1) == *spliter))
