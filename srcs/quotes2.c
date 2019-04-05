@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/05 17:56:31 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/05 18:35:26 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void	add_to_list(t_command_list *command,
 	i = 0;
 	while (!is_quoted && line[i] && (line[i] == '\t' || line[i] == ' '))
 		i++;
+    if (line[i] == ' ' || line[i] == '\t')
+        i++;
     push(command, ft_strdup(&line[i]), is_quoted);
 	*index = 0;
 	free(line);
@@ -38,13 +40,13 @@ static char	check_quote(char **line, char *spliter, char *start)
 	if ((*spliter != DOUBLE_QUOTE && **line == SINGLE_QUOTE) ||
 			(*spliter != SINGLE_QUOTE && **line == DOUBLE_QUOTE))
 	{
-		*spliter = *spliter == 0 ? **line : 0;
+		*spliter = (*spliter == 0) ? *(*line) : 0;
 		++(*line);
-		if (!*spliter && (ft_iswhitespace(**line) || !**line || **line == ';'))
-			flag = 1;
-		if (*spliter == 0 && (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE))
+		if (*spliter == 0 && (ft_iswhitespace(*(*line)) || !**line || **line == ';'))
+			return(flag = 1);
+        else if (*spliter == 0 && (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE))
 			return (0);
-        if (*spliter && (*line - 2) >= start && ft_strchr("<>", *(*line - 2)))
+        else if (*spliter && (*line - 2) >= start && ft_strchr("<>", *(*line - 2)))
             flag = 2;
 	}
 	if ((*spliter == 0 && **line == BACK_SLASH)

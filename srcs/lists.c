@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/28 18:49:04 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/05 18:05:24 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void		print_list(t_command_list *ptr)
 	current = ptr->head;
 	while (current)
 	{
-		ft_printf_fd(2, "|%s|\n", current->argv);
+		ft_printf_fd(2, "|%s| is quoted %d\n", current->argv, current->is_quoted);
 		current = current->next;
 	}
 }
