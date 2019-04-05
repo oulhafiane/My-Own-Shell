@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 13:08:31 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/05 16:58:15 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ static void	add_to_list(t_command_list *command,
 	int i;
 
 	i = 0;
-	while (line[i] && (line[i] == '\t' || line[i] == ' '))
+	while (!is_quoted && line[i] && (line[i] == '\t' || line[i] == ' '))
 		i++;
+    if (line[i] == '\t' || line[i] == ' ')
+        i++;
 	push(command, ft_strdup(&line[i]), is_quoted);
 	*index = 0;
 	free(line);
@@ -105,7 +107,7 @@ void		handle_quote(t_line *current, t_command_list *command, char flag)
 			continue;
 		else
 			handling_parsed_line(command, new_line, &i, flag);
-		new_line[i++] = *line++;
+        new_line[i++] = *line++;
 		while (*line && spliter == 0 && ft_strchr(" \t", *line) && ft_strchr("\t ", *(line + 1)))
 			line++;
 		if (*line == '\0' && i > 1 && is_not_only_spaces((tmp = ft_strndup(new_line, i - 1))))
