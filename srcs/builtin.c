@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/23 17:59:39 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/05 21:09:30 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,16 @@ void		run_builtin(t_list **env, t_list *bltin, t_command_list *command)
 	int	stdin_copy;
 	int	stderr_copy;
 		
+	redirect = handle_redirect(command);
+    if (loop_dup2(redirect->dup_head, 0))
+    {
+        ft_printf_fd(2, "Ambiguous input redirect.\n");
+        free_duped(redirect);
+        return ;
+    }
 	stdout_copy = dup(1);
 	stdin_copy = dup(0);
 	stderr_copy = dup(2);
-	redirect = handle_redirect(command);
 	if (loop_dup(redirect->dup_head, 0))
 		((t_builtin*)bltin->content)->f(redirect->command + 1, env);
 	dup2(stdout_copy, 1);

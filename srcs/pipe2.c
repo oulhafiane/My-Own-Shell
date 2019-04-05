@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:17:20 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 12:11:11 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/05 21:06:23 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		pipe_and_fork(int fd[2], pid_t *pid)
 
 void		check_ambiguous(t_redirect *redirect, int *fd_in)
 {
-	if (!loop_dup2(redirect->dup_head))
+	if (!loop_dup2(redirect->dup_head, 1))
 		dup2(*fd_in, 0);
 	else
 		exit_shell("Ambiguous input redirect.\n");

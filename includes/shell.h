@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/05 15:56:34 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/05 20:59:17 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define COPY_MAX 1000
 
 //debug
-#define TERM_TTY "/dev/ttys004"
+#define TERM_TTY "/dev/ttys003"
 void	debug_msg(char *msg, ...);
 
 
@@ -301,7 +301,7 @@ t_redirect				*handle_redirect(t_command_list *command);
 */
 void					free_duped(t_redirect *redirect);
 int						loop_dup(t_duped *current, int option);
-int						loop_dup2(t_duped *current);
+int						loop_dup2(t_duped *current, int option);
 t_duped					*init_t_duped(t_redirect *redirect);
 t_redirect				*init_t_redirect(void);
 
