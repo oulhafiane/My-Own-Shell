@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/05 19:46:37 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/06 12:40:22 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ static void	add_to_list(t_command_list *command,
 	i = 0;
 	while (!is_quoted && line[i] && (line[i] == '\t' || line[i] == ' '))
 		i++;
-    push(command, ft_strdup(&line[i]), is_quoted);
+    if (!is_quoted && ft_strlen(&line[i]) == 0)
+        ;
+    else
+        push(command, ft_strdup(&line[i]), is_quoted);
 	*index = 0;
 	free(line);
 }

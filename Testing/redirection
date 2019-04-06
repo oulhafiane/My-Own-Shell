@@ -16,6 +16,6 @@ re
 mi
 EOF
 
-wc <<< "do re mi"
+wc <<< "do re mi" Issue here
 foo 3> /tmp/bar.txt
 
