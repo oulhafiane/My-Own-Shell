@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 13:08:31 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/06 12:40:22 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,12 @@ static void	add_to_list(t_command_list *command,
 	int i;
 
 	i = 0;
-	while (line[i] && (line[i] == '\t' || line[i] == ' '))
+	while (!is_quoted && line[i] && (line[i] == '\t' || line[i] == ' '))
 		i++;
-	push(command, ft_strdup(&line[i]), is_quoted);
+    if (!is_quoted && ft_strlen(&line[i]) == 0)
+        ;
+    else
+        push(command, ft_strdup(&line[i]), is_quoted);
 	*index = 0;
 	free(line);
 }
@@ -38,12 +41,14 @@ static char	check_quote(char **line, char *spliter, char *start)
 	if ((*spliter != DOUBLE_QUOTE && **line == SINGLE_QUOTE) ||
 			(*spliter != SINGLE_QUOTE && **line == DOUBLE_QUOTE))
 	{
-		*spliter = *spliter == 0 ? **line : 0;
+		*spliter = (*spliter == 0) ? *(*line) : 0;
 		++(*line);
-		if (!*spliter && (ft_iswhitespace(**line) || !**line || **line == ';'))
-			flag = 1;
-		if (*spliter == 0 && (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE))
+		if (*spliter == 0 && (ft_iswhitespace(*(*line)) || !**line || **line == ';'))
+			return(flag = 1);
+        else if (*spliter == 0 && (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE))
 			return (0);
+        else if (*spliter && (*line - 2) >= start && !ft_strchr("\"\'", *(*line - 2)))
+            flag = 2;
 	}
 	if ((*spliter == 0 && **line == BACK_SLASH)
 		|| (**line == BACK_SLASH && *(*line + 1) == *spliter))
@@ -105,7 +110,7 @@ void		handle_quote(t_line *current, t_command_list *command, char flag)
 			continue;
 		else
 			handling_parsed_line(command, new_line, &i, flag);
-		new_line[i++] = *line++;
+        new_line[i++] = *line++;
 		while (*line && spliter == 0 && ft_strchr(" \t", *line) && ft_strchr("\t ", *(line + 1)))
 			line++;
 		if (*line == '\0' && i > 1 && is_not_only_spaces((tmp = ft_strndup(new_line, i - 1))))

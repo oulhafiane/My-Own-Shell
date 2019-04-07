@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/25 10:29:09 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/05 21:09:28 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ static void	forkit(char *full_path, t_list **env, t_command_list *command)
 	}
 	else if (father == 0)
 	{
+        if (loop_dup2(current, 0))
+            exit_shell("Ambiguous input redirect.\n");
 		loop_dup(current, 1);
 		execve(full_path, redirect->command, env_tab);
 		// Free t_redirect && t_duped
