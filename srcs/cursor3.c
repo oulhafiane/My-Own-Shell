@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 20:27:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/24 23:50:58 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/07 22:51:53 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,10 @@
 
 void	go_up(t_line *line, int col)
 {
-	int		i;
-
 	if (line->index - 1 > col - (long)ft_strlen(GET_MSG(line->print_msg)))
 	{
-		if (line->copy_mode == 1)
-		{
-			i = -1;
-			while (++i < col && line->index >= 0)
-				go_left(line, col);
-		}
-		else
-		{
-			tputs(tgetstr("up", NULL), 1, ft_putchar);
-			update_index(line, -col);
-		}
+		tputs(tgetstr("up", NULL), 1, ft_putchar);
+		update_index(line, -col);
 	}
 	else if (line->index + 1 >= col - (long)ft_strlen(GET_MSG(line->print_msg)))
 		go_home(line, col);

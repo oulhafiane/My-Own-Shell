@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/25 00:01:07 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/07 16:08:13 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,33 @@
 
 void	delete_char(t_line *line)
 {
-	if (line->index >= 0)
-		ft_memmove(line->command + line->index,
-				line->command + (line->index + 1),
-				line->top - line->index);
+	t_list	*tmp;
+	t_list	*tmp2;
+
+	if (line->index < 0)
+		return ;
+	ft_memmove(line->command + line->index,
+			line->command + (line->index + 1),
+			line->top - line->index);
 	line->command[line->top--] = 0;
+	if (line->current_index >= 0)
+		update_newlines(line, 1);
+	else if (line->new_lines != NULL)
+	{
+		tmp = line->new_lines;
+		if (line->new_lines->previous != NULL)
+		{
+			tmp2 = line->new_lines->previous;
+			line->new_lines->previous = line->new_lines->next;
+			line->new_lines = tmp2;
+		}
+		else
+		{
+			line->head_newlines = line->new_lines->next;
+			line->new_lines = line->new_lines->next;
+		}
+		free(tmp);
+	}
 }
 
 void	add_char(t_line *line, char c)

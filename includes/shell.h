@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/25 10:27:27 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/07 22:57:42 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ typedef struct			s_line
 	int					current_index;
 	t_list				*new_lines;
 	t_list				*head_newlines;
-	int					copy_mode;
-	int					begin_copy;
 	char				print_msg;
 	t_list				**tail_history;
 	t_list				*index_history;
@@ -209,14 +207,6 @@ int						decision_top_down_left(t_line *line, int col);
 void					set_new_current_index(t_line *line);
 int						get_current_rows(t_line *line, int col);
 void					update_newlines(t_line *line, char step);
-
-/*
-**	copy.c
-*/
-void					paste_text(t_line *line);
-void					end_copy_mode(t_line *line, int keystrock);
-void					begin_reset_mode(t_line *line);
-void					go_left_copy_mode(t_line *line, int col);
 
 /*
 **	handlers.c

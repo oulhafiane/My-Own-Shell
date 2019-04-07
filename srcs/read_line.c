@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/20 16:24:42 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/07 22:58:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,11 @@ void		check_keys(int buf, t_line *line)
 	if (buf == EOT_KEY)
 		free_buffer(line);
 	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
-			buf == DEL_KEY || buf == HOME_KEY || buf == END_KEY ||
-			buf == GO_UP || buf == GO_DOWN || buf == GO_RIGHT || buf == GO_LEFT)
+			buf == HOME_KEY || buf == END_KEY || buf == GO_UP ||
+			buf == GO_DOWN || buf == GO_RIGHT || buf == GO_LEFT)
 		move_cursor(buf, line);
 	else if (buf == UP_KEY || buf == DOWN_KEY)
 		handle_history(buf, line);
-	else if (buf == TAB_KEY)
-		handle_tab(line);
-	else if (buf == CTRL_SPACE || buf == ESC_KEY)
-		begin_reset_mode(line);
-	else if (line->copy_mode == 1 && (buf == CTRL_X || buf == CTRL_C))
-		end_copy_mode(line, buf);
-	else if (line->copy_mode == 0 && buf == CTRL_V)
-		paste_text(line);
 	else if (ft_isprint(buf))
 		print_char_inline(line, buf);
 	else if (((char*)&buf)[1] && (ft_isprint(*((char*)&buf)) || ft_strchr(" \t\n", (*((char*)&buf))) != NULL))
