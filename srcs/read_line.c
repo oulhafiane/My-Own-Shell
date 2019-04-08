@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/07 22:58:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 00:20:37 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,37 @@ static void	get_line(t_line *line)
 	go_end(line, tgetnum("co"));
 }
 
+void		clr_screen(int sig)
+{
+	int		i;
+	char	*tmp;
+	t_line	*line;
+
+	(void)sig;
+	line = get_t_line();
+	tputs(tgetstr("cl", NULL), 1, ft_putchar);
+	if (line->print_msg)
+		ft_printf(MSG);
+	else
+		ft_printf(MSG_QUOTE);
+	line->index = -1;
+	line->current_index = -1;
+	line->top = -1;
+	i = -1;
+	tmp = ft_strdup(line->command);
+	while (tmp[++i] != '\0')
+		print_newchar(line, tmp[i]);
+	free(tmp);
+	init_terms();
+	line->row_index = get_current_row(tgetnum("li"));
+}
+
 void		check_keys(int buf, t_line *line)
 {
 	if (buf == EOT_KEY)
 		free_buffer(line);
+	else if (buf == CLR_KEY1 || buf == CLR_KEY2)
+		clr_screen(0);
 	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
 			buf == HOME_KEY || buf == END_KEY || buf == GO_UP ||
 			buf == GO_DOWN || buf == GO_RIGHT || buf == GO_LEFT)
@@ -63,6 +90,7 @@ int			read_line(t_line *line)
 	if (line->print_msg)
 		ft_printf(MSG);
 	line->tmp_history = NULL;
+	line->row_index = get_current_row(tgetnum("li"));
 	get_line(line);
 	free(line->tmp_history);
 	ft_printf("\n");

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/07 22:51:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 00:52:30 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,81 +50,63 @@ void		go_left(t_line *line, int col)
 	update_index(line, -1);
 }
 
-void		delete_new_line(t_line *line, int col, int step)
+static void update_line(t_line *line, int col, char *tmp, char buf)
 {
-	set_new_current_index(line);
-	tputs(tgetstr("up", NULL), 1, ft_putchar);
-	if (line->index == line->current_index)
-		step -= 3;
-	tputs(tgoto(tgetstr("ch", NULL), 0, col - step), 1, ft_putchar);
+	int		i;
+	int		index;
+	int		current_index;
+
+	i = -1;
+	tputs(tgetstr("sc", NULL), 1, ft_putchar);
+	tputs(tgetstr("cd", NULL), 1, ft_putchar);
+	index = line->index;
+	current_index = line->current_index;
+	line->top = line->index;
+	if (buf != 0)
+		print_newchar(line, buf);
+	while (tmp[++i] != '\0')
+		print_newchar(line, tmp[i]);
+	tputs(tgetstr("rc", NULL), 1, ft_putchar);
+	line->index = index;
+	line->current_index = current_index;
+	debug_msg("================\n");
+	debug_msg("to end : %d <--> current rows : %d, height : %d\n", line->row_index, get_current_rows(line, col), tgetnum("li"));
+	debug_msg("================\n");
+	if (buf != 0 && tgetnum("li") - (line->row_index + get_current_rows(line, col)) < 0
+			&& decision_top_down_left(line, col))
+		tputs(tgetstr("up", NULL), 1, ft_putchar);
 }
 
-static void	delete_current(t_line *line, int direction, int col)
+static void	delete_current(t_line *line, int col)
 {
-	char	tmp;
-	int		step;
+	char	to_delete;
+	char	*tmp;
+	t_list	*tmp_newlines;
 
-	tmp = line->command[line->index];
-	if (tmp == '\n')
-		step = *((int*)line->new_lines->content);
-	if (direction == DEL_KEY)
-		line->index++;
-	delete_char(line);
-	if (direction == DEL_KEY)
-		line->index--;
-	if (direction == BACK_KEY)
-	{
-		if (tmp == '\n')
-			delete_new_line(line, col, step);
-		else if (line->command[line->index] == '\n')
-		{
-			tputs(tgetstr("le", NULL), 1, ft_putchar);
-			update_index(line, -1);
-		}
-		else
-			go_left(line, col);
-	}
-	tputs(tgetstr("cd", NULL), 1, ft_putchar);
-	tputs(tgetstr("sc", NULL), 1, ft_putchar);
-	ft_printf("%s", line->command + line->index + 1);
-	tputs(tgetstr("rc", NULL), 1, ft_putchar);
+	to_delete = line->command[line->index];
+	tmp_newlines = free_next_newlines(line);
+	go_left(line, col);
+	tmp = ft_strdup(line->command + line->index + 2);
+	line->command[line->top] = '\0';
+	update_line(line, col, tmp, 0);
+	free(tmp);
+	line->new_lines = tmp_newlines;
+	if (to_delete == '\n' && line->new_lines)
+		line->new_lines = delete_current_newline(line);
 }
 
 static void	add_current(t_line *line, char buf, int col)
 {
-	int		rows_to_end;
-	int		index;
-	int		current_index;
-	int		height;
-	t_list		*newlines;
+	char	*tmp;
+	t_list	*tmp_newlines;
 
-	rows_to_end = -1;
-	add_char(line, buf);
-	if (decision_top_down_left(line, col))
-	{
-		tputs(tgetstr("sc", NULL), 1, ft_putchar);
-		index = line->index;
-		current_index = line->current_index;
-		newlines = line->new_lines;
-		go_home(line, col);
-		line->index = index;
-		line->current_index = current_index;
-		line->new_lines = newlines;
-		height = tgetnum("li");
-		rows_to_end = height - ((get_current_row(height) - 1) +  get_current_rows(line, col));
-		tputs(tgetstr("rc", NULL), 1, ft_putchar);
-	}
-	tputs(tgetstr("sc", NULL), 1, ft_putchar);
-	tputs(tgetstr("cd", NULL), 1, ft_putchar);
-	ft_printf("%s", line->command + line->index + 1);
-	if (rows_to_end == 0 && decision_top_down_left(line, col))
-		go_down_left();
-	tputs(tgetstr("rc", NULL), 1, ft_putchar);
-	if (rows_to_end == 0 && decision_top_down_left(line, col))
-		tputs(tgetstr("up", NULL), 1, ft_putchar);
+	tmp_newlines = free_next_newlines(line);
+	tmp = ft_strdup(line->command + line->index + 1);
+	update_line(line, col, tmp, buf);
 	go_right(line, col);
+	free(tmp);
+	line->new_lines = tmp_newlines;
 }
-
 
 void		move_cursor(int direction, t_line *line)
 {
@@ -137,7 +119,7 @@ void		move_cursor(int direction, t_line *line)
 	else if (direction == LEFT_KEY && line->index >= 0)
 		go_left(line, col);
 	else if (direction == BACK_KEY && line->index >= 0)
-		delete_current(line, direction, col);
+		delete_current(line, col);
 	else if (direction == HOME_KEY)
 		go_home(line, col);
 	else if (direction == END_KEY)
