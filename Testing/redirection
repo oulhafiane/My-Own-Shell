@@ -9,7 +9,7 @@ ls >> /tmp/bash.out 2>&1
 ls | wc
 ls 2>&1 | wc
 cat -e <> file
-cat -e [n]<>file
+cat -e [n]<>file // look for 0 case
 wc << EOF
 do
 re

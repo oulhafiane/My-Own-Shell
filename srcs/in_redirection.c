@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/06 12:42:55 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/08 09:50:39 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void			less_great(t_command **command, t_redirect *redirect)
 	duped = init_t_duped(redirect);
 	if (*tmp && ft_isdigit(*tmp))
 	{
-		duped->filed2 = *tmp - 0;
+		duped->filed2 = *tmp - '0';
 		tmp++;
 	}
 	else if (*tmp && *tmp == INPUT_REDI)
