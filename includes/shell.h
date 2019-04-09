@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/08 09:41:43 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/09 00:53:31 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct			s_line
 	char				copy[COPY_MAX];
 	int					buf_size;
 	int					top;
+	int					row_index;
 	int					index;
 	int					current_index;
 	t_list				*new_lines;
@@ -150,6 +151,7 @@ void					ft_pwd(char **args, t_list **env);
 **	read_line.c
 */
 void					check_keys(int bif, t_line *line);
+void					clr_screen(int sig);
 int						read_line(t_line *line);
 
 /*
@@ -163,9 +165,10 @@ void					free_buffer(t_line *line);
 /*
 **	edit_line.c
 */
-void					delete_char(t_line *line);
-void					add_char(t_line *line, char c);
+void					print_newchar(t_line *line, int buf);
 void					print_char_inline(t_line *line, int buf);
+t_list					*delete_current_newline(t_line *line);
+t_list					*free_next_newlines(t_line *line);
 void					paste_chars(int *buf, t_line *line);
 
 /*
