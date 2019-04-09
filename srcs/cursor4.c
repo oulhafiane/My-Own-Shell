@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 17:39:00 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/07 13:23:34 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 16:56:11 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,11 @@ int		get_current_rows(t_line *line, int col)
 	int	count_rows;
 
 	count_rows = 0;
-	i = -1;
-	j = ft_strlen(GET_MSG(line->print_msg)) + 1;
+	i = line->index;
+	if (line->index == line->current_index)
+		j = line->current_index + ft_strlen(GET_MSG(line->print_msg));
+	else
+		j = line->current_index;
 	while (line->command[++i] != '\0')
 	{
 		if (line->command[i] == '\n')

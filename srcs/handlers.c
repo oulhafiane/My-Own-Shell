@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 13:10:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/09 00:19:23 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:57:12 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static void	sig_handler(int sig)
 {
 	t_line	*line;
-	int		height;
 
 	(void)sig;
 	init_terms();
@@ -23,9 +22,6 @@ static void	sig_handler(int sig)
 	go_end(line, tgetnum("co"));
 	ft_printf("\n");
 	ft_printf(MSG);
-	init_terms();
-	height = tgetnum("li");
-	line->row_index = get_current_row(height);
 	free_line();
 	init_line();
 }
