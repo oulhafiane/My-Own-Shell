@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/22 22:52:46 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/20 16:03:12 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 16:47:57 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,30 @@
 
 int		get_current_row(int height)
 {
-	char	buf[8];
+	char	buf;
 	int		row;
-	int		step;
-	int		ok;
-	int		i;
+	char	begin;
 
-	int cc = 0;
-	ok = 1;
-	while (ok)
+	begin = 0;
+	row = 0;
+	tputs("\E[6n", 1, ft_putchar);
+	while (read(0, &buf, 1) > 0)
 	{
-		tputs("\E[6n", 1, ft_putchar);
-		ft_bzero(buf, sizeof(buf));
-		read(0, buf, sizeof(buf));
-		step = 0;
-		if (!ft_isdigit(buf[2]))
-			step = 1;
-		row = buf[2 + step] - '0';
-		i = 2;
-		while (ft_isdigit(buf[++i + step]))
-			row = (row * 10) + buf[i + step] - '0';
-		if (row >= 0 && row <= height)
-			ok = 0;
-		cc++;
+		if (begin == 3 && buf == 'R')
+			break;
+		if (begin == 2 && buf == ';')
+			begin = 3;
+		else if (begin == 1 && buf == 91)
+			begin = 2;
+		else if (begin == 0 && buf == 27)
+			begin = 1;
+		else if (begin == 2)
+			row = (row * 10) + (buf - '0');
 	}
-	return (row);
+	if (row >= 0 && row <= height)
+		return (row);
+	else 
+		return (get_current_row(height));
 }
 
 void	go_down_left(void)

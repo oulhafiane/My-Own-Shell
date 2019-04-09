@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/09 00:20:37 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:57:33 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ void		clr_screen(int sig)
 	while (tmp[++i] != '\0')
 		print_newchar(line, tmp[i]);
 	free(tmp);
-	init_terms();
-	line->row_index = get_current_row(tgetnum("li"));
 }
 
 void		check_keys(int buf, t_line *line)
@@ -90,7 +88,6 @@ int			read_line(t_line *line)
 	if (line->print_msg)
 		ft_printf(MSG);
 	line->tmp_history = NULL;
-	line->row_index = get_current_row(tgetnum("li"));
 	get_line(line);
 	free(line->tmp_history);
 	ft_printf("\n");

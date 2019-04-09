@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/09 00:53:31 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:52:41 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct			s_line
 	char				copy[COPY_MAX];
 	int					buf_size;
 	int					top;
-	int					row_index;
 	int					index;
 	int					current_index;
 	t_list				*new_lines;
