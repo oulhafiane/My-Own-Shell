@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/09 00:52:30 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 14:14:44 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,6 @@ static void update_line(t_line *line, int col, char *tmp, char buf)
 	tputs(tgetstr("rc", NULL), 1, ft_putchar);
 	line->index = index;
 	line->current_index = current_index;
-	debug_msg("================\n");
-	debug_msg("to end : %d <--> current rows : %d, height : %d\n", line->row_index, get_current_rows(line, col), tgetnum("li"));
-	debug_msg("================\n");
 	if (buf != 0 && tgetnum("li") - (line->row_index + get_current_rows(line, col)) < 0
 			&& decision_top_down_left(line, col))
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
