@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/09 16:58:04 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 23:29:54 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,16 @@ static void	delete_current(t_line *line, int col)
 	t_list	*tmp_newlines;
 
 	to_delete = line->command[line->index];
-	tmp_newlines = free_next_newlines(line);
+	free_next_newlines(line);
 	go_left(line, col);
+	if (to_delete == '\n' && line->new_lines)
+		free_next_newlines(line);
 	tmp = ft_strdup(line->command + line->index + 2);
 	line->command[line->top] = '\0';
+	tmp_newlines = line->new_lines;
 	update_line(line, col, tmp, 0);
 	free(tmp);
 	line->new_lines = tmp_newlines;
-	if (to_delete == '\n' && line->new_lines)
-		line->new_lines = delete_current_newline(line);
 }
 
 static void	add_current(t_line *line, char buf, int col)

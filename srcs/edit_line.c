@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/09 00:52:26 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/09 23:29:40 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,22 @@ t_list	*free_next_newlines(t_line *line)
 	t_list	*tmp;
 	t_list	*tmp_next;
 
-	if (line->new_lines && line->new_lines->next)
+	tmp = NULL;
+	if (line->new_lines)
 	{
 		tmp = line->new_lines->next;
-		while (tmp)
-		{
-			tmp_next = tmp->next;
-			free(tmp->next);
-			tmp = tmp_next;
-		}
 		line->new_lines->next = NULL;
+	}
+	else if (line->head_newlines)
+	{
+		tmp = line->head_newlines;
+		line->head_newlines = NULL;
+	}
+	while (tmp)
+	{
+		tmp_next = tmp->next;
+		free(tmp);
+		tmp = tmp_next;
 	}
 	return (line->new_lines);
 }
