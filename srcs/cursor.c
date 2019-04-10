@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 13:39:23 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/10 20:51:57 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void		go_left(t_line *line, int col)
 		set_new_current_index(line);
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
 		int step = *((int*)line->new_lines->content);
-		if (line->index == line->current_index)
-			step -= 3;
 		tputs(tgoto(tgetstr("ch", NULL), 0, col - step), 1, ft_putchar);
 		line->new_lines = line->new_lines->previous;
 	}

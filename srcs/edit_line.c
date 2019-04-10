@@ -6,18 +6,35 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/09 23:29:40 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/10 20:53:12 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
+static void update_newlines(t_line *line, int col)
+{
+	int		*diff;
+	int		index;
+	t_list	*new_newline;
+
+	if (line->index == line->current_index)
+		index = line->current_index + ft_strlen(GET_MSG(line->print_msg));
+	else
+		index = line->current_index;
+	diff = (int*)malloc(sizeof(int));
+	*diff = col - ((index + 1) % col);
+	new_newline = ft_lstnew(diff, 0);
+	if (line->new_lines == NULL)
+		line->head_newlines = new_newline;
+	ft_lstadd_end(&(line->new_lines), new_newline);
+	line->new_lines = new_newline;
+}
+
 void	print_newchar(t_line *line, int buf)
 {
 	int		col;
 	int		old_size;
-	t_list	*new_newline;
-	int		*diff;
 
 	ft_putchar(buf);
 	if (line->top + 2 >= line->buf_size)
@@ -30,38 +47,11 @@ void	print_newchar(t_line *line, int buf)
 	init_terms();
 	col = tgetnum("co");
 	if (buf == '\n')
-	{
-		diff = (int*)malloc(sizeof(int));
-		*diff = col - ((line->current_index + 1) % col);
-		new_newline = ft_lstnew(diff, 0);
-		if (line->new_lines == NULL)
-			line->head_newlines = new_newline;
-		ft_lstadd_end(&(line->new_lines), new_newline);
-		line->new_lines = new_newline;
-	}
+		update_newlines(line, col);
 	update_index(line, 1);
 	line->top++;
 	if (decision_down_left(line, col))
 		go_down_left();
-}
-
-t_list	*delete_current_newline(t_line *line)
-{
-	t_list	*tmp_newlines;
-
-	tmp_newlines = line->new_lines;
-	if (line->new_lines->previous)
-	{
-		line->new_lines->previous->next = line->new_lines->next;
-		line->new_lines = line->new_lines->previous;
-	}
-	else
-	{
-		line->head_newlines = line->new_lines->next;
-		line->new_lines = NULL;
-	}
-	free(tmp_newlines);
-	return (line->new_lines);
 }
 
 t_list	*free_next_newlines(t_line *line)

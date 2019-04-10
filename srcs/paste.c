@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 22:57:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/19 23:00:53 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/10 20:51:04 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ void    paste_chars(int *buf, t_line *line)
 		{
 			j = -1;
 			while (++j < 4)
-				move_cursor(' ', line);
+				print_char_inline(line, ' ');
 		}
 		else
-			move_cursor(buf_c[i], line);
+			print_char_inline(line, buf_c[i]);
 	}
 	i = -1;
 	while (str[++i])
-		move_cursor(str[i], line);
+		print_char_inline(line, str[i]);
 	free(str);
 }

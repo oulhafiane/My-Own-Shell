@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 17:39:00 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/09 16:56:11 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/10 14:54:24 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,23 +117,4 @@ void	set_new_current_index(t_line *line)
 		line->current_index = line->index - index;
 	else
 		line->current_index = line->index;
-}
-
-void	update_newlines(t_line *line, char step)
-{
-	t_list	*targeted_newline;
-
-	targeted_newline = NULL;
-	if (line->new_lines != NULL && line->new_lines->next != NULL)
-		targeted_newline = line->new_lines->next;
-	else if (line->new_lines == NULL && line->head_newlines != NULL)
-		targeted_newline = line->head_newlines;
-	if (targeted_newline == NULL)
-		return ;
-	*((int*)targeted_newline->content) += step;
-	if (*((int*)targeted_newline->content) <= 0)
-	{
-		init_terms();
-		*((int*)targeted_newline->content) = tgetnum("col");	
-	}
 }
