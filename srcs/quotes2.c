@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/06 12:40:22 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 13:17:19 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void		handle_quote(t_line *current, t_command_list *command, char flag)
 			continue;
 		else if (!spliter && *line == TILDA && handle_tilda(&line, &new_line, &i))
 			continue;
-		else
+		else if (flag !=  -1)
 			handling_parsed_line(command, new_line, &i, flag);
         new_line[i++] = *line++;
 		while (*line && spliter == 0 && ft_strchr(" \t", *line) && ft_strchr("\t ", *(line + 1)))
