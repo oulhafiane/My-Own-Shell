@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/09 15:52:41 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/10 20:52:11 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,15 @@ int						is_not_only_spaces(char *line);
 /*
 ** quotes2.c
 */
-void					handle_quote(t_line *current, t_command_list *command, char flag);
+void					handle_quote(t_line *current, t_command_list *command, char flag, int i);
+char					check_quote(char **line, char *spliter, char *start);
+void					push_non_quoted(char *new_line, int *i, t_command_list *command);
+void					last_world(t_command_list *command,
+							char **line, char **new_line, int *i);
+void					init_var(t_line *current,
+							char **line, char **start, char *spliter);
+void					add_to_list(t_command_list *command,
+						char *line, int *index, int is_quoted);
 
 
 /*
@@ -340,4 +348,17 @@ int						handle_tilda(char **line, char **new_line, int *i);
 */
 
 void					handle_asterisk(t_command_list *command);
+
+/*
+** is_digit.c
+*/
+
+int						is_digit(char **tmp, t_duped *duped);
+
+/*
+**	miscellaneous.c
+*/
+
+void					free_line_assign(t_line **line);
+
 #endif

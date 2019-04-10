@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:50:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 14:31:18 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 15:57:30 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int				handle_tilda(char **line, char **new_line, int *i)
 	if (ft_isalpha(*((*line) + 1)))
 		return (0);
 	head = ++(*line);
-	if((home = getenv("HOME")) == NULL)
+	if ((home = getenv("HOME")) == NULL)
 		home = "";
 	while (home[j])
 		(*new_line)[(*i)++] = home[j++];
@@ -65,6 +65,6 @@ int				handle_tilda(char **line, char **new_line, int *i)
 t_command_list	*init_quotes(t_line *line, t_command_list *commands)
 {
 	init_list(commands);
-	handle_quote(line, commands, -1);
+	handle_quote(line, commands, -1, 0);
 	return (commands);
 }

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 12:58:54 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/22 15:18:01 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 20:59:48 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ void		agregate_redirect(t_command **command,
 	}
 	else if (*tmp && *tmp != AMPERSAND && *tmp != OUTPUT_REDI)
 		reverse_agregate(command, duped, tmp, redirect);
-	else if (ft_strncmp(tmp, GREATAND, 2) == 0 || ft_strncmp(tmp, GREATAND_R, 2) == 0)
+	else if (ft_strncmp(tmp, GREATAND, 2) == 0
+			|| ft_strncmp(tmp, GREATAND_R, 2) == 0)
 		redirect_err_out(command, redirect);
 }
 

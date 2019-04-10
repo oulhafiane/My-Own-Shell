@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/08 16:05:12 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/10 16:02:34 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,18 @@
 # define READ_END 0
 # define ERROR_MSG "21sh :syntax error near unexprected token"
 # define FN_EXIST "No such file or directory"
+# define SPACE_OR_COMMA(line) (ft_iswhitespace(*(*line)) || !**line || **line == ';')
+# define SINGLE_OR_DOUBLE(line) (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE)
+# define CONTAIN_S_D(line, start) (*line - 2) >= start && !ft_strchr("\"\'", *(*line - 2))
+# define REMOVE_NEW_LINE(start) remove_new_line(ft_strdup(start), ft_strlen(start))
+/*
+** DOLAR CONDITION
+*/
+# define D_COND (spliter != SINGLE_QUOTE && *line == DOLLAR_SIGN)
+# define TILDA_COND (!spliter && *line == TILDA)
+# define CONTAIN_S (ft_strchr(" \t", *line) && (ft_strchr(" \t", *(line + 1))))
+# define IS_BSLASH (*spliter == 0 && **line == BACK_SLASH)
+# define IS_SINGLE_QUOTE (*spliter != DOUBLE_QUOTE && **line == SINGLE_QUOTE)
+# define IS_DOUBLE_QUOTE (*spliter != SINGLE_QUOTE && **line == DOUBLE_QUOTE)
 
 #endif

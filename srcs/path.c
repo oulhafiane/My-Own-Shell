@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/22 19:11:37 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/21 16:45:17 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 16:20:37 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int			full_path(char **cmd, char **path_env)
 			free(*cmd);
 			*cmd = full_path;
 			return (SUCCESS);
-		}	
+		}
 		else if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == -1)
 			return (EACCESS);
 		path_env++;

@@ -6,13 +6,13 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/09 15:01:14 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 20:45:45 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void	init_list(t_command_list *listptr)
+void			init_list(t_command_list *listptr)
 {
 	listptr->head = NULL;
 	listptr->tail = NULL;
@@ -20,7 +20,7 @@ void	init_list(t_command_list *listptr)
 	listptr->node_count = 0;
 }
 
-void	push(t_command_list *listptr, char *command, int is_quoted)
+void			push(t_command_list *listptr, char *command, int is_quoted)
 {
 	t_command *new_node_ptr;
 
@@ -50,7 +50,7 @@ void	push(t_command_list *listptr, char *command, int is_quoted)
 ** The whole list or not if it's allocated
 */
 
-void	free_list(t_command_list *ptr, int option)
+void			free_list(t_command_list *ptr, int option)
 {
 	t_command	*head;
 	t_command	*tmp;
@@ -71,35 +71,23 @@ void	free_list(t_command_list *ptr, int option)
 		init_list(ptr);
 }
 
-void		print_list(t_command_list *ptr)
+#if 0
+
+void			print_list(t_command_list *ptr)
 {
 	t_command *current;
 
 	current = ptr->head;
 	while (current)
 	{
-		ft_printf_fd(2, "|%s| is quoted %d\n", current->argv, current->is_quoted);
+		ft_printf_fd(2, "|%s|", current->argv);
 		current = current->next;
 	}
 }
 
-char		*get_first_non_empty(t_command_list *ptr)
-{
-	t_command	*current;
-	
-	current = ptr->head;
-	while (current)
-	{
-		if (ft_strlen(current->argv) != 0 && !current->is_quoted)
-			return (current->argv);
-		else if (!ft_strlen(current->argv) && current->is_quoted)
-			return (current->argv);
-		current = current->next;
-	}
-	return (ptr->head->argv);
-}
+#endif
 
-char		**list_to_chars(t_command_list *ptr)
+char			**list_to_chars(t_command_list *ptr)
 {
 	char		**cmds;
 	t_command	*node;
@@ -110,7 +98,8 @@ char		**list_to_chars(t_command_list *ptr)
 	i = 0;
 	while (node)
 	{
-		if (node->argv && is_not_only_spaces(node->argv) && node->is_skiped == 0 && ft_strlen(node->argv) != 0)
+		if (node->argv && is_not_only_spaces(node->argv)
+				&& node->is_skiped == 0 && ft_strlen(node->argv) != 0)
 			cmds[i++] = ft_strdup(node->argv);
 		node = node->next;
 	}
@@ -123,7 +112,7 @@ t_command_list	*separated_by_del(t_command_list *ptr, char del)
 	t_command_list	*commands;
 	t_command		*current;
 
-	if((commands = (t_command_list *)malloc(sizeof(t_command_list))) == NULL)
+	if ((commands = (t_command_list *)malloc(sizeof(t_command_list))) == NULL)
 		return (NULL);
 	init_list(commands);
 	current = ptr->index;
@@ -132,7 +121,7 @@ t_command_list	*separated_by_del(t_command_list *ptr, char del)
 		if (*current->argv == del && ft_strlen(current->argv) == 1)
 		{
 			ptr->index = current->next;
-			break;
+			break ;
 		}
 		push(commands, ft_strdup(current->argv), current->is_quoted);
 		current = current->next;

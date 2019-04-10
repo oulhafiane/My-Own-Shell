@@ -6,29 +6,29 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 13:17:19 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 20:01:54 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	add_to_list(t_command_list *command,
-			char *line, int *index, int is_quoted)
+void		add_to_list(t_command_list *command,
+		char *line, int *index, int is_quoted)
 {
 	int i;
 
 	i = 0;
 	while (!is_quoted && line[i] && (line[i] == '\t' || line[i] == ' '))
 		i++;
-    if (!is_quoted && ft_strlen(&line[i]) == 0)
-        ;
-    else
-        push(command, ft_strdup(&line[i]), is_quoted);
+	if (!is_quoted && ft_strlen(&line[i]) == 0)
+		;
+	else
+		push(command, ft_strdup(&line[i]), is_quoted);
 	*index = 0;
 	free(line);
 }
 
-static char	check_quote(char **line, char *spliter, char *start)
+char		check_quote(char **line, char *spliter, char *start)
 {
 	int		flag;
 
@@ -38,28 +38,26 @@ static char	check_quote(char **line, char *spliter, char *start)
 		(*line) += 2;
 		return (0);
 	}
-	if ((*spliter != DOUBLE_QUOTE && **line == SINGLE_QUOTE) ||
-			(*spliter != SINGLE_QUOTE && **line == DOUBLE_QUOTE))
+	if (IS_SINGLE_QUOTE || IS_DOUBLE_QUOTE)
 	{
 		*spliter = (*spliter == 0) ? *(*line) : 0;
 		++(*line);
-		if (*spliter == 0 && (ft_iswhitespace(*(*line)) || !**line || **line == ';'))
-			return(flag = 1);
-        else if (*spliter == 0 && (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE))
+		if (*spliter == 0 && SPACE_OR_COMMA(line))
+			return (flag = 1);
+		else if (*spliter == 0 && SINGLE_OR_DOUBLE(line))
 			return (0);
-        else if (*spliter && (*line - 2) >= start && !ft_strchr("\"\'", *(*line - 2)))
-            flag = 2;
+		else if (*spliter && CONTAIN_S_D(line, start))
+			flag = 2;
 	}
-	if ((*spliter == 0 && **line == BACK_SLASH)
-		|| (**line == BACK_SLASH && *(*line + 1) == *spliter))
+	if (IS_BSLASH || (**line == BACK_SLASH && *(*line + 1) == *spliter))
 		(*line)++;
 	if (!*spliter && ((ft_strchr(" \t", **line) || ft_strchr(SPECIAL, **line)
-			|| (*line > start && ft_strchr(SPECIAL, *(*line - 1))))))
+					|| (*line > start && ft_strchr(SPECIAL, *(*line - 1))))))
 		flag = 2;
 	return (flag);
 }
 
-static void	push_non_quoted(char *new_line, int *i, t_command_list *command)
+void		push_non_quoted(char *new_line, int *i, t_command_list *command)
 {
 	char	*tmp;
 
@@ -70,52 +68,27 @@ static void	push_non_quoted(char *new_line, int *i, t_command_list *command)
 		free(tmp);
 }
 
-static void	handling_parsed_line(t_command_list *command,
-			char *new_line, int *i, char flag)
+void		init_var(t_line *current,
+		char **line, char **start, char *spliter)
 {
-	if (flag == 1)
-		add_to_list(command, ft_strndup(new_line, *i), i, 1);
-	else if (flag == 2)
-		push_non_quoted(new_line, i, command);
-}
-
-void		handle_quote(t_line *current, t_command_list *command, char flag)
-{
-	int		i;
-	char	spliter;
-	char	*start;
-	char	*line;
-	char	*tmp;
-	char	*new_line;
-
-	i = 0;
 	spliter = 0;
-	line = current->old_command != NULL ?
-		ft_strjoin(current->old_command, current->command) : ft_strdup(current->command);
-	start = line;
+	*line = current->old_command != NULL ?
+		ft_strjoin(current->old_command, current->command)
+		: ft_strdup(current->command);
+	*start = *line;
 	if ((*(current->tail_history)) != NULL)
 	{
 		free((*(current->tail_history))->content);
-		(*(current->tail_history))->content = remove_new_line(ft_strdup(start), ft_strlen(start));
+		(*(current->tail_history))->content = REMOVE_NEW_LINE(*start);
 	}
-	new_line = ft_strnew(ft_strlen(line));
-	while (*line)
-	{
-		flag = check_quote(&line, &spliter, start);
-		if (flag == 0)
-			continue;
-		else if (spliter != SINGLE_QUOTE && *line == DOLLAR_SIGN && handle_dollar(&line, &new_line, &i))
-			continue;
-		else if (!spliter && *line == TILDA && handle_tilda(&line, &new_line, &i))
-			continue;
-		else if (flag !=  -1)
-			handling_parsed_line(command, new_line, &i, flag);
-        new_line[i++] = *line++;
-		while (*line && spliter == 0 && ft_strchr(" \t", *line) && ft_strchr("\t ", *(line + 1)))
-			line++;
-		if (*line == '\0' && i > 1 && is_not_only_spaces((tmp = ft_strndup(new_line, i - 1))))
-			add_to_list(command, tmp, &i, 0);
-	}
-	free(new_line);
-	is_match(spliter, current, command, start);
+}
+
+void		last_world(t_command_list *command,
+			char **line, char **new_line, int *i)
+{
+	char *tmp;
+
+	if (**line == '\0' && *i > 1
+			&& is_not_only_spaces((tmp = ft_strndup(*new_line, *i - 1))))
+		add_to_list(command, tmp, i, 0);
 }

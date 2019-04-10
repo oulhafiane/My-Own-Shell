@@ -6,13 +6,14 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 16:48:58 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/23 14:18:47 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 16:07:03 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-t_command		*target_t_command(t_command_list *command, t_command **prev, t_command **next)
+t_command		*target_t_command(t_command_list *command,
+			t_command **prev, t_command **next)
 {
 	t_command *current;
 
@@ -34,7 +35,8 @@ t_command		*target_t_command(t_command_list *command, t_command **prev, t_comman
 	return (NULL);
 }
 
-void			change_node(t_command_list *command, t_command **prev, t_command_list *cmd, t_command **target)
+void			change_node(t_command_list *command,
+		t_command **prev, t_command_list *cmd, t_command **target)
 {
 	t_command	*tmp;
 
@@ -67,10 +69,8 @@ void			handle_asterisk(t_command_list *command)
 		{
 			init_list(&cmd);
 			while ((dp = readdir(directory)) != NULL)
-			{
 				if (dp->d_name[0] != '.')
 					push(&cmd, ft_strdup(dp->d_name), 1);
-			}
 			change_node(command, &prev, &cmd, &target);
 		}
 		else

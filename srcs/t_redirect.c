@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 16:04:22 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/05 21:04:08 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 21:05:03 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,12 @@ t_duped			*init_t_duped(t_redirect *redirect)
 {
 	t_duped		*node;
 
-	if((node = (t_duped *)malloc(sizeof(t_duped))) == NULL)
+	if ((node = (t_duped *)malloc(sizeof(t_duped))) == NULL)
 		return (NULL);
 	node->filed1 = -1;
 	node->filed2 = -1;
 	node->del = NULL;
 	node->next = NULL;
-
 	if (redirect->dup_head == NULL)
 	{
 		redirect->dup_head = node;
@@ -47,13 +46,12 @@ t_duped			*init_t_duped(t_redirect *redirect)
 	return (node);
 }
 
-void	free_duped(t_redirect *redirect)
+void			free_duped(t_redirect *redirect)
 {
 	t_duped		*duped;
 	t_duped		*tmp;
 
 	duped = redirect->dup_head;
-
 	while (duped)
 	{
 		if (duped->filed1 > 2)
@@ -69,31 +67,31 @@ void	free_duped(t_redirect *redirect)
 	free(redirect);
 }
 
-int		loop_dup2(t_duped *current, int option)
+int				loop_dup2(t_duped *current, int option)
 {
-    int flag;
+	int flag;
 
-    flag = 0;
+	flag = 0;
 	while (current)
 	{
 		if (option && current->filed2 == -2)
 			return (1);
-        else if (!option && current->filed2 == -2)
-        {
-            flag++;
-            if (flag == 2)
-                return (1);
-        }
+		else if (!option && current->filed2 == -2)
+		{
+			flag++;
+			if (flag == 2)
+				return (1);
+		}
 		current = current->next;
 	}
 	return (0);
 }
 
-int		loop_dup(t_duped *current, int option)
+int				loop_dup(t_duped *current, int option)
 {
 	while (current)
 	{
-		if (option && current->filed2 >= 0 && current->filed1 < 0)
+		if (option && current->filed2 >= 0 && current->filed1 == -4)
 			exit(EXIT_FAILURE);
 		else if (!option && current->filed2 >= 0 && current->filed1 < 0)
 			return (0);
