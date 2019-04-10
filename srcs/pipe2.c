@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:17:20 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/05 21:06:23 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 11:56:49 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,15 @@ void		check_ambiguous(t_redirect *redirect, int *fd_in)
 		exit_shell("Ambiguous input redirect.\n");
 }
 
-void		wait_fork(t_list **cmds, int fd[2], int *fd_in)
+int		wait_fork(t_list **cmds, int fd[2], int *fd_in, int pid)
 {
-	wait(NULL);
+	int status;
+
+	waitpid(pid, &status, 0);
 	close(fd[1]);
 	*fd_in = fd[0];
 	*cmds = (*cmds)->next;
+	return (status);
 }
 
 void		piping(t_list *cmds, t_list **env, t_list *built_in)
@@ -61,6 +64,7 @@ void		piping(t_list *cmds, t_list **env, t_list *built_in)
 			execute_command(&redirect->command, env, built_in);
 		}
 		else if (pid > 0)
-			wait_fork(&cmds, fd, &fd_in);
+			if(wait_fork(&cmds, fd, &fd_in, pid))
+				break;
 	}
 }

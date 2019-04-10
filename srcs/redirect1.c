@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 11:45:56 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/23 12:22:38 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/08 16:28:49 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ void	file_to_des(t_command **command, t_duped *duped, char *tmp, int perm)
 			(*command)->is_skiped = 1;
 		}
 		else
-		{
-			ft_printf_fd(2, "%s `newline'\n", ERROR_MSG);
-			duped->filed1 = -4;
-		}
+			syntax_error(duped, "%s `newline'\n", ERROR_MSG);
 	}
 }
 

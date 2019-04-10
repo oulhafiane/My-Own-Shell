@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/03/22 15:17:27 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/09 12:44:39 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ void	execute_command(char ***cmd, t_list **env, t_list *built_in)
 	env_tab = env_to_tab(*env);
 	path = get_path(*env);
 	if ((bltin = ft_lstsearch(built_in, (*cmd)[0], &check_builtin)))
+	{
 		((t_builtin*)bltin->content)->f(&(*cmd)[1], env);
+		exit(EXIT_SUCCESS);
+	}
 	else if ((error = full_path(&(*cmd)[0], path)) == SUCCESS)
 		execve((*cmd)[0], *cmd, env_tab);
 	else if (error == ERROR_DIR)
