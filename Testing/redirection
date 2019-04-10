@@ -18,4 +18,10 @@ EOF
 
 wc <<< "do re mi" Issue here
 foo 3> /tmp/bar.txt
+echo "$HOME"
+echo $HOME
+
+ls -la | cat -e | ls | echo "karim"
+
+cat -e << eol | cat -e
 

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:50:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 13:12:27 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/10 14:31:18 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int				handle_dollar(char **line, char **new_line, int *i)
 	char *env;
 	char *tmp;
 
-	*i = 0;
+	if (*i == 1 && (*new_line)[0] == ' ')
+		*i = 0;
 	if (is_special(*((*line) + 1)))
 		return (0);
 	head = ++(*line);
