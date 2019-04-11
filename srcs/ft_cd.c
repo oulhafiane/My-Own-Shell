@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:50:18 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/18 14:43:39 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/10 22:08:29 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,18 +102,18 @@ void	ft_cd(char **args, t_list **env)
 {
 	char		*home;
 	char		*new;
+	char		*oldpwd;
 
 	new = NULL;
 	if (*args == NULL)
 		home = get_home(*env);
 	else
 		home = *args;
-	if (home != NULL && ft_strcmp(home, "~") == 0)
-		home = get_env_value("HOME", *env);
-	else if (home != NULL && home[0] == '~' && home[1] == '/')
-		new = ft_strjoin(get_env_value("HOME", *env), home + 1);
-	else if (home != NULL && ft_strcmp(home, "-") == 0)
-		new = ft_strdup(get_env_value("OLDPWD", *env));
+	if (home != NULL && ft_strcmp(home, "-") == 0)
+	{
+		new = (oldpwd = get_env_value("OLDPWD", *env)) ?
+			ft_strdup(oldpwd) : ft_strdup(".");
+	}
 	if (new != NULL)
 		home = new;
 	if (check_dir(home) == 1)
