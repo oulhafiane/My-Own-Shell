@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 21:26:42 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/18 14:43:13 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 16:30:57 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void		ft_setenv(char **args, t_list **lst)
 		if (ft_strcmp(env->name, *args) == 0)
 		{
 			free(env->value);
-			env->value = ft_strdup(args[1]);
+			env->value = args[1] ? ft_strdup(args[1]) : ft_strdup("");
 			return ;
 		}
 		cpy = cpy->next;
