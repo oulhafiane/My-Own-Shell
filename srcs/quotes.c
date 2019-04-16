@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/16 13:36:13 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 18:10:10 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void			is_match(char spliter, t_line *current,
 		current->print_msg = 0;
 		ft_printf(GET_MSG(current->print_msg));
 		read_line(current);
+		current->index_history = NULL;
 		free_list(command, 0);
 		handle_quote(current, command, -1, current->env);
 	}

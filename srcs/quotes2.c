@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/16 16:19:25 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 18:00:27 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,6 @@ void		init_var(t_line *current,
 		ft_strjoin(current->old_command, current->command)
 		: ft_strdup(current->command);
 	*start = *line;
-	if ((*(current->tail_history)) != NULL)
-	{
-		free((*(current->tail_history))->content);
-		(*(current->tail_history))->content = REMOVE_NEW_LINE(*start);
-	}
 }
 
 void		last_word(t_command_list *command,
