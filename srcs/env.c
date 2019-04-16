@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 14:07:31 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/15 18:59:39 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 16:31:34 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ void	add_env(t_list **lst, char *name, char *value, int end)
 
 	elem = (t_env*)malloc(sizeof(t_env));
 	elem->name = ft_strdup(name);
-	elem->value = ft_strdup(value);
+	if (value)
+		elem->value = ft_strdup(value);
+	else
+		elem->value = ft_strdup("");
 	if (end == 0)
 		ft_lstadd(lst, ft_lstnew(elem, 0));
 	else
