@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/10 16:02:34 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/15 09:55:52 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 # define CONST_H
 # define M_ISDIR(m)	((m & 0170000) == 0040000)
 # define TAB_KEY 9
-# define CLR_KEY1 11
-# define CLR_KEY2 12
+# define CLR_KEY 12
 # define UP_KEY 4283163
 # define DOWN_KEY 4348699
 # define RIGHT_KEY 4414235

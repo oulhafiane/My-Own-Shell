@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 13:10:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/09 15:57:12 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/15 18:56:52 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static void	sig_handler(int sig)
 	ft_printf(MSG);
 	free_line();
 	init_line();
+	if (line->print_msg)
+	{
+		ft_strdel(&line->old_command);
+		ioctl(0, TIOCSTI, RETURN_KEY);
+	}
 }
 
 void		child_handler(int sig)

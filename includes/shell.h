@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/10 21:06:52 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/15 10:59:49 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define COPY_MAX 1000
 
 //debug
-#define TERM_TTY "/dev/ttys002"
+#define TERM_TTY "/dev/ttys000"
 void	debug_msg(char *msg, ...);
 
 
@@ -168,7 +168,6 @@ void					print_newchar(t_line *line, int buf);
 void					print_char_inline(t_line *line, int buf);
 t_list					*delete_current_newline(t_line *line);
 t_list					*free_next_newlines(t_line *line);
-void					paste_chars(int *buf, t_line *line);
 
 /*
 **	terms.c
@@ -180,6 +179,7 @@ int						init_terms(void);
 /*
 **	cursor.c
 */
+void					update_line(t_line *line, int col, char *tmp, char buf);
 void					go_left(t_line *line, int col);
 void					go_right(t_line *line, int col);
 void					move_cursor(int direction, t_line *line);
@@ -307,7 +307,7 @@ t_redirect				*init_t_redirect(void);
 /*
 **	paste.c
 */
-void					paste_chars(int *buf, t_line *line);
+void					print_pasted_chars(int *buf, t_line *line);
 
 /*
 **  redirect1.c

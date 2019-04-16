@@ -52,5 +52,4 @@ help :
 	@echo "obj: $(OBJECT)"
 
 valgrind :
-	bash
-	#@valgrind --tool=memcheck --leak-check=full ./$(NAME)
+	@valgrind --tool=memcheck --leak-check=full ./$(NAME)

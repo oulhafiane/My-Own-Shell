@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 14:07:31 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/02/23 11:24:18 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/15 18:59:39 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	init_env(t_list **lst, char **env)
 	while (*cpy_env)
 	{
 		tmp = ft_strsplit(*cpy_env, '=');
-		add_env(lst, tmp[0], tmp[1], 0);
+		add_env(lst, tmp[0], tmp[1] ? tmp[1] : "", 0);
 		ft_free_strtab(tmp);
 		cpy_env++;
 	}

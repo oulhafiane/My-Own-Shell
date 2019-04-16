@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/09 15:57:33 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/15 10:49:04 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		check_keys(int buf, t_line *line)
 {
 	if (buf == EOT_KEY)
 		free_buffer(line);
-	else if (buf == CLR_KEY1 || buf == CLR_KEY2)
+	else if (buf == CLR_KEY)
 		clr_screen(0);
 	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
 			buf == HOME_KEY || buf == END_KEY || buf == GO_UP ||
@@ -71,7 +71,7 @@ void		check_keys(int buf, t_line *line)
 	else if (ft_isprint(buf))
 		print_char_inline(line, buf);
 	else if (((char*)&buf)[1] && (ft_isprint(*((char*)&buf)) || ft_strchr(" \t\n", (*((char*)&buf))) != NULL))
-		paste_chars(&buf, line);
+		print_pasted_chars(&buf, line);
 }
 
 int			read_line(t_line *line)

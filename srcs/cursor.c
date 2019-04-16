@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 20:51:57 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/15 16:26:15 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void		go_left(t_line *line, int col)
 	update_index(line, -1);
 }
 
-static void update_line(t_line *line, int col, char *tmp, char buf)
+void update_line(t_line *line, int col, char *tmp, char buf)
 {
 	int		i;
 	int		index;
@@ -56,18 +56,22 @@ static void update_line(t_line *line, int col, char *tmp, char buf)
 	int		height;
 
 	i = -1;
-	tputs(tgetstr("sc", NULL), 1, ft_putchar);
+	if (buf != -1)
+		tputs(tgetstr("sc", NULL), 1, ft_putchar);
 	tputs(tgetstr("cd", NULL), 1, ft_putchar);
 	index = line->index;
 	current_index = line->current_index;
 	line->top = line->index;
-	if (buf != 0)
+	if (buf != 0 && buf != -1)
 		print_newchar(line, buf);
 	while (tmp[++i] != '\0')
 		print_newchar(line, tmp[i]);
-	tputs(tgetstr("rc", NULL), 1, ft_putchar);
-	line->index = index;
-	line->current_index = current_index;
+	if (buf != -1)
+	{
+		tputs(tgetstr("rc", NULL), 1, ft_putchar);
+		line->index = index;
+		line->current_index = current_index;
+	}
 	height = tgetnum("li");
 	if (buf != 0 && decision_top_down_left(line, col) &&
 			(get_current_row(height) + get_current_rows(line, col)) == height)
