@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/05 21:09:28 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/16 14:58:45 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,35 +164,31 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 **	free_strtab    : frees all strings (char**) returned by ft_strsplit_ws. 
 */
 
-static void	run_shell(t_list *blt, t_list **env, t_list **history)
+static void	run_shell(t_list *blt, t_line *line)
 {
-	t_line			*new_line;
 	t_command_list	commands;
 	t_command_list	*cmds;
 	t_command_list	*cmd;
 
-	new_line = init_line();
-	new_line->tail_history = history;
-	new_line->old_command = NULL;
-	while(read_line(new_line) == 0)
+	while(read_line(line) == 0)
 	{
-		if (!ft_str_isnull(new_line->command))
+		if (!ft_str_isnull(line->command))
 		{
-			add_history(new_line);
-			cmds = init_quotes(get_t_line(), &commands);
+			add_history(line);
+			cmds = init_quotes(line, &commands);
 			handle_asterisk(&commands);
 			while (cmds->index)
 			{
 				cmd = separated_by_del(cmds, ';');
-				shell(blt, env, cmd);
+				shell(blt, &(line->env), cmd);
 				free_list(cmd, 1);
 			}
 			free_list(&commands, 0);
 		}
 		free_line();
-		new_line = init_line();
-		free(new_line->old_command);
-		new_line->old_command = NULL;
+		line = init_line();
+		free(line->old_command);
+		line->old_command = NULL;
 	}
 	free_line();
 }
@@ -209,6 +205,7 @@ int		main(int ac, char **av, char **ev)
 	t_list		*env;
 	t_list		*blt;
 	t_list		*history;
+	t_line		*new_line;
 
 	(void)ac;
 	(void)av;
@@ -218,7 +215,11 @@ int		main(int ac, char **av, char **ev)
 	init_env(&env, ev);
 	init_builtin(&blt);
 	signals();
-	run_shell(blt, &env, &history);
+	new_line = init_line();
+	new_line->tail_history = &history;
+	new_line->old_command = NULL;
+	new_line->env = env;
+	run_shell(blt, new_line);
 	free_gnl(0);
 	free_env(env);
 	free_builtin(blt);

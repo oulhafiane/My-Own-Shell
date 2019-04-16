@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/15 09:55:52 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 14:43:13 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@
 /*
 ** DOLAR CONDITION
 */
-# define D_COND (spliter != SINGLE_QUOTE && *line == DOLLAR_SIGN)
-# define TILDA_COND (!spliter && *line == TILDA)
+# define D_COND (spl->spliter != SINGLE_QUOTE && **line == DOLLAR_SIGN)
+# define TILDA_COND (!spl->spliter && **line == TILDA)
 # define CONTAIN_S (ft_strchr(" \t", *line) && (ft_strchr(" \t", *(line + 1))))
 # define IS_BSLASH (*spliter == 0 && **line == BACK_SLASH)
 # define IS_SINGLE_QUOTE (*spliter != DOUBLE_QUOTE && **line == SINGLE_QUOTE)

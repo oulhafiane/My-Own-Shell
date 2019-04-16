@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 20:45:45 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/16 15:06:51 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ t_command_list	*separated_by_del(t_command_list *ptr, char del)
 	current = ptr->index;
 	while (current)
 	{
-		if (*current->argv == del && ft_strlen(current->argv) == 1)
+		if (!current->is_quoted && *current->argv == del && ft_strlen(current->argv) == 1)
 		{
 			ptr->index = current->next;
 			break ;

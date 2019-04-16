@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/15 10:59:49 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 14:37:43 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct			s_line
 	t_list				**tail_history;
 	t_list				*index_history;
 	char				*tmp_history;
+	t_list				*env;
 }						t_line;
 
 typedef struct			s_command
@@ -90,6 +91,12 @@ typedef struct			s_redirect
 		struct s_duped		*dup_head;
 		struct s_duped		*dup_tail;
 }						t_redirect;
+
+typedef struct			s_spliter
+{
+		char			spliter;
+		int				i;
+}						t_spliter;
 
 /*
 **	minishell.c
@@ -249,7 +256,6 @@ int						redir_out(char *filename, int perm);
 /*
 ** quotes.c
 */
-int						handle_dollar(char **line, char **new_line, int *i);
 char					*remove_new_line(char *line, int len);
 void					is_match(char spliter, t_line *current, t_command_list *command, char *start);
 int						is_not_only_spaces(char *line);
@@ -257,7 +263,7 @@ int						is_not_only_spaces(char *line);
 /*
 ** quotes2.c
 */
-void					handle_quote(t_line *current, t_command_list *command, char flag, int i);
+void					handle_quote(t_line *current, t_command_list *command, char flag, t_list *env);
 char					check_quote(char **line, char *spliter, char *start);
 void					push_non_quoted(char *new_line, int *i, t_command_list *command);
 void					last_world(t_command_list *command,
@@ -338,9 +344,9 @@ void					piping(t_list *cmds, t_list **env, t_list *built_in);
 ** quotes3.c
 */
 
-int						handle_dollar(char **line, char **new_line, int *i);
+int						handle_dollar(char **line, char **new_line, int *i, t_list *env);
 t_command_list			*init_quotes(t_line *line, t_command_list *commands);
-int						handle_tilda(char **line, char **new_line, int *i);
+int						handle_tilda(char **line, char **new_line, int *i, t_list *env);
 
 /*
 ** ft_asterisk
