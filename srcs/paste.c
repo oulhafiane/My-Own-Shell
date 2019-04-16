@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 22:57:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/15 18:45:27 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 21:12:53 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ static void	add_char(t_line *line, char c)
 {
 	char	*tmp;
 
+	debug_msg("to paste : %d <--> %c\n", c, c);
+	if (c == '\0')
+		return ;
 	if (line->top + 2 >= line->buf_size)
 		line->buf_size *= 2;
 	tmp = ft_strnew(line->buf_size);
@@ -70,7 +73,8 @@ static void    paste_chars(int *buf, t_line *line)
 	get_pasted_str(line, &str);
 	buf_c = (char*)buf;
 	i = -1;
-	while (++i < 4 && (ft_isprint(buf_c[i]) || ft_strchr(" \t\n", (buf_c[i])) != NULL))
+	while (++i < 4 && (ft_isprint(buf_c[i]) ||
+				buf_c[i] == '\n' || buf_c[i] == '\t'))
 	{
 		if (buf_c[i] == '\t')
 		{

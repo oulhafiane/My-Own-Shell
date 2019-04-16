@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 13:10:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/15 18:56:52 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 21:22:12 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void		exit_shell(char *format, ...)
 	va_list args;
 	struct termios	*term;
 
+	tputs(tgetstr("ve", NULL), 1, ft_putchar);
 	term = get_termios();
 	tcsetattr(0, TCSANOW, term);
 	va_start(args, format);

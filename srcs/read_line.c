@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/15 10:49:04 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 21:22:07 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ static void	get_line(t_line *line)
 			line->top++;
 			break ;
 		}
+		tputs(tgetstr("vi", NULL), 1, ft_putchar);
 		check_keys(buf, line);
+		tputs(tgetstr("ve", NULL), 1, ft_putchar);
 		buf = 0;
 	}
 	init_terms();
@@ -70,7 +72,8 @@ void		check_keys(int buf, t_line *line)
 		handle_history(buf, line);
 	else if (ft_isprint(buf))
 		print_char_inline(line, buf);
-	else if (((char*)&buf)[1] && (ft_isprint(*((char*)&buf)) || ft_strchr(" \t\n", (*((char*)&buf))) != NULL))
+	else if (((char*)&buf)[1] && (ft_isprint(*((char*)&buf)) ||
+				(*((char*)&buf)) == '\t' || (*((char*)&buf)) == '\n'))
 		print_pasted_chars(&buf, line);
 }
 
