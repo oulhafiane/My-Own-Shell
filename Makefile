@@ -53,3 +53,5 @@ help :
 
 valgrind :
 	@valgrind --tool=memcheck --leak-check=full --track-origins=yes ./$(NAME)
+
+val : valgrind
