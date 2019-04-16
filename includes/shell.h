@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/16 14:37:43 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 16:08:39 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,7 +266,7 @@ int						is_not_only_spaces(char *line);
 void					handle_quote(t_line *current, t_command_list *command, char flag, t_list *env);
 char					check_quote(char **line, char *spliter, char *start);
 void					push_non_quoted(char *new_line, int *i, t_command_list *command);
-void					last_world(t_command_list *command,
+void					last_word(t_command_list *command,
 							char **line, char **new_line, int *i);
 void					init_var(t_line *current,
 							char **line, char **start, char *spliter);

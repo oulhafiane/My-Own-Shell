@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/15 16:26:15 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 16:01:45 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ void update_line(t_line *line, int col, char *tmp, char buf)
 	int		height;
 
 	i = -1;
-	if (buf != -1)
-		tputs(tgetstr("sc", NULL), 1, ft_putchar);
+	tputs(tgetstr("sc", NULL), 1, ft_putchar);
 	tputs(tgetstr("cd", NULL), 1, ft_putchar);
 	index = line->index;
 	current_index = line->current_index;

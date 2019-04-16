@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 19:58:13 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/16 14:57:48 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 16:08:30 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void			handle_quote(t_line *current,
 		new_line[spl.i++] = *line++;
 		while (*line && spl.spliter == 0 && CONTAIN_S)
 			line++;
-		last_world(command, &line, &new_line, &(spl.i));
+		last_word(command, &line, &new_line, &(spl.i));
 	}
 	free(new_line);
 	is_match(spl.spliter, current, command, start);

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/16 14:55:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 16:19:25 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		add_to_list(t_command_list *command,
 	int i;
 
 	i = 0;
-	while (!is_quoted && line[i] && (line[i] == '\t' || line[i] == ' '))
+	while (!is_quoted && line[i] && (line[i] == '\n' || line[i] == ' '))
 		i++;
 	if (!is_quoted && ft_strlen(&line[i]) == 0)
 		;
@@ -83,7 +83,7 @@ void		init_var(t_line *current,
 	}
 }
 
-void		last_world(t_command_list *command,
+void		last_word(t_command_list *command,
 			char **line, char **new_line, int *i)
 {
 	char *tmp;

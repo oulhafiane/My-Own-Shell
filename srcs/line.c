@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/08 19:50:20 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/16 16:04:28 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ void	free_line(void)
 
 	line = get_t_line();
 	free(line->command);
-	while (line->new_lines)
+	while (line->head_newlines)
 	{
-		tmp = line->new_lines->next;
-		free(line->new_lines);
-		line->new_lines = tmp;
+		tmp = line->head_newlines->next;
+		free(line->head_newlines->content);
+		free(line->head_newlines);
+		line->head_newlines = tmp;
 	}
 	line->head_newlines = NULL;
 	line->new_lines = NULL;
