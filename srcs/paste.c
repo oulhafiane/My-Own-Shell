@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 22:57:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/16 21:12:53 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 11:22:19 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static void	add_char(t_line *line, char c)
 {
 	char	*tmp;
 
-	debug_msg("to paste : %d <--> %c\n", c, c);
 	if (c == '\0')
 		return ;
 	if (line->top + 2 >= line->buf_size)
