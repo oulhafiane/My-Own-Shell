@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/16 14:43:13 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 14:53:30 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@
 # define BACK_KEY 127
 # define DEL_KEY 2117294875
 # define HOME_KEY 4741915
+# define HOME_LINE 1
 # define END_KEY 4610843
+# define END_LINE 5
 # define EOT_KEY 4
 # define GO_UP 1096489755
 # define GO_DOWN 1113266971

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/22 22:52:46 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/09 16:47:57 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:20:42 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,6 @@ int		get_current_row(int height)
 		return (get_current_row(height));
 }
 
-void	go_down_left(void)
-{
-	tputs(tgetstr("do", NULL), 1, ft_putchar);
-	tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, ft_putchar);
-}
-
 void	go_home(t_line *line, int col)
 {
 	size_t	step;
@@ -55,11 +49,28 @@ void	go_home(t_line *line, int col)
 		go_left(line, col);
 }
 
+void	go_home_line(t_line *line, int col)
+{
+	if (line->command[line->index] == '\n')
+		go_left(line, col);
+	while (line->current_index > -1)
+		go_left(line, col);
+}
+
 void	go_end(t_line *line, int col)
 {
 	size_t	step;
 
 	step = (line->top - line->index) + 1;
 	while (--step > 0)
+		go_right(line, col);
+}
+
+void	go_end_line(t_line *line, int col)
+{
+	if (line->command[line->index + 1] == '\n')
+		go_right(line, col);
+	while (line->command[line->index + 1] != '\0' &&
+			line->command[line->index + 1] != '\n')
 		go_right(line, col);
 }

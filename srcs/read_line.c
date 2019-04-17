@@ -6,33 +6,55 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/16 21:22:07 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:20:44 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
+static void	check_keys(int buf, t_line *line, int col)
+{
+	if (buf == EOT_KEY)
+		handle_eot(line, col);
+	else if (buf == CLR_KEY)
+		clr_screen(0);
+	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
+			buf == HOME_KEY || buf == END_KEY || buf == GO_UP ||
+			buf == GO_DOWN || buf == GO_RIGHT || buf == GO_LEFT ||
+			buf == HOME_LINE || buf == END_LINE)
+		move_cursor(buf, line, col);
+	else if (buf == UP_KEY || buf == DOWN_KEY)
+		handle_history(buf, line);
+	else if (ft_isprint(buf))
+		print_char_inline(line, buf);
+	else if (((char*)&buf)[1] && (ft_isprint(*((char*)&buf)) ||
+				(*((char*)&buf)) == '\t' || (*((char*)&buf)) == '\n'))
+		print_pasted_chars(&buf, line);
+}
+
 static void	get_line(t_line *line)
 {
 	int		buf;
+	int		col;
 
 	buf = 0;
+	init_terms();
+	col = tgetnum("co");
 	while (read(0, &buf, 4) >= 0)
 	{
 		if (buf == RETURN_KEY)
 		{
-			move_cursor(END_KEY, line);
+			go_end(line, col);
 			line->command[++(line->index)] = buf;
 			line->top++;
 			break ;
 		}
 		tputs(tgetstr("vi", NULL), 1, ft_putchar);
-		check_keys(buf, line);
+		check_keys(buf, line, col);
 		tputs(tgetstr("ve", NULL), 1, ft_putchar);
 		buf = 0;
 	}
-	init_terms();
-	go_end(line, tgetnum("co"));
+	go_end(line, col);
 }
 
 void		clr_screen(int sig)
@@ -56,25 +78,6 @@ void		clr_screen(int sig)
 	while (tmp[++i] != '\0')
 		print_newchar(line, tmp[i]);
 	free(tmp);
-}
-
-void		check_keys(int buf, t_line *line)
-{
-	if (buf == EOT_KEY)
-		free_buffer(line);
-	else if (buf == CLR_KEY)
-		clr_screen(0);
-	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
-			buf == HOME_KEY || buf == END_KEY || buf == GO_UP ||
-			buf == GO_DOWN || buf == GO_RIGHT || buf == GO_LEFT)
-		move_cursor(buf, line);
-	else if (buf == UP_KEY || buf == DOWN_KEY)
-		handle_history(buf, line);
-	else if (ft_isprint(buf))
-		print_char_inline(line, buf);
-	else if (((char*)&buf)[1] && (ft_isprint(*((char*)&buf)) ||
-				(*((char*)&buf)) == '\t' || (*((char*)&buf)) == '\n'))
-		print_pasted_chars(&buf, line);
 }
 
 int			read_line(t_line *line)

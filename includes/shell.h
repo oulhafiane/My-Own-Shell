@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 10:13:57 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:21:44 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,6 @@ void					ft_pwd(char **args, t_list **env);
 /*
 **	read_line.c
 */
-void					check_keys(int bif, t_line *line);
 void					clr_screen(int sig);
 int						read_line(t_line *line);
 
@@ -166,7 +165,7 @@ int						read_line(t_line *line);
 t_line					*get_t_line(void);
 void					free_line(void);
 t_line					*init_line(void);
-void					free_buffer(t_line *line);
+void					handle_eot(t_line *line, int col);
 
 /*
 **	edit_line.c
@@ -175,6 +174,7 @@ void					print_newchar(t_line *line, int buf);
 void					print_char_inline(t_line *line, int buf);
 t_list					*delete_current_newline(t_line *line);
 t_list					*free_next_newlines(t_line *line);
+void					go_down_left(void);
 
 /*
 **	terms.c
@@ -189,15 +189,16 @@ int						init_terms(void);
 void					update_line(t_line *line, int col, char *tmp, char buf);
 void					go_left(t_line *line, int col);
 void					go_right(t_line *line, int col);
-void					move_cursor(int direction, t_line *line);
+void					move_cursor(int direction, t_line *line, int col);
 
 /*
 **	cursor2.c
 */
 int						get_current_row(int height);
-void					go_down_left(void);
 void					go_home(t_line *line, int col);
+void					go_home_line(t_line *line, int col);
 void					go_end(t_line *line, int col);
+void					go_end_line(t_line *line, int col);
 
 /*
 **	cursor3.c
@@ -210,8 +211,7 @@ void					next_word(t_line *line, int col, int direction);
 **	cursor4.c
 */
 void					update_index(t_line *line, char step);
-int						decision_up_right(t_line *line, int col);
-int						decision_down_left(t_line *line, int col);
+int						decision_up_down(t_line *line, int col);
 int						decision_top_down_left(t_line *line, int col);
 void					set_new_current_index(t_line *line);
 int						get_current_rows(t_line *line, int col);

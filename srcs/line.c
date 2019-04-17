@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/16 16:04:28 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:14:05 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,15 @@ t_line	*init_line(void)
 }
 
 
-void	free_buffer(t_line *line)
+void	handle_eot(t_line *line, int col)
 {
-	init_terms();
-	go_home(line, tgetnum("co"));
-	tputs(tgetstr("cd", NULL), 1, ft_putchar);
-	free_line();
-	exit_shell("exit\n");
+	if (line->top == -1)
+	{
+		go_home(line, tgetnum("co"));
+		tputs(tgetstr("cd", NULL), 1, ft_putchar);
+		free_line();
+		exit_shell("exit\n");
+	}
+	else
+		move_cursor(DEL_KEY, line, col);
 }
