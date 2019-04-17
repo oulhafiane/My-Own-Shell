@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/16 17:58:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:13:50 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static void	print_history(t_line *line, char *new_line, char flag_free_line)
 {
 	int		i;
 
-	init_terms();
 	go_home(line, tgetnum("co"));
 	tputs(tgetstr("cd", NULL), 1, ft_putchar);
 	if (flag_free_line)

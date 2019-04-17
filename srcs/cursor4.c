@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 17:39:00 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 09:41:41 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:23:47 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,7 @@ void	update_index(t_line *line, char step)
 	}
 }
 
-int		decision_up_right(t_line *line, int col)
-{
-	int		marge;
-
-	marge = 0;
-	if (line->index == line->current_index)
-		marge = ft_strlen(GET_MSG(line->print_msg));
-	if ((line->current_index + marge) % col == col - 1)
-		return (1);
-	else
-		return (0);
-}
-
-int		decision_down_left(t_line *line, int col)
+int		decision_up_down(t_line *line, int col)
 {
 	int		marge;
 

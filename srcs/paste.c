@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 22:57:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 11:22:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:14:30 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ void	print_pasted_chars(int *buf, t_line *line)
 	paste_chars(buf, line);
 	line->index = index;
 	tmp = ft_strdup(line->command + line->index + 1);
-	init_terms();
 	col = tgetnum("co");
 	update_line(line, col, tmp, -1);
 	free(tmp);
