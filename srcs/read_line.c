@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 15:20:44 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/18 22:58:51 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ static void	check_keys(int buf, t_line *line, int col)
 			buf == GO_DOWN || buf == GO_RIGHT || buf == GO_LEFT ||
 			buf == HOME_LINE || buf == END_LINE)
 		move_cursor(buf, line, col);
+	else if (buf == ALT_LEFT || buf == ALT_RIGHT || buf == ALT_C ||
+			buf == CTRL_K || buf == CTRL_U || buf == CTRL_X)
+		handle_copy(line, buf, col);
+	else if (buf == CTRL_V && ft_strlen(line->copy) > 0)
+		internal_paste(line, col);
 	else if (buf == UP_KEY || buf == DOWN_KEY)
 		handle_history(buf, line);
 	else if (ft_isprint(buf))

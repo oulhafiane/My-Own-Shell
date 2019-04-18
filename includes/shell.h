@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 15:21:44 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/18 21:36:36 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,14 +311,19 @@ t_duped					*init_t_duped(t_redirect *redirect);
 t_redirect				*init_t_redirect(void);
 
 /*
+**	copy.c
+*/
+void					handle_copy(t_line *line, int key, int col);
+
+/*
 **	paste.c
 */
 void					print_pasted_chars(int *buf, t_line *line);
+void					internal_paste(t_line *line, int col);
 
 /*
 **  redirect1.c
 */
-
 int						is_number(char *str);
 int						redir_out(char *filename, int perm);
 void					file_to_des(t_command **command, t_duped *duped, char *tmp, int perm);
@@ -328,7 +333,6 @@ void					redirect_err_out(t_command **command, t_redirect *redirect);
 /*
 **	redirect2.c
 */
-
 void					reverse_agregate(t_command **c, t_duped *d, char *t, t_redirect *r);
 void					agregate_2_check(char *tmp, t_duped *duped, int num);
 void					agregate_redirect(t_command **c, t_redirect *r);
@@ -337,13 +341,11 @@ void					simple_redirect(t_command **c, t_redirect *r);
 /*
 **	Pipe2.c
 */
-
 void					piping(t_list *cmds, t_list **env, t_list *built_in);
 
 /*
 ** quotes3.c
 */
-
 int						handle_dollar(char **line, char **new_line, int *i, t_list *env);
 t_command_list			*init_quotes(t_line *line, t_command_list *commands);
 int						handle_tilda(char **line, char **new_line, int *i, t_list *env);
@@ -351,19 +353,16 @@ int						handle_tilda(char **line, char **new_line, int *i, t_list *env);
 /*
 ** ft_asterisk
 */
-
 void					handle_asterisk(t_command_list *command);
 
 /*
 ** is_digit.c
 */
-
 int						is_digit(char **tmp, t_duped *duped);
 
 /*
 **	miscellaneous.c
 */
-
 void					free_line_assign(t_line **line);
 
 #endif

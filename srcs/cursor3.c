@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 20:27:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 13:40:26 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/17 19:58:13 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,39 @@ static int	get_steps_down(t_line *line, int col)
 	else
 		nl = 1;
 	return (nl);
+}
+
+void	go_down(t_line *line, int col)
+{
+	int		i;
+	int		steps;
+	int		count_nl;
+	int		marge;
+	char	decision;
+
+	steps = col - get_steps_down(line, col);
+	if (line->index == line->current_index)
+		marge = ft_strlen(GET_MSG(line->print_msg));
+	count_nl = 0;
+	i = -1;
+	debug_msg("====================\n");
+	while (++i <= steps && line->index < line->top)
+	{
+		decision = 0;
+		if ((line->command[line->index + 1] == '\n') ||
+				(line->current_index + 1 + marge) % col == col - 1)
+			decision = 1;
+		debug_msg("col : %d\n", col);
+		debug_msg("steps : %d\n", steps);
+		debug_msg("current_index : %d\n", line->current_index + 1);
+		debug_msg("desiction : %d\n", decision);
+		if (count_nl == 1 && decision == 1)
+			return ;
+		else if (count_nl == 0 && decision == 1)
+			count_nl++;
+		go_right(line, col);
+	}
+	debug_msg("====================\n");
 }
 
 static int	get_steps_up(t_line *line, int col)
@@ -84,33 +117,6 @@ void	go_up(t_line *line, int col)
 				(line->current_index - 1 + marge) % col == col - 1))
 			decision = 1;
 		go_left(line, col);
-	}
-}
-
-void	go_down(t_line *line, int col)
-{
-	int		i;
-	int		steps;
-	int		count_nl;
-	int		marge;
-	char	decision;
-
-	steps = col - get_steps_down(line, col);
-	if (line->index == line->current_index)
-		marge = ft_strlen(GET_MSG(line->print_msg));
-	count_nl = 0;
-	i = -1;
-	while (++i <= steps && line->index < line->top)
-	{
-		decision = 0;
-		if ((line->command[line->index + 1] == '\n') ||
-				(line->current_index + 1 + marge) % col == col - 1)
-			decision = 1;
-		if (count_nl == 1 && decision == 1)
-			return ;
-		else if (count_nl == 0 && decision == 1)
-			count_nl++;
-		go_right(line, col);
 	}
 }
 
