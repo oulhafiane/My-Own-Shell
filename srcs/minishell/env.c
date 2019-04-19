@@ -6,14 +6,14 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 14:07:31 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/16 16:31:34 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/19 23:06:51 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 /*
-**	this function get the element called PATH 
+**	this function get the element called PATH
 **	from the list that contains t_env elements
 **	and split it with the delimited :
 **	to get an array of strings containing all paths.

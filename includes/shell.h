@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/18 21:36:36 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/19 23:07:54 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct			s_line
 	char				*old_command;
 	char				copy[COPY_MAX];
 	int					buf_size;
+	int					col;
 	int					top;
 	int					index;
 	int					current_index;
@@ -165,7 +166,7 @@ int						read_line(t_line *line);
 t_line					*get_t_line(void);
 void					free_line(void);
 t_line					*init_line(void);
-void					handle_eot(t_line *line, int col);
+void					handle_eot(t_line *line);
 
 /*
 **	edit_line.c
@@ -186,35 +187,35 @@ int						init_terms(void);
 /*
 **	cursor.c
 */
-void					update_line(t_line *line, int col, char *tmp, char buf);
-void					go_left(t_line *line, int col);
-void					go_right(t_line *line, int col);
-void					move_cursor(int direction, t_line *line, int col);
+void					go_left(t_line *line);
+void					go_right(t_line *line);
+void					move_cursor(int direction, t_line *line);
 
 /*
 **	cursor2.c
 */
 int						get_current_row(int height);
-void					go_home(t_line *line, int col);
-void					go_home_line(t_line *line, int col);
-void					go_end(t_line *line, int col);
-void					go_end_line(t_line *line, int col);
+void					go_home(t_line *line);
+void					go_home_line(t_line *line);
+void					go_end(t_line *line);
+void					go_end_line(t_line *line);
 
 /*
 **	cursor3.c
 */
-void					go_up(t_line *line, int col);
-void					go_down(t_line *line, int col);
-void					next_word(t_line *line, int col, int direction);
+void					go_up(t_line *line);
+void					go_down(t_line *line);
+void					next_word(t_line *line, int direction);
+void					update_line(t_line *line, char *tmp, char buf);
 
 /*
 **	cursor4.c
 */
 void					update_index(t_line *line, char step);
-int						decision_up_down(t_line *line, int col);
-int						decision_top_down_left(t_line *line, int col);
+int						decision_up_down(t_line *line);
+int						decision_top_down_left(t_line *line);
 void					set_new_current_index(t_line *line);
-int						get_current_rows(t_line *line, int col);
+int						get_current_rows(t_line *line);
 
 /*
 **	handlers.c
@@ -286,11 +287,6 @@ t_command_list			*separated_by_del(t_command_list *ptr, char del);
 char					*get_first_non_empty(t_command_list *ptr);
 
 /*
-**	tab.c
-*/
-void					handle_tab(t_line *line);
-
-/*
 **	history.c
 */
 void					add_history(t_line *line);
@@ -313,13 +309,13 @@ t_redirect				*init_t_redirect(void);
 /*
 **	copy.c
 */
-void					handle_copy(t_line *line, int key, int col);
+void					handle_copy(t_line *line, int key);
 
 /*
 **	paste.c
 */
 void					print_pasted_chars(int *buf, t_line *line);
-void					internal_paste(t_line *line, int col);
+void					internal_paste(t_line *line);
 
 /*
 **  redirect1.c
@@ -349,11 +345,6 @@ void					piping(t_list *cmds, t_list **env, t_list *built_in);
 int						handle_dollar(char **line, char **new_line, int *i, t_list *env);
 t_command_list			*init_quotes(t_line *line, t_command_list *commands);
 int						handle_tilda(char **line, char **new_line, int *i, t_list *env);
-
-/*
-** ft_asterisk
-*/
-void					handle_asterisk(t_command_list *command);
 
 /*
 ** is_digit.c

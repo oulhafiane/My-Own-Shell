@@ -6,13 +6,13 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/22 19:11:37 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 16:20:37 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/19 20:59:12 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int			is_accessible(char *full_path)
+static int	is_accessible(char *full_path)
 {
 	if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0
 			&& !is_directory(full_path))

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 13:10:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/16 21:22:12 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/19 22:41:28 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ static void	sig_handler(int sig)
 	t_line	*line;
 
 	(void)sig;
-	init_terms();
 	line = get_t_line();
-	go_end(line, tgetnum("co"));
+	go_end(line);
 	ft_printf("\n");
 	ft_printf(MSG);
 	free_line();
@@ -45,7 +44,7 @@ void		signals(void)
 
 void		exit_shell(char *format, ...)
 {
-	va_list args;
+	va_list			args;
 	struct termios	*term;
 
 	tputs(tgetstr("ve", NULL), 1, ft_putchar);
@@ -57,7 +56,7 @@ void		exit_shell(char *format, ...)
 	exit(-1);
 }
 
-void	syntax_error(t_duped *duped, char *format, ...)
+void		syntax_error(t_duped *duped, char *format, ...)
 {
 	va_list	args;
 

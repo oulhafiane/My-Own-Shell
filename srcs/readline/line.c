@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 15:14:05 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/19 22:42:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,23 @@ t_line	*init_line(void)
 	line->index = -1;
 	line->current_index = -1;
 	line->print_msg = 1;
+	init_terms();
+	line->col = tgetnum("co");
 	if (line->buf_size < BUF_S)
 		line->buf_size = BUF_S + 1;
 	line->command = (char*)ft_memalloc(sizeof(char) * line->buf_size);
 	return (line);
 }
 
-
-void	handle_eot(t_line *line, int col)
+void	handle_eot(t_line *line)
 {
 	if (line->top == -1)
 	{
-		go_home(line, tgetnum("co"));
+		go_home(line);
 		tputs(tgetstr("cd", NULL), 1, ft_putchar);
 		free_line();
 		exit_shell("exit\n");
 	}
 	else
-		move_cursor(DEL_KEY, line, col);
+		move_cursor(DEL_KEY, line);
 }

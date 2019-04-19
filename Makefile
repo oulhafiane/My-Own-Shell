@@ -6,8 +6,20 @@ INC = includes
 LIB = lib
 BUILT = builtin
 
-SOURCE = $(wildcard $(SRC)/*.c)
-OBJECT = $(patsubst %, $(BIN)/%, $(notdir $(SOURCE:.c=.o)))
+SRC_MIN = $(wildcard $(SRC)/minishell/*.c)
+SRC_PIP = $(wildcard $(SRC)/pipe/*.c)
+SRC_QUO = $(wildcard $(SRC)/quotes/*.c)
+SRC_REA = $(wildcard $(SRC)/readline/*.c)
+SRC_RED = $(wildcard $(SRC)/redirect/*.c)
+
+OBJ_MIN = $(patsubst %.c, %.o, $(SRC_MIN))
+OBJ_PIP = $(patsubst %.c, %.o, $(SRC_PIP))
+OBJ_QUO = $(patsubst %.c, %.o, $(SRC_QUO))
+OBJ_REA = $(patsubst %.c, %.o, $(SRC_REA))
+OBJ_RED = $(patsubst %.c, %.o, $(SRC_RED))
+
+OBJECT = $(OBJ_MIN) $(OBJ_PIP) $(OBJ_QUO) $(OBJ_REA) $(OBJ_RED)
+REAL_OBJECT = $(patsubst %, $(BIN)/%, /$(notdir $(OBJECT)))
 
 CC = gcc
 FLAGS = -g -Wall -Wextra -Werror
@@ -24,19 +36,19 @@ all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJECT)
 	@echo "$(RED)Linking...$(NC)"
-	@$(CC) $(OBJECT) -ltermcap $(LIBFT) -o $(NAME)
+	@$(CC) $(REAL_OBJECT) -ltermcap $(LIBFT) -o $(NAME)
 	@echo "$(GREEN)Finished...$(NC)"
 
 $(LIBFT):
 	@echo "$(BLUE)Getting Libraries...$(NC)"
 	@make -C $(LIB)/libft
 
-$(BIN)/%.o : $(SRC)/%.c
-	@$(CC) $(FLAGS) $(CFLAGS) $(CPP_FLAGS) -c $< -o $@
+%.o : %.c
+	@$(CC) $(FLAGS) $(CFLAGS) $(CPP_FLAGS) -c $< -o $(BIN)/$(notdir $@)
 
 clean:
 	@echo "$(RED)Cleaning up...$(NC)"
-	@rm -rf $(OBJECT)
+	@rm -rf $(REAL_OBJECT)
 	@make -C $(LIB)/libft clean
 
 fclean: clean
@@ -48,8 +60,12 @@ re : fclean all
 .PHONY: all clean fclean re help
 
 help :
-	@echo "src: $(SOURCE)"
-	@echo "obj: $(OBJECT)"
+	@echo "$(GREEN)src_minishell: $(RED)$(notdir $(SRC_MIN))$(NC)"
+	@echo "$(GREEN)src_pipe: $(RED)$(notdir $(SRC_PIP))$(NC)"
+	@echo "$(GREEN)src_quotes: $(RED)$(notdir $(SRC_QUO))$(NC)"
+	@echo "$(GREEN)src_readline: $(RED)$(notdir $(SRC_REA))$(NC)"
+	@echo "$(GREEN)src_redirect: $(RED)$(notdir $(SRC_RED))$(NC)"
+	@echo "$(BLUE)obj: $(RED)$(notdir $(REAL_OBJECT)$(NC))"
 
 valgrind :
 	@valgrind --tool=memcheck --leak-check=full --track-origins=yes ./$(NAME)

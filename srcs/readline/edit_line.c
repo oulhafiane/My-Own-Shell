@@ -6,13 +6,13 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/17 15:22:58 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/19 22:41:08 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void update_newlines(t_line *line, int col)
+static void	update_newlines(t_line *line)
 {
 	int		*diff;
 	int		index;
@@ -23,7 +23,7 @@ static void update_newlines(t_line *line, int col)
 	else
 		index = line->current_index;
 	diff = (int*)malloc(sizeof(int));
-	*diff = col - ((index + 1) % col);
+	*diff = line->col - ((index + 1) % line->col);
 	new_newline = ft_lstnew(diff, 0);
 	if (line->new_lines == NULL)
 		line->head_newlines = new_newline;
@@ -31,9 +31,8 @@ static void update_newlines(t_line *line, int col)
 	line->new_lines = new_newline;
 }
 
-void	print_newchar(t_line *line, int buf)
+void		print_newchar(t_line *line, int buf)
 {
-	int		col;
 	int		old_size;
 
 	ft_putchar(buf);
@@ -44,17 +43,15 @@ void	print_newchar(t_line *line, int buf)
 		line->command = ft_realloc(line->command, line->buf_size, old_size);
 	}
 	line->command[line->index + 1] = buf;
-	col = tgetnum("co");
 	if (buf == '\n')
-		update_newlines(line, col);
+		update_newlines(line);
 	update_index(line, 1);
 	line->top++;
-	if (decision_up_down(line, col))
+	if (decision_up_down(line))
 		go_down_left();
 }
 
-t_list	*free_next_newlines(t_line *line)
-
+t_list		*free_next_newlines(t_line *line)
 {
 	t_list	*tmp;
 	t_list	*tmp_next;
@@ -80,15 +77,15 @@ t_list	*free_next_newlines(t_line *line)
 	return (line->new_lines);
 }
 
-void	print_char_inline(t_line *line, int buf)
+void		print_char_inline(t_line *line, int buf)
 {
 	if (line->index >= line->top)
 		print_newchar(line, buf);
 	else
-		move_cursor(buf, line, tgetnum("co"));
+		move_cursor(buf, line);
 }
 
-void	go_down_left(void)
+void		go_down_left(void)
 {
 	tputs(tgetstr("do", NULL), 1, ft_putchar);
 	tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, ft_putchar);
