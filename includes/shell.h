@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/20 09:02:22 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 11:25:58 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@
 # define BUF_S 10000
 # define COPY_MAX 1000
 
-//debug
-#define TERM_TTY "/dev/ttys000"
-void	debug_msg(char *msg, ...);
+//debug && don't forget to push to vogsphere
+# define TERM_TTY "/dev/ttys000"
 
+void					debug_msg(char *msg, ...);
 
 typedef struct			s_builtin
 {
@@ -77,46 +77,50 @@ typedef struct			s_command_s
 	int					node_count;
 }						t_command_list;
 
-
 typedef struct			s_duped
 {
-		int					filed1;
-		int					filed2;
-		char				*del;
-		struct s_duped		*next;
+	int					filed1;
+	int					filed2;
+	char				*del;
+	struct s_duped		*next;
 }						t_duped;
 
 typedef struct			s_redirect
 {
-		char				**command;
-		struct s_duped		*dup_head;
-		struct s_duped		*dup_tail;
+	char				**command;
+	struct s_duped		*dup_head;
+	struct s_duped		*dup_tail;
 }						t_redirect;
 
 typedef struct			s_spliter
 {
-		char			spliter;
-		int				i;
+	char				spliter;
+	int					i;
 }						t_spliter;
 
 /*
-**	minishell.c
+** main.c
 */
-void					exec_cmd(t_command_list *command, char **path, t_list **env);
 int						is_directory(const char *path);
+
+/*
+**	shell.c
+*/
+void					run_shell(t_list *builtin, t_line *line);
 
 /*
 **	args.c
 */
-int					fix_line(char **line, t_list *env);
+int						fix_line(char **line, t_list *env);
 
 /*
 **	builtin.c
 */
 void					free_builtin(t_list *lst);
 void					init_builtin(t_list **lst);
-int					check_builtin(t_list *elem, void *obj);
-void					run_builtin(t_list **env, t_list *bltin, t_command_list *cmd);
+int						check_builtin(t_list *elem, void *obj);
+void					run_builtin(t_list **env, t_list *bltin,
+		t_command_list *cmd);
 
 /*
 **	env.c
@@ -234,9 +238,11 @@ int						check_stack(char flag_quote);
 /*
 **	pipe.c
 */
-void					handle_piping(t_command_list *ptr, t_list **env, t_list *built_in);
+void					handle_piping(t_command_list *ptr, t_list **env,
+		t_list *built_in);
 int						is_piped(t_command_list *ptr);
-void					execute_command(char ***cmd, t_list **env, t_list *built_in);
+void					execute_command(char ***cmd, t_list **env,
+		t_list *built_in);
 
 /*
 ** Path.c
@@ -258,22 +264,24 @@ int						redir_out(char *filename, int perm);
 ** quotes.c
 */
 char					*remove_new_line(char *line, int len);
-void					is_match(char spliter, t_line *current, t_command_list *command, char *start);
+void					is_match(char spliter, t_line *current,
+		t_command_list *command, char *start);
 int						is_not_only_spaces(char *line);
 
 /*
 ** quotes2.c
 */
-void					handle_quote(t_line *current, t_command_list *command, char flag, t_list *env);
+void					handle_quote(t_line *current, t_command_list *command,
+		char flag, t_list *env);
 char					check_quote(char **line, char *spliter, char *start);
-void					push_non_quoted(char *new_line, int *i, t_command_list *command);
+void					push_non_quoted(char *new_line, int *i,
+		t_command_list *command);
 void					last_word(t_command_list *command,
 							char **line, char **new_line, int *i);
 void					init_var(t_line *current,
 							char **line, char **start, char *spliter);
 void					add_to_list(t_command_list *command,
 						char *line, int *index, int is_quoted);
-
 
 /*
 ** lists.c
@@ -322,14 +330,18 @@ void					internal_paste(t_line *line);
 */
 int						is_number(char *str);
 int						redir_out(char *filename, int perm);
-void					file_to_des(t_command **command, t_duped *duped, char *tmp, int perm);
-void					file_or_fdes(t_command **command, t_duped *duped, char *tmp);
-void					redirect_err_out(t_command **command, t_redirect *redirect);
+void					file_to_des(t_command **command, t_duped *duped,
+		char *tmp, int perm);
+void					file_or_fdes(t_command **command, t_duped *duped,
+		char *tmp);
+void					redirect_err_out(t_command **command,
+		t_redirect *redirect);
 
 /*
 **	redirect2.c
 */
-void					reverse_agregate(t_command **c, t_duped *d, char *t, t_redirect *r);
+void					reverse_agregate(t_command **c, t_duped *d,
+		char *t, t_redirect *r);
 void					agregate_2_check(char *tmp, t_duped *duped, int num);
 void					agregate_redirect(t_command **c, t_redirect *r);
 void					simple_redirect(t_command **c, t_redirect *r);
@@ -342,9 +354,11 @@ void					piping(t_list *cmds, t_list **env, t_list *built_in);
 /*
 ** quotes3.c
 */
-int						handle_dollar(char **line, char **new_line, int *i, t_list *env);
+int						handle_dollar(char **line, char **new_line,
+		int *i, t_list *env);
 t_command_list			*init_quotes(t_line *line, t_command_list *commands);
-int						handle_tilda(char **line, char **new_line, int *i, t_list *env);
+int						handle_tilda(char **line, char **new_line,
+		int *i, t_list *env);
 
 /*
 ** is_digit.c

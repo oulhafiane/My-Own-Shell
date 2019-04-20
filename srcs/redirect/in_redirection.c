@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 21:05:00 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/20 11:08:56 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void		redirect_in_app(char *del, int option)
 		{
 			ft_printf_fd(fd[1], "%s", line->command);
 			ft_printf_fd(2, "> ", del);
-			free_line_assign(&line);	
+			free_line_assign(&line);
 		}
 	}
 	else if (option == 1)

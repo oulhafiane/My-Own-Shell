@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/20 09:12:28 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 11:02:33 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static void	forkit(char *full_path, t_list **env, t_command_list *command)
 			exit_shell("Ambiguous input redirect.\n");
 		loop_dup(current, 1);
 		execve(full_path, redirect->command, env_tab);
-		// Free t_redirect && t_duped
 	}
 }
 
@@ -57,15 +56,6 @@ static void	forkit(char *full_path, t_list **env, t_command_list *command)
 **	then sends it to forkit function
 **	otherwise, it prints an error msg.
 */
-
-int			is_directory(const char *path)
-{
-	struct stat statbuf;
-
-	if (stat(path, &statbuf) != 0)
-		return (0);
-	return (M_ISDIR(statbuf.st_mode));
-}
 
 static void	exec_local(char **cmds, t_list **env, t_command_list *command)
 {
@@ -90,7 +80,7 @@ static void	exec_local(char **cmds, t_list **env, t_command_list *command)
 **	otherwise, it prints an error msg.
 */
 
-void		exec_cmd(t_command_list *command, char **path, t_list **env)
+static void	exec_cmd(t_command_list *command, char **path, t_list **env)
 {
 	char	*full_path;
 	char	*error;
@@ -99,8 +89,7 @@ void		exec_cmd(t_command_list *command, char **path, t_list **env)
 
 	error = NULL;
 	head_path = path;
-	binary_file = get_first_non_empty(command);
-	if (binary_file != NULL)
+	if ((binary_file = get_first_non_empty(command)) != NULL)
 	{
 		while (*path)
 		{
@@ -108,8 +97,7 @@ void		exec_cmd(t_command_list *command, char **path, t_list **env)
 			if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
 			{
 				forkit(full_path, env, command);
-				free_exec_cmd(error, full_path, head_path);
-				return ;
+				return (free_exec_cmd(error, full_path, head_path));
 			}
 			else if (error != NULL && access(full_path, F_OK) == 0)
 				error = ft_strjoin(full_path, ": Permission denied.\n");
@@ -164,7 +152,7 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 **	free_strtab    : frees all strings (char**) returned by ft_strsplit_ws.
 */
 
-static void	run_shell(t_list *blt, t_line *line)
+void		run_shell(t_list *blt, t_line *line)
 {
 	t_command_list	commands;
 	t_command_list	*cmds;
@@ -190,37 +178,4 @@ static void	run_shell(t_list *blt, t_line *line)
 		line->old_command = NULL;
 	}
 	free_line();
-}
-
-/*
-**	The Main Function of Minishell
-**	it initiates the builtins and environment lists,
-**	after calls the loop function of minishell,
-**	after frees all memory allocated on the heap
-*/
-
-int		main(int ac, char **av, char **ev)
-{
-	t_list		*env;
-	t_list		*blt;
-	t_list		*history;
-	t_line		*new_line;
-
-	(void)ac;
-	(void)av;
-	blt = NULL;
-	env = NULL;
-	history = NULL;
-	init_env(&env, ev);
-	init_builtin(&blt);
-	signals();
-	new_line = init_line();
-	new_line->tail_history = &history;
-	new_line->old_command = NULL;
-	new_line->env = env;
-	run_shell(blt, new_line);
-	free_gnl(0);
-	free_env(env);
-	free_builtin(blt);
-	return (0);
 }

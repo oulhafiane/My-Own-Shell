@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 19:58:13 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/16 16:08:30 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 11:04:52 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void		handling_parsed_line(t_command_list *command,
 }
 
 static char		check_tilda_dollar(char **line, char **new_line, t_spliter *spl,
-		t_list	*env)
+		t_list *env)
 {
 	if (D_COND && handle_dollar(line, new_line, &(spl->i), env))
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/16 15:06:51 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 11:08:33 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,22 +71,6 @@ void			free_list(t_command_list *ptr, int option)
 		init_list(ptr);
 }
 
-#if 0
-
-void			print_list(t_command_list *ptr)
-{
-	t_command *current;
-
-	current = ptr->head;
-	while (current)
-	{
-		ft_printf_fd(2, "|%s|", current->argv);
-		current = current->next;
-	}
-}
-
-#endif
-
 char			**list_to_chars(t_command_list *ptr)
 {
 	char		**cmds;
@@ -118,7 +102,8 @@ t_command_list	*separated_by_del(t_command_list *ptr, char del)
 	current = ptr->index;
 	while (current)
 	{
-		if (!current->is_quoted && *current->argv == del && ft_strlen(current->argv) == 1)
+		if (!current->is_quoted &&
+				*current->argv == del && ft_strlen(current->argv) == 1)
 		{
 			ptr->index = current->next;
 			break ;

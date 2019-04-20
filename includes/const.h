@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/18 22:59:12 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 11:30:07 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,13 @@
 # define READ_END 0
 # define ERROR_MSG "21sh :syntax error near unexprected token"
 # define FN_EXIST "No such file or directory"
-# define SPACE_OR_COMMA(line) (ft_iswhitespace(*(*line)) || !**line || **line == ';')
-# define SINGLE_OR_DOUBLE(line) (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE)
-# define CONTAIN_S_D(line, start) (*line - 2) >= start && !ft_strchr("\"\'", *(*line - 2))
-# define REMOVE_NEW_LINE(start) remove_new_line(ft_strdup(start), ft_strlen(start))
+# define WHITESPACE ft_iswhitespace(*(*line))
+# define END_OR_SEMI (!**line || **line == ';')
+# define SPACE_OR_COMMA(line) (WHITESPACE || END_OR_SEMI)
+# define QUOTE_S_D(line) (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE)
+# define FT_STRCHR ft_strchr("\"\'", *(*line - 2))
+# define CONTAIN_S_D(line, start) (*line - 2) >= start && !FT_STRCHR
+# define RM_NEW_LINE(start) remove_new_line(ft_strdup(start), ft_strlen(start))
 /*
 ** DOLAR CONDITION
 */

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:50:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/16 14:25:48 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 11:04:33 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static int		is_special(char c)
 	return (0);
 }
 
-int				handle_dollar(char **line, char **new_line, int *i, t_list *env_list)
+int				handle_dollar(char **line, char **new_line,
+				int *i, t_list *env_list)
 {
 	char *head;
 	char *env;
