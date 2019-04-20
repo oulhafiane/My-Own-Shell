@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/19 22:44:45 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 09:30:03 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ void		add_history(t_line *line)
 		tmp = ft_strjoin(line->old_command, line->command);
 	else
 		tmp = ft_strdup(line->command);
-	tmp = remove_new_line(ft_strdup(tmp), ft_strlen(tmp));
-	new_history = ft_lstnew(tmp, line->buf_size);
+	tmp = remove_new_line(tmp, ft_strlen(tmp));
+	new_history = ft_lstnew(tmp, ft_strlen(tmp));
 	ft_lstadd_end(history, new_history);
 	*history = new_history;
 	line->index_history = NULL;
