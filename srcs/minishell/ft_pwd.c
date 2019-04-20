@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/10 15:52:28 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/21 14:56:12 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/19 23:08:25 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 **	we can use it, so the next project of shell (21sh) i will use it.
 */
 
-void	ft_pwd(char	**args, t_list **lst)
+void	ft_pwd(char **args, t_list **lst)
 {
 	t_list		*cpy;
 	t_env		*env;

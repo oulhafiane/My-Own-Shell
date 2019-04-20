@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 22:57:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 15:14:30 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 09:03:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,29 +60,28 @@ static void	get_pasted_str(t_line *line, char **str)
 	str[0][++i] = '\0';
 }
 
-static void    paste_chars(int *buf, t_line *line)
+static void	paste_chars(int *buf, t_line *line)
 {
 	char	*str;
-	char	*buf_c;
+	char	*c;
 	int		i;
 	int		j;
 
 	str = (char*)malloc(sizeof(char) * line->buf_size);
 	tputs("\E[6n", 1, ft_putchar);
 	get_pasted_str(line, &str);
-	buf_c = (char*)buf;
+	c = (char*)buf;
 	i = -1;
-	while (++i < 4 && (ft_isprint(buf_c[i]) ||
-				buf_c[i] == '\n' || buf_c[i] == '\t'))
+	while (++i < 4 && (ft_isprint(c[i]) || c[i] == '\n' || c[i] == '\t'))
 	{
-		if (buf_c[i] == '\t')
+		if (c[i] == '\t')
 		{
 			j = -1;
 			while (++j < 4)
 				add_char(line, ' ');
 		}
 		else
-			add_char(line, buf_c[i]);
+			add_char(line, c[i]);
 	}
 	i = -1;
 	while (str[++i])
@@ -90,9 +89,8 @@ static void    paste_chars(int *buf, t_line *line)
 	free(str);
 }
 
-void	print_pasted_chars(int *buf, t_line *line)
+void		print_pasted_chars(int *buf, t_line *line)
 {
-	int		col;
 	int		diff;
 	int		index;
 	char	*tmp;
@@ -103,9 +101,29 @@ void	print_pasted_chars(int *buf, t_line *line)
 	paste_chars(buf, line);
 	line->index = index;
 	tmp = ft_strdup(line->command + line->index + 1);
-	col = tgetnum("co");
-	update_line(line, col, tmp, -1);
+	update_line(line, tmp, -1);
 	free(tmp);
 	while (diff-- > 0)
-		go_left(line, col);
+		go_left(line);
+}
+
+void		internal_paste(t_line *line)
+{
+	int		i;
+	int		diff;
+	int		index;
+	char	*tmp;
+
+	free_next_newlines(line);
+	diff = line->top - line->index;
+	index = line->index;
+	i = -1;
+	while (line->copy[++i])
+		add_char(line, line->copy[i]);
+	line->index = index;
+	tmp = ft_strdup(line->command + line->index + 1);
+	update_line(line, tmp, -1);
+	free(tmp);
+	while (diff-- > 0)
+		go_left(line);
 }

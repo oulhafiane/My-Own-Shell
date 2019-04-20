@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 15:13:50 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 09:30:03 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	print_history(t_line *line, char *new_line, char flag_free_line)
 {
 	int		i;
 
-	go_home(line, tgetnum("co"));
+	go_home(line);
 	tputs(tgetstr("cd", NULL), 1, ft_putchar);
 	if (flag_free_line)
 		free_line();
@@ -69,7 +69,7 @@ static void	down_history(t_line *line)
 	print_history(line, new_line, 1);
 }
 
-void	handle_history(int buf, t_line *line)
+void		handle_history(int buf, t_line *line)
 {
 	if (buf == UP_KEY)
 		up_history(line);
@@ -77,7 +77,7 @@ void	handle_history(int buf, t_line *line)
 		down_history(line);
 }
 
-void	add_history(t_line *line)
+void		add_history(t_line *line)
 {
 	t_list	**history;
 	t_list	*new_history;
@@ -88,8 +88,8 @@ void	add_history(t_line *line)
 		tmp = ft_strjoin(line->old_command, line->command);
 	else
 		tmp = ft_strdup(line->command);
-	tmp = remove_new_line(ft_strdup(tmp), ft_strlen(tmp));
-	new_history = ft_lstnew(tmp, line->buf_size);
+	tmp = remove_new_line(tmp, ft_strlen(tmp));
+	new_history = ft_lstnew(tmp, ft_strlen(tmp));
 	ft_lstadd_end(history, new_history);
 	*history = new_history;
 	line->index_history = NULL;

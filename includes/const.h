@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 14:53:30 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/18 22:59:12 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,15 @@
 # define GO_RIGHT 1130044187
 # define GO_LEFT 1146821403
 # define CTRL_SPACE 41154
-# define CTRL_X 8948194
-# define CTRL_C 42947
+# define ALT_LEFT 10783202
+# define ALT_RIGHT 10848738
+# define ALT_C 42947
+# define CTRL_K 11
+# define CTRL_U 21
+# define CTRL_X 24
 # define CTRL_V 10127586
+# define MODE_CUT 0
+# define MODE_COPY 1
 # define NOTHING 0
 # define CURSORON 1
 # define SELECTED 2

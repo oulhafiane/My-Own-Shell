@@ -6,23 +6,28 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 15:20:44 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 09:02:32 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	check_keys(int buf, t_line *line, int col)
+static void	check_keys(int buf, t_line *line)
 {
 	if (buf == EOT_KEY)
-		handle_eot(line, col);
+		handle_eot(line);
 	else if (buf == CLR_KEY)
 		clr_screen(0);
 	else if (buf == RIGHT_KEY || buf == LEFT_KEY || buf == BACK_KEY ||
 			buf == HOME_KEY || buf == END_KEY || buf == GO_UP ||
 			buf == GO_DOWN || buf == GO_RIGHT || buf == GO_LEFT ||
 			buf == HOME_LINE || buf == END_LINE)
-		move_cursor(buf, line, col);
+		move_cursor(buf, line);
+	else if (buf == ALT_LEFT || buf == ALT_RIGHT || buf == ALT_C ||
+			buf == CTRL_K || buf == CTRL_U || buf == CTRL_X)
+		handle_copy(line, buf);
+	else if (buf == CTRL_V && ft_strlen(line->copy) > 0)
+		internal_paste(line);
 	else if (buf == UP_KEY || buf == DOWN_KEY)
 		handle_history(buf, line);
 	else if (ft_isprint(buf))
@@ -35,26 +40,25 @@ static void	check_keys(int buf, t_line *line, int col)
 static void	get_line(t_line *line)
 {
 	int		buf;
-	int		col;
 
 	buf = 0;
 	init_terms();
-	col = tgetnum("co");
+	line->col = tgetnum("co");
 	while (read(0, &buf, 4) >= 0)
 	{
 		if (buf == RETURN_KEY)
 		{
-			go_end(line, col);
+			go_end(line);
 			line->command[++(line->index)] = buf;
 			line->top++;
 			break ;
 		}
 		tputs(tgetstr("vi", NULL), 1, ft_putchar);
-		check_keys(buf, line, col);
+		check_keys(buf, line);
 		tputs(tgetstr("ve", NULL), 1, ft_putchar);
 		buf = 0;
 	}
-	go_end(line, col);
+	go_end(line);
 }
 
 void		clr_screen(int sig)
@@ -73,6 +77,8 @@ void		clr_screen(int sig)
 	line->index = -1;
 	line->current_index = -1;
 	line->top = -1;
+	init_terms();
+	line->col = tgetnum("co");
 	i = -1;
 	tmp = ft_strdup(line->command);
 	while (tmp[++i] != '\0')

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/05 21:09:30 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/19 22:57:16 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ void		init_builtin(t_list **lst)
 }
 
 /*
-**	this function needed by ft_lstsearch libft function 
+**	this function needed by ft_lstsearch libft function
 **	that called from minishell loop function
 **	to check if the command is a builtin function or not
 */
 
-int		check_builtin(t_list *elem, void *obj)
+int			check_builtin(t_list *elem, void *obj)
 {
 	if (ft_strcmp(((t_builtin*)elem->content)->cmd, (char*)obj) == 0)
 		return (1);
@@ -85,17 +85,17 @@ void		free_builtin(t_list *lst)
 void		run_builtin(t_list **env, t_list *bltin, t_command_list *command)
 {
 	t_redirect	*redirect;
-	int stdout_copy;
-	int	stdin_copy;
-	int	stderr_copy;
-		
+	int			stdout_copy;
+	int			stdin_copy;
+	int			stderr_copy;
+
 	redirect = handle_redirect(command);
-    if (loop_dup2(redirect->dup_head, 0))
-    {
-        ft_printf_fd(2, "Ambiguous input redirect.\n");
-        free_duped(redirect);
-        return ;
-    }
+	if (loop_dup2(redirect->dup_head, 0))
+	{
+		ft_printf_fd(2, "Ambiguous input redirect.\n");
+		free_duped(redirect);
+		return ;
+	}
 	stdout_copy = dup(1);
 	stdin_copy = dup(0);
 	stderr_copy = dup(2);

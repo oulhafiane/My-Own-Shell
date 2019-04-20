@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:48:01 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/17 10:22:15 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/19 23:06:42 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 /*
 **	a builtin command, that print the arguments passed as parameter **args.
+**	Note: The variable flag is used to indecated whether
+**        we should print the new line or not
 */
 
 void		ft_echo(char **args, t_list **env)
 {
-	/*
-	** This flag is used to indecated whether we should print the new line or not
-	*/
 	int flag;
 
 	flag = 0;
