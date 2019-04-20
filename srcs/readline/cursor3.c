@@ -6,90 +6,55 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 20:27:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/19 22:53:40 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 08:50:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-static int	get_steps_down(t_line *line)
-{
-	int		nl;
-
-	if (line->new_lines && line->new_lines->next)
-		nl = *((int*)line->new_lines->next->content);
-	else if (line->new_lines == NULL && line->head_newlines)
-		nl = *((int*)line->head_newlines->content);
-	else
-		nl = 0;
-	return (nl);
-}
 
 void		go_down(t_line *line)
 {
 	int		index;
 
 	index = 0;
-	while (line->command[line->index + 1] != '\n' && index < line->col
-			&& line->index < line->top)
-	{
+	while (line->index < line->top &&
+			line->command[line->index + 1] != '\n' && index++ < line->col)
 		go_right(line);
-		index++;
+	if (index <= line->col)
+	{
+		if (line->new_lines && line->new_lines->next)
+			index += *((int*)line->new_lines->next->content);
+		else if (line->new_lines == NULL && line->head_newlines)
+			index += *((int*)line->head_newlines->content);
 	}
-	if (index < line->col)
+	if (index <= line->col)
 	{
-		index += get_steps_down(line);
 		go_right(line);
-		while (index++ < line->col && line->command[line->index + 1] != '\n'
-				&& line->index < line->top)
+		while (line->index < line->top &&
+				index++ < line->col && line->command[line->index + 1] != '\n')
 			go_right(line);
 	}
 }
 
-static int	get_steps_up(t_line *line)
-{
-	int		nl;
-	int		marge;
-	int		index;
-	int		current_index;
-
-	index = line->index - 1;
-	current_index = line->current_index - 1;
-	marge = 0;
-	if (index == current_index)
-		marge = ft_strlen(GET_MSG(line->print_msg));
-	while (index >= 0 && line->command[index] != '\n')
-	{
-		if ((current_index + marge) % line->col == line->col - 1)
-			return (1);
-		index--;
-		current_index--;
-	}
-	if (line->new_lines)
-		nl = *((int*)line->new_lines->content);
-	else
-		nl = 1;
-	return (nl);
-}
-
 void		go_up(t_line *line)
 {
-	int		i;
-	int		steps;
-	int		marge;
-	char	decision;
+	int		index;
 
-	steps = line->col - get_steps_up(line);
-	if (line->index == line->current_index)
-		marge = ft_strlen(GET_MSG(line->print_msg));
-	i = -1;
-	decision = 0;
-	while ((++i <= steps || decision == 0) && line->index >= 0)
-	{
-		if (line->index >= 0 && ((line->command[line->index] == '\n') ||
-				(line->current_index - 1 + marge) % line->col == line->col - 1))
-			decision = 1;
+	index = 0;
+	while (line->index >= 0 &&
+			line->command[line->index] != '\n' && index++ < line->col)
 		go_left(line);
+	if (index < line->col)
+	{
+		if (line->new_lines)
+			index += *((int*)line->new_lines->content);
+		go_left(line);
+	}
+	if (index < line->col)
+	{
+		while (line->index >= 0 &&
+				index++ < line->col && line->command[line->index] != '\n')
+			go_left(line);
 	}
 }
 
