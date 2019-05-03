@@ -6,13 +6,13 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:45:59 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/08 09:34:32 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/22 12:12:15 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void		double_great(t_command **command, t_redirect *redirect)
+static void		double_great(t_command **command, t_redirect *redirect)
 {
 	t_duped		*duped;
 	char		*tmp;
@@ -45,7 +45,7 @@ void		double_great(t_command **command, t_redirect *redirect)
 ** Functions belows Handles input redirection such < <& << <<- <<<
 */
 
-int			redir_in(char *filename, int perm)
+static int		redir_in(char *filename, int perm)
 {
 	int		fd_in;
 
@@ -53,7 +53,7 @@ int			redir_in(char *filename, int perm)
 	return (fd_in);
 }
 
-void		simple_in_redirect(t_command **command, t_redirect *redirect)
+static void		simple_in_redirect(t_command **command, t_redirect *redirect)
 {
 	t_duped		*duped;
 	char		*tmp;
@@ -78,7 +78,7 @@ void		simple_in_redirect(t_command **command, t_redirect *redirect)
 	}
 }
 
-void		parse_redirection(t_command **command, t_redirect *redirect)
+static void		parse_redirection(t_command **command, t_redirect *redirect)
 {
 	if (ft_strstr((*command)->argv, GREATAND)
 			|| ft_strstr((*command)->argv, GREATAND_R))
@@ -97,7 +97,7 @@ void		parse_redirection(t_command **command, t_redirect *redirect)
 		simple_redirect(command, redirect);
 }
 
-t_redirect	*handle_redirect(t_command_list *command)
+t_redirect		*handle_redirect(t_command_list *command)
 {
 	t_redirect		*redirect;
 	t_command		*current;

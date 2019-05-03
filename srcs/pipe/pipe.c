@@ -6,13 +6,39 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/09 12:44:39 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/22 12:21:40 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void	execute_command(char ***cmd, t_list **env, t_list *built_in)
+static t_list	*get_command(t_command_list *command)
+{
+	t_command_list	*tmp;
+	t_list			*list_commands;
+	t_redirect		*redirect;
+
+	list_commands = NULL;
+	while (command->index)
+	{
+		tmp = separated_by_del(command, '|');
+		if (tmp != NULL)
+		{
+			redirect = handle_redirect(tmp);
+			ft_lstadd_end(&list_commands, ft_lstnew(redirect, 0));
+			free_list(tmp, 1);
+		}
+	}
+	return (list_commands);
+}
+
+static void		free_cmd(void *command, size_t size)
+{
+	(void)size;
+	free_duped(command);
+}
+
+void			execute_command(char ***cmd, t_list **env, t_list *built_in)
 {
 	int		error;
 	char	**path;
@@ -37,7 +63,7 @@ void	execute_command(char ***cmd, t_list **env, t_list *built_in)
 	exit(EXIT_FAILURE);
 }
 
-int		is_piped(t_command_list *ptr)
+int				is_piped(t_command_list *ptr)
 {
 	t_command	*current;
 	int			count;
@@ -54,33 +80,8 @@ int		is_piped(t_command_list *ptr)
 	return (count);
 }
 
-t_list	*get_command(t_command_list *command)
-{
-	t_command_list	*tmp;
-	t_list			*list_commands;
-	t_redirect		*redirect;
-
-	list_commands = NULL;
-	while (command->index)
-	{
-		tmp = separated_by_del(command, '|');
-		if (tmp != NULL)
-		{
-			redirect = handle_redirect(tmp);
-			ft_lstadd_end(&list_commands, ft_lstnew(redirect, 0));
-			free_list(tmp, 1);
-		}
-	}
-	return (list_commands);
-}
-
-void	free_cmd(void *command, size_t size)
-{
-	(void)size;
-	free_duped(command);
-}
-
-void	handle_piping(t_command_list *command, t_list **env, t_list *built_in)
+void			handle_piping(t_command_list *command, t_list **env,
+		t_list *built_in)
 {
 	t_list	*list;
 

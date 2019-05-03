@@ -3,7 +3,7 @@ NAME = 21sh
 SRC = srcs
 BIN = bin
 INC = includes
-LIB = lib
+LIB = libft
 BUILT = builtin
 
 SRC_MIN = $(wildcard $(SRC)/minishell/*.c)
@@ -23,8 +23,8 @@ REAL_OBJECT = $(patsubst %, $(BIN)/%, /$(notdir $(OBJECT)))
 
 CC = gcc
 FLAGS = -g -Wall -Wextra -Werror
-CPP_FLAGS = -I$(INC) -I$(LIB)/libft/includes
-LIBFT = $(LIB)/libft/libft.a
+CPP_FLAGS = -I$(INC) -I$(LIB)/includes
+LIBFT = $(LIB)/libft.a
 
 RED = \033[1;31m
 GREEN = \033[1;32m
@@ -41,7 +41,7 @@ $(NAME): $(LIBFT) $(OBJECT)
 
 $(LIBFT):
 	@echo "$(BLUE)Getting Libraries...$(NC)"
-	@make -C $(LIB)/libft
+	@make -C $(LIB)
 
 %.o : %.c
 	@$(CC) $(FLAGS) $(CFLAGS) $(CPP_FLAGS) -c $< -o $(BIN)/$(notdir $@)
@@ -49,11 +49,11 @@ $(LIBFT):
 clean:
 	@echo "$(RED)Cleaning up...$(NC)"
 	@rm -rf $(REAL_OBJECT)
-	@make -C $(LIB)/libft clean
+	@make -C $(LIB) clean
 
 fclean: clean
 	@rm -rf $(NAME)
-	@make -C $(LIB)/libft fclean
+	@make -C $(LIB) fclean
 
 re : fclean all
 
@@ -70,4 +70,6 @@ help :
 valgrind :
 	@valgrind --tool=memcheck --leak-check=full --track-origins=yes ./$(NAME)
 
-val : valgrind
+val : $(NAME) valgrind
+
+valre : re valgrind

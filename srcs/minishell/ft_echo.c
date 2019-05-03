@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:48:01 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/19 23:06:42 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/20 15:36:44 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void		ft_echo(char **args, t_list **env)
 
 	flag = 0;
 	(void)env;
-	if ((*args)[0] == '-' && (*args)[1] == 'n')
+	if (*args && (*args)[0] == '-' && (*args)[1] == 'n')
 	{
 		flag = 1;
 		args++;

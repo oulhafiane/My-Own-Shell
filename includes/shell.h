@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/20 11:25:58 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/22 12:21:15 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,7 @@
 # include <sys/ioctl.h>
 # include <dirent.h>
 # include <string.h>
-# define BUF_S 10000
-# define COPY_MAX 1000
-
-//debug && don't forget to push to vogsphere
-# define TERM_TTY "/dev/ttys000"
-
-void					debug_msg(char *msg, ...);
+# define BUF_S 1000
 
 typedef struct			s_builtin
 {
@@ -46,7 +40,7 @@ typedef struct			s_line
 {
 	char				*command;
 	char				*old_command;
-	char				copy[COPY_MAX];
+	char				*copy;
 	int					buf_size;
 	int					col;
 	int					top;
@@ -95,8 +89,14 @@ typedef struct			s_redirect
 typedef struct			s_spliter
 {
 	char				spliter;
+	char				*start;
 	int					i;
+	int					len;
 }						t_spliter;
+
+/*
+**	=============================== MINISHELL ==================================
+*/
 
 /*
 ** main.c
@@ -107,11 +107,6 @@ int						is_directory(const char *path);
 **	shell.c
 */
 void					run_shell(t_list *builtin, t_line *line);
-
-/*
-**	args.c
-*/
-int						fix_line(char **line, t_list *env);
 
 /*
 **	builtin.c
@@ -159,34 +154,13 @@ void					ft_unsetenv(char **args, t_list **env);
 void					ft_pwd(char **args, t_list **env);
 
 /*
-**	read_line.c
+**	=============================== READLINE ==================================
 */
-void					clr_screen(int sig);
-int						read_line(t_line *line);
 
 /*
-**	line.c
+**	copy.c
 */
-t_line					*get_t_line(void);
-void					free_line(void);
-t_line					*init_line(void);
-void					handle_eot(t_line *line);
-
-/*
-**	edit_line.c
-*/
-void					print_newchar(t_line *line, int buf);
-void					print_char_inline(t_line *line, int buf);
-t_list					*delete_current_newline(t_line *line);
-t_list					*free_next_newlines(t_line *line);
-void					go_down_left(void);
-
-/*
-**	terms.c
-*/
-struct termios			*get_termios(void);
-int						init_termios(struct termios term);
-int						init_terms(void);
+void					handle_copy(t_line *line, int key);
 
 /*
 **	cursor.c
@@ -207,8 +181,8 @@ void					go_end_line(t_line *line);
 /*
 **	cursor3.c
 */
-void					go_up(t_line *line);
 void					go_down(t_line *line);
+void					go_up(t_line *line);
 void					next_word(t_line *line, int direction);
 void					update_line(t_line *line, char *tmp, char buf);
 
@@ -217,9 +191,17 @@ void					update_line(t_line *line, char *tmp, char buf);
 */
 void					update_index(t_line *line, char step);
 int						decision_up_down(t_line *line);
-int						decision_top_down_left(t_line *line);
-void					set_new_current_index(t_line *line);
 int						get_current_rows(t_line *line);
+int						decision_top_down_left(t_line *line, int current_rows);
+void					set_new_current_index(t_line *line);
+
+/*
+**	edit_line.c
+*/
+void					print_newchar(t_line *line, int buf);
+void					print_char_inline(t_line *line, int buf);
+t_list					*free_next_newlines(t_line *line);
+void					go_down_left(void);
 
 /*
 **	handlers.c
@@ -230,19 +212,55 @@ void					exit_shell(char *format, ...);
 void					syntax_error(t_duped *duped, char *format, ...);
 
 /*
-**	quotes.c
+**	history.c
 */
-void					push_stack(char *flag_quote, char buf);
-int						check_stack(char flag_quote);
+void					handle_history(int buf, t_line *line);
+void					add_history(t_line *line);
+
+/*
+**	line.c
+*/
+t_line					*get_t_line(void);
+void					free_line(void);
+t_line					*init_line(void);
+void					handle_eot(t_line *line);
+
+/*
+**	paste.c
+*/
+void					print_pasted_chars(int *buf, t_line *line);
+void					internal_paste(t_line *line);
+
+/*
+**	read_line.c
+*/
+void					clr_screen(int sig);
+int						read_line(t_line *line);
+
+/*
+**	terms.c
+*/
+struct termios			*get_termios(void);
+int						init_termios(struct termios term);
+int						init_terms(void);
+
+/*
+**	=============================== PIPE ==================================
+*/
 
 /*
 **	pipe.c
 */
-void					handle_piping(t_command_list *ptr, t_list **env,
-		t_list *built_in);
-int						is_piped(t_command_list *ptr);
 void					execute_command(char ***cmd, t_list **env,
 		t_list *built_in);
+int						is_piped(t_command_list *ptr);
+void					handle_piping(t_command_list *ptr, t_list **env,
+		t_list *built_in);
+
+/*
+**	Pipe2.c
+*/
+void					piping(t_list *cmds, t_list **env, t_list *built_in);
 
 /*
 ** Path.c
@@ -250,15 +268,80 @@ void					execute_command(char ***cmd, t_list **env,
 int						full_path(char **cmd, char **path_env);
 
 /*
-** redirection.c
+**	============================= REDIRECTION ================================
+*/
+
+/*
+** in_redirection.c
 */
 
 void					redirect_in_app(char *del, int option);
 void					less_great(t_command **command, t_redirect *redirect);
 void					less_and(t_command **command, t_redirect *redirect);
 void					double_less(t_command **command, t_redirect *redirect);
+
+/*
+** is_digit.c
+*/
+int						is_digit(char **tmp, t_duped *duped);
+
+/*
+** lists.c
+*/
+void					init_list(t_command_list *ptr);
+void					push(t_command_list *ptr, char *command, int is_quoted);
+void					free_list(t_command_list *ptr, int option);
+char					**list_to_chars(t_command_list *ptr);
+t_command_list			*separated_by_del(t_command_list *ptr, char del);
+
+/*
+** miscellaneous.c
+*/
+char					*get_first_non_empty(t_command_list *ptr);
+void					free_line_assign(t_line **line);
 void					jump_forward(t_command **command, t_duped *duped);
+void					last_word(t_command_list *command,
+		char **line, char **new_line, int *i);
+
+/*
+** redirect1.c
+*/
+int						is_number(char *str);
 int						redir_out(char *filename, int perm);
+void					file_to_des(t_command **command, t_duped *duped,
+		char *tmp, int perm);
+void					file_or_fdes(t_command **command, t_duped *duped,
+		char *tmp);
+void					redirect_err_out(t_command **command,
+		t_redirect *redirect);
+
+/*
+** redirect2.c
+*/
+void					reverse_agregate(t_command **c, t_duped *d,
+		char *t, t_redirect *r);
+void					agregate_2_check(t_command **command,
+		char *tmp, t_duped *duped, int num);
+void					agregate_redirect(t_command **c, t_redirect *r);
+void					simple_redirect(t_command **c, t_redirect *r);
+
+/*
+** redirect3.c
+*/
+t_redirect				*handle_redirect(t_command_list *command);
+
+/*
+** t_redirect.c
+*/
+t_redirect				*init_t_redirect(void);
+t_duped					*init_t_duped(t_redirect *redirect);
+void					free_duped(t_redirect *redirect);
+int						loop_dup2(t_duped *current, int option);
+int						loop_dup(t_duped *current, int option);
+
+/*
+**	=============================== QUOTES ==================================
+*/
 
 /*
 ** quotes.c
@@ -271,103 +354,27 @@ int						is_not_only_spaces(char *line);
 /*
 ** quotes2.c
 */
-void					handle_quote(t_line *current, t_command_list *command,
-		char flag, t_list *env);
+void					add_to_list(t_command_list *command,
+						char *line, int *index, int is_quoted);
 char					check_quote(char **line, char *spliter, char *start);
 void					push_non_quoted(char *new_line, int *i,
 		t_command_list *command);
-void					last_word(t_command_list *command,
-							char **line, char **new_line, int *i);
 void					init_var(t_line *current,
 							char **line, char **start, char *spliter);
-void					add_to_list(t_command_list *command,
-						char *line, int *index, int is_quoted);
-
-/*
-** lists.c
-*/
-void					init_list(t_command_list *ptr);
-void					push(t_command_list *ptr, char *command, int is_quoted);
-void					free_list(t_command_list *ptr, int option);
-void					print_list(t_command_list *ptr);
-char					**list_to_chars(t_command_list *ptr);
-t_command_list			*separated_by_del(t_command_list *ptr, char del);
-char					*get_first_non_empty(t_command_list *ptr);
-
-/*
-**	history.c
-*/
-void					add_history(t_line *line);
-void					handle_history(int buf, t_line *line);
-
-/*
-** tmp_redirect.c
-*/
-t_redirect				*handle_redirect(t_command_list *command);
-
-/*
-** t_redirect.c
-*/
-void					free_duped(t_redirect *redirect);
-int						loop_dup(t_duped *current, int option);
-int						loop_dup2(t_duped *current, int option);
-t_duped					*init_t_duped(t_redirect *redirect);
-t_redirect				*init_t_redirect(void);
-
-/*
-**	copy.c
-*/
-void					handle_copy(t_line *line, int key);
-
-/*
-**	paste.c
-*/
-void					print_pasted_chars(int *buf, t_line *line);
-void					internal_paste(t_line *line);
-
-/*
-**  redirect1.c
-*/
-int						is_number(char *str);
-int						redir_out(char *filename, int perm);
-void					file_to_des(t_command **command, t_duped *duped,
-		char *tmp, int perm);
-void					file_or_fdes(t_command **command, t_duped *duped,
-		char *tmp);
-void					redirect_err_out(t_command **command,
-		t_redirect *redirect);
-
-/*
-**	redirect2.c
-*/
-void					reverse_agregate(t_command **c, t_duped *d,
-		char *t, t_redirect *r);
-void					agregate_2_check(char *tmp, t_duped *duped, int num);
-void					agregate_redirect(t_command **c, t_redirect *r);
-void					simple_redirect(t_command **c, t_redirect *r);
-
-/*
-**	Pipe2.c
-*/
-void					piping(t_list *cmds, t_list **env, t_list *built_in);
 
 /*
 ** quotes3.c
 */
 int						handle_dollar(char **line, char **new_line,
-		int *i, t_list *env);
-t_command_list			*init_quotes(t_line *line, t_command_list *commands);
+		t_list *env, t_spliter *spl);
 int						handle_tilda(char **line, char **new_line,
-		int *i, t_list *env);
+		t_list *env, t_spliter *spl);
+t_command_list			*init_quotes(t_line *line, t_command_list *commands);
 
 /*
-** is_digit.c
+** quotes4.c
 */
-int						is_digit(char **tmp, t_duped *duped);
-
-/*
-**	miscellaneous.c
-*/
-void					free_line_assign(t_line **line);
+void					handle_quote(t_line *current, t_command_list *command,
+		char flag, t_list *env);
 
 #endif

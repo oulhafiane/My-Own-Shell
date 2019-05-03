@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 22:57:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/20 09:03:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 12:26:04 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,17 @@ static void	get_pasted_str(t_line *line, char **str)
 			begin = 2;
 		else if (begin == 0 && buf == 27)
 			begin = 1;
-		else if (begin == 0 && (ft_isprint(buf) || buf == '\n' || buf == '\t'))
+		else if (begin == 0 && (ft_isprint(buf) ||
+					buf == '\n' || buf == '\t'))
 		{
-			if (i + 1 >= line->buf_size)
+			if (i + 2 >= line->buf_size)
 			{
-				*str = ft_realloc(str, line->buf_size, line->buf_size * 2);
+				*str = ft_realloc(*str, line->buf_size * 2, i + 1);
 				line->buf_size *= 2;
 			}
 			str[0][++i] = buf;
 		}
 	}
-	str[0][++i] = '\0';
 }
 
 static void	paste_chars(int *buf, t_line *line)
@@ -67,7 +67,7 @@ static void	paste_chars(int *buf, t_line *line)
 	int		i;
 	int		j;
 
-	str = (char*)malloc(sizeof(char) * line->buf_size);
+	str = (char*)ft_memalloc(sizeof(char) * line->buf_size);
 	tputs("\E[6n", 1, ft_putchar);
 	get_pasted_str(line, &str);
 	c = (char*)buf;

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 16:04:22 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 21:05:03 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/22 12:12:54 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,12 @@ int				loop_dup(t_duped *current, int option)
 	{
 		if (option && current->filed2 >= 0 && current->filed1 == -4)
 			exit(EXIT_FAILURE);
-		else if (!option && current->filed2 >= 0 && current->filed1 < 0)
+		else if (!option && current->filed2 >= 0 && current->filed1 == -4)
 			return (0);
-		if (current->filed1 != -1 && current->filed2 != -1)
+		if (current->filed1 != -1 && current->filed2 != -1
+				&& current->filed1 != -5)
 			dup2(current->filed1, current->filed2);
-		else if (current->filed1 == -2)
+		else if (current->filed1 == -5)
 			close(current->filed2);
 		else
 		{

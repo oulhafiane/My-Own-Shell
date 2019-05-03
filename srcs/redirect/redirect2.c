@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 12:58:54 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 20:59:48 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/22 09:57:32 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,27 @@ void		reverse_agregate(t_command **command, t_duped *duped,
 ** Or somthing like this [ls -la &> file | ls -la >& file]
 */
 
-void		agregate_2_check(char *tmp, t_duped *duped, int num)
+void		agregate_2_check(t_command **command,
+		char *tmp, t_duped *duped, int num)
 {
-	if (is_number(++tmp) && ft_isdigit(*tmp) && *tmp <= '2')
+	t_command *cmd;
+
+	if (is_number(++tmp) && ft_isdigit(*tmp) && ft_atoi(tmp) <= 2)
 		duped->filed1 = *tmp - '0';
 	else if (*tmp == '-')
-		duped->filed1 = -2;
+		duped->filed1 = -5;
 	else if (is_number(tmp) && (num = ft_atoi(tmp)) > 2)
 		syntax_error(duped, "21sh: %d: Bad file descriptor\n", num);
+	else if ((cmd = (*command)->next) && cmd->argv && is_number(cmd->argv))
+	{
+		cmd->is_skiped = 1;
+		if (ft_atoi(cmd->argv) > 2)
+			syntax_error(duped, "21sh: %d: Bad file descriptor\n", num);
+		else if (ft_atoi(cmd->argv) <= 2)
+			duped->filed1 = *cmd->argv - '0';
+	}
+	else if (cmd != NULL && cmd->argv)
+		duped->filed1 = redir_out(cmd->argv, O_WRONLY | O_TRUNC);
 	else
 		syntax_error(duped, "21sh: %s: ambiguous redirect\n", tmp);
 }
@@ -62,14 +75,15 @@ void		agregate_redirect(t_command **command,
 	num = 0;
 	current->is_skiped = 1;
 	duped = init_t_duped(redirect);
-	if (*tmp && ft_isdigit(*tmp) && *(tmp + 1) == OUTPUT_REDI)
+	if (*tmp && (*(tmp + 1) == OUTPUT_REDI || *(tmp) == OUTPUT_REDI))
 	{
-		duped->filed2 = *tmp - '0';
-		tmp++;
+		duped->filed2 = ft_isdigit(*tmp) ? *tmp - '0' : 2;
+		if (ft_isdigit(*tmp))
+			tmp++;
 		if (*tmp && *tmp == OUTPUT_REDI && *(++tmp) == AMPERSAND)
-			agregate_2_check(tmp, duped, num);
+			agregate_2_check(command, tmp, duped, num);
 	}
-	else if (*tmp && *tmp != AMPERSAND && *tmp != OUTPUT_REDI)
+	if (*tmp && *tmp != AMPERSAND && *tmp != OUTPUT_REDI)
 		reverse_agregate(command, duped, tmp, redirect);
 	else if (ft_strncmp(tmp, GREATAND, 2) == 0
 			|| ft_strncmp(tmp, GREATAND_R, 2) == 0)

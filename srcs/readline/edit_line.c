@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/19 22:41:08 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 11:55:06 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,12 @@ static void	update_newlines(t_line *line)
 
 void		print_newchar(t_line *line, int buf)
 {
-	int		old_size;
-
 	ft_putchar(buf);
 	if (line->top + 2 >= line->buf_size)
 	{
-		old_size = line->buf_size;
 		line->buf_size *= 2;
-		line->command = ft_realloc(line->command, line->buf_size, old_size);
+		line->command = ft_realloc(line->command, line->buf_size,
+				line->top + 1);
 	}
 	line->command[line->index + 1] = buf;
 	if (buf == '\n')

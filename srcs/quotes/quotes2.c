@@ -6,11 +6,27 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/20 11:27:28 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/22 12:16:05 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+static char	escape_slash(char **line, char *spliter, char *start, int *flag)
+{
+	if (IS_BSLASH || (*spliter != '\''
+				&& **line == BACK_SLASH && *(*line + 1) == *spliter))
+	{
+		(*line)++;
+		return (32);
+	}
+	if (!*spliter && ((ft_strchr(" \t", **line) || ft_strchr(SPECIAL, **line)
+					|| (*line > start && ft_strchr(SPECIAL, *(*line - 1)))
+					|| (*line > start && ft_strchr("\"\'", *(*line - 1))
+						&& ft_strchr("<>", **line)))))
+		*flag = 2;
+	return (*flag);
+}
 
 void		add_to_list(t_command_list *command,
 		char *line, int *index, int is_quoted)
@@ -33,7 +49,8 @@ char		check_quote(char **line, char *spliter, char *start)
 	int		flag;
 
 	flag = -1;
-	if (*spliter == 0 && ft_strncmp(*line, "\"\"", 2) == 0)
+	if (*spliter == 0 &&
+			(!ft_strncmp(*line, "\"\"", 2) || !ft_strncmp(*line, "\'\'", 2)))
 	{
 		(*line) += 2;
 		return (0);
@@ -49,12 +66,7 @@ char		check_quote(char **line, char *spliter, char *start)
 		else if (*spliter && CONTAIN_S_D(line, start))
 			flag = 2;
 	}
-	if (IS_BSLASH || (**line == BACK_SLASH && *(*line + 1) == *spliter))
-		(*line)++;
-	if (!*spliter && ((ft_strchr(" \t", **line) || ft_strchr(SPECIAL, **line)
-					|| (*line > start && ft_strchr(SPECIAL, *(*line - 1))))))
-		flag = 2;
-	return (flag);
+	return (escape_slash(line, spliter, start, &flag));
 }
 
 void		push_non_quoted(char *new_line, int *i, t_command_list *command)
@@ -76,14 +88,4 @@ void		init_var(t_line *current,
 		ft_strjoin(current->old_command, current->command)
 		: ft_strdup(current->command);
 	*start = *line;
-}
-
-void		last_word(t_command_list *command,
-			char **line, char **new_line, int *i)
-{
-	char *tmp;
-
-	if (**line == '\0' && *i > 1
-			&& is_not_only_spaces((tmp = ft_strndup(*new_line, *i - 1))))
-		add_to_list(command, tmp, i, 0);
 }

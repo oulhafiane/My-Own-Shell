@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/20 11:08:56 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/22 12:05:24 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,31 @@ void		less_great(t_command **command, t_redirect *redirect)
 		}
 }
 
+static void	less_and_second_param(t_command **command, t_duped *duped)
+{
+	t_command	*cmd;
+	int			num;
+
+	num = -1;
+	if ((cmd = (*command)->next))
+	{
+		cmd->is_skiped = 1;
+		if (cmd->argv && is_number(cmd->argv)
+				&& (num = ft_atoi(cmd->argv) <= 2))
+			duped->filed1 = ft_atoi(cmd->argv);
+		else if (cmd->argv && is_number(cmd->argv) && num > 2)
+			syntax_error(duped, "%s: bad file descriptor\n", cmd->argv);
+		else
+			syntax_error(duped, "21sh: %s ambiguous redirect\n", cmd->argv);
+	}
+	else
+		syntax_error(duped,\
+				"21sh: syntax error near unexpected token `newline'\n");
+}
+
 void		less_and(t_command **command, t_redirect *redirect)
 {
 	t_duped		*duped;
-	t_command	*cmd;
 	char		*tmp;
 
 	duped = init_t_duped(redirect);
@@ -92,11 +113,7 @@ void		less_and(t_command **command, t_redirect *redirect)
 		else if (*tmp && *tmp == '-')
 			duped->filed1 = -2;
 		else
-		{
-			cmd = (*command)->next;
-			ft_printf_fd(2, "21sh: %s: ambiguous redirect\n", cmd->argv);
-			duped->filed1 = -1;
-		}
+			less_and_second_param(command, duped);
 	}
 }
 
@@ -126,19 +143,5 @@ void		double_less(t_command **command, t_redirect *redirect)
 			duped->del = ft_strdup((*command)->argv + 3);
 		else
 			duped->del = ft_strdup((*command)->argv + 2);
-	}
-}
-
-void		jump_forward(t_command **command, t_duped *duped)
-{
-	*command = (*command)->next;
-	if (*command)
-		(*command)->is_skiped = 1;
-	if (*command && (*command)->argv && ft_strlen((*command)->argv))
-		duped->del = ft_strdup((*command)->argv);
-	else
-	{
-		duped->filed2 = 0;
-		syntax_error(duped, "%s\n", ERROR_MSG);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:17:20 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/10 16:19:25 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/29 09:52:38 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ int			wait_fork(t_list **cmds, int fd[2], int *fd_in, int pid)
 {
 	int status;
 
-	waitpid(pid, &status, 0);
+	status = 0;
+	if ((*cmds)->next == NULL)
+		waitpid(pid, &status, 0);
 	close(fd[1]);
 	*fd_in = fd[0];
 	*cmds = (*cmds)->next;

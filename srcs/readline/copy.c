@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 18:34:39 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/19 20:00:53 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 12:18:17 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 static void	before(t_line *line, char mode)
 {
 	char	tmp;
+	int		len;
 
 	tmp = line->command[line->index + 1];
 	line->command[line->index + 1] = '\0';
+	len = ft_strlen(line->command);
+	ft_strdel(&line->copy);
+	line->copy = ft_strnew(len);
 	ft_strcpy(line->copy, line->command);
 	line->command[line->index + 1] = tmp;
 	if (mode == MODE_CUT)
@@ -29,6 +33,11 @@ static void	before(t_line *line, char mode)
 
 static void	after(t_line *line, char mode)
 {
+	int		len;
+
+	len = ft_strlen(line->command + line->index + 1);
+	ft_strdel(&line->copy);
+	line->copy = ft_strnew(len);
 	ft_strcpy(line->copy, line->command + line->index + 1);
 	if (mode == MODE_CUT)
 	{
@@ -39,7 +48,12 @@ static void	after(t_line *line, char mode)
 
 static void	all(t_line *line, char mode)
 {
-	ft_strncpy(line->copy, line->command, COPY_MAX - 1);
+	int		len;
+
+	len = ft_strlen(line->command);
+	ft_strdel(&line->copy);
+	line->copy = ft_strnew(len);
+	ft_strcpy(line->copy, line->command);
 	if (mode == MODE_CUT)
 	{
 		go_home(line);

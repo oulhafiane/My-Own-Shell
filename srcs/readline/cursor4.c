@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 17:39:00 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/19 20:07:23 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 00:29:19 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,15 @@ int		get_current_rows(t_line *line)
 	count_rows = 0;
 	i = line->index;
 	if (line->index == line->current_index)
-		j = line->current_index + ft_strlen(GET_MSG(line->print_msg));
+		j = line->current_index + 1 + ft_strlen(GET_MSG(line->print_msg));
 	else
-		j = line->current_index;
+		j = line->current_index + 1;
 	while (line->command[++i] != '\0')
 	{
 		if (line->command[i] == '\n')
 		{
 			count_rows++;
-			j = -1;
+			j = 0;
 		}
 		else if (j % line->col == line->col - 1)
 			count_rows++;
@@ -72,11 +72,12 @@ int		get_current_rows(t_line *line)
 	return (count_rows);
 }
 
-int		decision_top_down_left(t_line *line)
+int		decision_top_down_left(t_line *line, int current_rows)
 {
 	int		marge;
 	int		top;
 	int		index;
+	int		height;
 
 	marge = 0;
 	index = line->index;
@@ -88,7 +89,13 @@ int		decision_top_down_left(t_line *line)
 	if (line->index == line->current_index)
 		marge = ft_strlen(GET_MSG(line->print_msg));
 	if ((top + marge) % line->col == line->col - 1)
-		return (1);
+	{
+		height = tgetnum("li");
+		if (get_current_row(height) + current_rows == height)
+			return (1);
+		else
+			return (0);
+	}
 	else
 		return (0);
 }

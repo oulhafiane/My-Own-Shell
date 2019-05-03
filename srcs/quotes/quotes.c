@@ -6,13 +6,13 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/16 18:10:10 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 12:14:23 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int				check_pipe_ending(char *line, int len)
+static int		check_pipe_ending(char *line, int len)
 {
 	while (len > 0 && ft_iswhitespace(line[--len]))
 		;
@@ -23,7 +23,8 @@ int				check_pipe_ending(char *line, int len)
 
 char			*remove_new_line(char *line, int len)
 {
-	line[--len] = '\0';
+	if (len > 0)
+		line[--len] = '\0';
 	return (line);
 }
 

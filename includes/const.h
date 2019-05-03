@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/20 11:30:07 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/21 13:33:15 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,14 @@
 # define END_OR_SEMI (!**line || **line == ';')
 # define SPACE_OR_COMMA(line) (WHITESPACE || END_OR_SEMI)
 # define QUOTE_S_D(line) (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE)
-# define FT_STRCHR ft_strchr("\"\'", *(*line - 2))
-# define CONTAIN_S_D(line, start) (*line - 2) >= start && !FT_STRCHR
+# define IS_CHAR *(*line -2 ) > 32 && *(*line - 2) <= '~'
+# define FT_STRCHR !(IS_CHAR && !ft_strchr("<>", *(*line - 2)))
+# define CONTAIN_S_D(line, start) (*line - 2) >= start && FT_STRCHR
 # define RM_NEW_LINE(start) remove_new_line(ft_strdup(start), ft_strlen(start))
 /*
 ** DOLAR CONDITION
 */
 # define D_COND (spl->spliter != SINGLE_QUOTE && **line == DOLLAR_SIGN)
-# define TILDA_COND (!spl->spliter && **line == TILDA)
-# define CONTAIN_S (ft_strchr(" \t", *line) && (ft_strchr(" \t", *(line + 1))))
 # define IS_BSLASH (*spliter == 0 && **line == BACK_SLASH)
 # define IS_SINGLE_QUOTE (*spliter != DOUBLE_QUOTE && **line == SINGLE_QUOTE)
 # define IS_DOUBLE_QUOTE (*spliter != SINGLE_QUOTE && **line == DOUBLE_QUOTE)

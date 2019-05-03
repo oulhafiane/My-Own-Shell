@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 20:27:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/20 08:50:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 12:22:04 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void		go_down(t_line *line)
 {
 	int		index;
 
+	if (get_current_rows(line) <= 0)
+		return ;
 	index = 0;
 	while (line->index < line->top &&
 			line->command[line->index + 1] != '\n' && index++ < line->col)
@@ -40,6 +42,9 @@ void		go_up(t_line *line)
 {
 	int		index;
 
+	if (line->index == line->current_index && line->index +
+			(int)ft_strlen(GET_MSG(line->print_msg)) < line->col - 1)
+		return ;
 	index = 0;
 	while (line->index >= 0 &&
 			line->command[line->index] != '\n' && index++ < line->col)
@@ -92,9 +97,10 @@ void		update_line(t_line *line, char *tmp, char buf)
 	int		i;
 	int		index;
 	int		current_index;
-	int		height;
+	int		current_rows;
 
 	i = -1;
+	current_rows = get_current_rows(line);
 	tputs(tgetstr("sc", NULL), 1, ft_putchar);
 	tputs(tgetstr("cd", NULL), 1, ft_putchar);
 	index = line->index;
@@ -110,8 +116,6 @@ void		update_line(t_line *line, char *tmp, char buf)
 		line->index = index;
 		line->current_index = current_index;
 	}
-	height = tgetnum("li");
-	if (buf != 0 && decision_top_down_left(line) &&
-			(get_current_row(height) + get_current_rows(line)) == height)
+	if (buf != 0 && decision_top_down_left(line, current_rows))
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
 }

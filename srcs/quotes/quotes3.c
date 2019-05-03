@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:50:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/20 11:04:33 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/04/21 16:13:51 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,21 @@
 
 static int		is_special(char c)
 {
-	const char	*escapchar = " !@#$%^&*()-_+=,;.\"\n\t\v\f\r\\";
-
-	if (ft_strchr(escapchar, c))
+	if (!ft_isalnum(c))
 		return (1);
 	return (0);
 }
 
 int				handle_dollar(char **line, char **new_line,
-				int *i, t_list *env_list)
+				t_list *env_list, t_spliter *spl)
 {
-	char *head;
-	char *env;
-	char *tmp;
+	char	*head;
+	char	*env;
+	char	*tmp;
+	int		len;
 
-	if (*i == 1 && (*new_line)[0] == ' ')
-		*i = 0;
+	if (spl->i == 1 && (*new_line)[0] == ' ')
+		spl->i = 0;
 	if (is_special(*((*line) + 1)))
 		return (0);
 	head = ++(*line);
@@ -39,26 +38,38 @@ int				handle_dollar(char **line, char **new_line,
 	if ((env = get_env_value(tmp, env_list)) == NULL)
 		env = "";
 	free(tmp);
+	if ((len = ft_strlen(env)) > 0)
+	{
+		spl->len += len;
+		*new_line = ft_realloc(*new_line, spl->len, spl->i);
+	}
 	while (*env)
-		(*new_line)[(*i)++] = *env++;
+		(*new_line)[(spl->i)++] = *env++;
 	*line = head;
 	return (1);
 }
 
-int				handle_tilda(char **line, char **new_line, int *i, t_list *env)
+int				handle_tilda(char **line, char **new_line, t_list *env,
+		t_spliter *spl)
 {
 	char	*head;
 	char	*home;
 	int		j;
+	int		len;
 
 	j = 0;
-	if (ft_isalpha(*((*line) + 1)))
+	if (ft_isalpha(*(*line + 1)))
 		return (0);
 	head = ++(*line);
 	if ((home = get_env_value("HOME", env)) == NULL)
 		home = "";
+	if ((len = ft_strlen(home)) > 0)
+	{
+		spl->len += len;
+		*new_line = ft_realloc(*new_line, spl->len, spl->i);
+	}
 	while (home[j])
-		(*new_line)[(*i)++] = home[j++];
+		(*new_line)[(spl->i)++] = home[j++];
 	*line = head;
 	return (1);
 }

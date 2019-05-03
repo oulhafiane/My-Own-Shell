@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/19 22:42:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 11:28:50 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	free_line(void)
 	}
 	line->head_newlines = NULL;
 	line->new_lines = NULL;
+	if (ft_strlen(line->copy) == 0)
+		ft_strdel(&line->copy);
 }
 
 t_line	*init_line(void)

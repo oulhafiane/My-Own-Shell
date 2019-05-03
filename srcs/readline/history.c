@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/20 09:30:03 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/21 19:08:19 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	up_history(t_line *line)
 	}
 	else
 		return ;
-	new_line = (char*)malloc(sizeof(char) * line->buf_size);
+	new_line = ft_strnew(ft_strlen(line->index_history->content));
 	ft_strcpy(new_line, line->index_history->content);
 	print_history(line, new_line, !flag_tmp_history_saved);
 }
@@ -57,11 +57,14 @@ static void	down_history(t_line *line)
 		line->index_history = line->index_history->next;
 	else
 		return ;
-	new_line = (char*)malloc(sizeof(char) * line->buf_size);
 	if (line->index_history)
+	{
+		new_line = ft_strnew(ft_strlen(line->index_history->content));
 		ft_strcpy(new_line, line->index_history->content);
+	}
 	else
 	{
+		new_line = ft_strnew(ft_strlen(line->tmp_history));
 		ft_strcpy(new_line, line->tmp_history);
 		free(line->tmp_history);
 		line->tmp_history = NULL;

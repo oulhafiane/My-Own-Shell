@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/20 09:02:32 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/21 21:16:56 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,21 @@ static void	get_line(t_line *line)
 	while (read(0, &buf, 4) >= 0)
 	{
 		if (buf == RETURN_KEY)
-		{
-			go_end(line);
-			line->command[++(line->index)] = buf;
-			line->top++;
 			break ;
-		}
 		tputs(tgetstr("vi", NULL), 1, ft_putchar);
 		check_keys(buf, line);
 		tputs(tgetstr("ve", NULL), 1, ft_putchar);
 		buf = 0;
 	}
 	go_end(line);
+	if (line->top + 2 >= line->buf_size)
+	{
+		line->buf_size *= 2;
+		line->command = ft_realloc(line->command,
+				line->buf_size, line->top + 1);
+	}
+	line->command[++(line->index)] = '\n';
+	line->top++;
 }
 
 void		clr_screen(int sig)
@@ -100,6 +103,7 @@ int			read_line(t_line *line)
 	if (line->print_msg)
 		ft_printf(MSG);
 	line->tmp_history = NULL;
+	line->buf_size = BUF_S;
 	get_line(line);
 	free(line->tmp_history);
 	ft_printf("\n");
