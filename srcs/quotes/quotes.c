@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 14:58:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/22 12:14:23 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/03 16:35:29 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int				is_not_only_spaces(char *line)
 {
 	while (*line)
 	{
-		if (*line != ' ' || *line != '\t')
+		if (*line != ' ' || *line != '\t' || *line == '\n')
 			return (1);
 		line++;
 	}

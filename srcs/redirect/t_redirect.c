@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/16 16:04:22 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/22 12:12:54 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/03 17:02:36 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,15 +97,18 @@ int				loop_dup(t_duped *current, int option)
 			return (0);
 		if (current->filed1 != -1 && current->filed2 != -1
 				&& current->filed1 != -5)
+		{
+			close(current->closefd);
 			dup2(current->filed1, current->filed2);
+		}
 		else if (current->filed1 == -5)
 			close(current->filed2);
 		else
 		{
 			if (current->filed2 == -2)
-				redirect_in_app(current->del, 0);
+				;//redirect_in_app(current->del, 0);
 			else if (current->filed2 == -4)
-				redirect_in_app(current->del, 1);
+				;//redirect_in_app(current->del, 1);
 			current = current->next;
 			continue;
 		}

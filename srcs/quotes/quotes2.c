@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:54:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/22 12:16:05 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/03 16:36:06 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	escape_slash(char **line, char *spliter, char *start, int *flag)
 		(*line)++;
 		return (32);
 	}
-	if (!*spliter && ((ft_strchr(" \t", **line) || ft_strchr(SPECIAL, **line)
+	if (!*spliter && ((ft_strchr(" \t\n", **line) || ft_strchr(SPECIAL, **line)
 					|| (*line > start && ft_strchr(SPECIAL, *(*line - 1)))
 					|| (*line > start && ft_strchr("\"\'", *(*line - 1))
 						&& ft_strchr("<>", **line)))))

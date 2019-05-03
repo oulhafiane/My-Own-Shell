@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/03 16:21:37 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/03 17:05:53 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Get the input from the strin
 */
 
-void		redirect_in_app(char *del, int option)
+void		redirect_in_app(char *del, int option, t_duped *duped)
 {
 	int		fd[2];
 	t_line	*line;
@@ -41,8 +41,9 @@ void		redirect_in_app(char *del, int option)
 	}
 	else if (option == 1)
 		ft_printf_fd(fd[1], "%s\n", del);
-	close(fd[1]);
-	dup2(fd[0], 0);
+	duped->filed1 = 0;
+	duped->filed2 = fd[0];
+	duped->closefd = fd[1];
 }
 
 void		less_great(t_command **command, t_redirect *redirect)
@@ -145,4 +146,6 @@ void		double_less(t_command **command, t_redirect *redirect)
 		else
 			duped->del = ft_strdup((*command)->argv + 2);
 	}
+	//
+	redirect_in_app(duped->del, 0, duped);
 }

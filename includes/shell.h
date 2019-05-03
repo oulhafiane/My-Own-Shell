@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/22 12:21:15 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/03 16:57:54 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct			s_duped
 {
 	int					filed1;
 	int					filed2;
+	int					closefd;
 	char				*del;
 	struct s_duped		*next;
 }						t_duped;
@@ -275,7 +276,7 @@ int						full_path(char **cmd, char **path_env);
 ** in_redirection.c
 */
 
-void					redirect_in_app(char *del, int option);
+void					redirect_in_app(char *del, int option, t_duped *);
 void					less_great(t_command **command, t_redirect *redirect);
 void					less_and(t_command **command, t_redirect *redirect);
 void					double_less(t_command **command, t_redirect *redirect);
