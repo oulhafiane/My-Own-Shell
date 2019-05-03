@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 09:39:05 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/22 12:05:24 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/03 16:21:37 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void		redirect_in_app(char *del, int option)
 		line = init_line();
 		line->print_msg = 0;
 		read_line(line);
-		while (ft_strncmp(line->command, del, line->top) != 0)
+		while (ft_strncmp(line->command, del, line->top) != 0 
+				&& line->command[line->index] != EOT_KEY)
 		{
 			ft_printf_fd(fd[1], "%s", line->command);
 			ft_printf_fd(2, "> ", del);

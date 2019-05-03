@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/22 12:49:25 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/03 15:53:03 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,25 @@
 
 static void	forkit(char *full_path, t_list **env, t_command_list *command)
 {
-	pid_t		father;
+	pid_t		child;
 	char		**env_tab;
 	t_duped		*current;
 	t_redirect	*redirect;
+	int			status;
 
 	env_tab = env_to_tab(*env);
 	signal(SIGINT, child_handler);
 	redirect = handle_redirect(command);
 	current = redirect->dup_head;
-	father = fork();
-	if (father > 0)
+	child = fork();
+	if (child > 0)
 	{
-		wait(NULL);
+		waitpid(child, &status, 0);
 		ft_free_strtab(env_tab);
 		free_duped(redirect);
 		signals();
 	}
-	else if (father == 0)
+	else if (child == 0)
 	{
 		if (loop_dup2(current, 0))
 			exit_shell("Ambiguous input redirect.\n");

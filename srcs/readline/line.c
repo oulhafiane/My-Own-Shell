@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/22 11:28:50 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/03 16:14:33 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ void	handle_eot(t_line *line)
 {
 	if (line->top == -1)
 	{
-		go_home(line);
-		tputs(tgetstr("cd", NULL), 1, ft_putchar);
 		free_line();
 		exit_shell("exit\n");
 	}

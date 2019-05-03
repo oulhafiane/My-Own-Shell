@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/21 21:16:56 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/03 16:23:59 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	get_line(t_line *line)
 	line->col = tgetnum("co");
 	while (read(0, &buf, 4) >= 0)
 	{
-		if (buf == RETURN_KEY)
+		if (buf == RETURN_KEY || (buf == EOT_KEY && !line->print_msg))
 			break ;
 		tputs(tgetstr("vi", NULL), 1, ft_putchar);
 		check_keys(buf, line);
@@ -60,7 +60,7 @@ static void	get_line(t_line *line)
 		line->command = ft_realloc(line->command,
 				line->buf_size, line->top + 1);
 	}
-	line->command[++(line->index)] = '\n';
+	line->command[++(line->index)] = buf;
 	line->top++;
 }
 
@@ -106,7 +106,8 @@ int			read_line(t_line *line)
 	line->buf_size = BUF_S;
 	get_line(line);
 	free(line->tmp_history);
-	ft_printf("\n");
+	if (line->command[line->index] != EOT_KEY)
+		ft_printf("\n");
 	if (tcsetattr(0, TCSANOW, term) == -1)
 		return (-1);
 	return (0);
