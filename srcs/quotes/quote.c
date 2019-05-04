@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 19:24:51 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 23:52:31 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int					is_special_char(char c)
 }
 
 static int			is_special_token(t_token_list *list, char **ptr,
-		t_string *str, enum token_type *type)
+					t_string *str, enum token_type *type)
 {
 	if (**ptr == '&' && !(*type & SH_REDIRECTION))
 		return (0);
@@ -30,15 +30,10 @@ static int			is_special_token(t_token_list *list, char **ptr,
 		*type = (*type | SH_REDIRECTION);
 		while (**ptr && is_special_char(**ptr))
 			push(str, *(*ptr)++);
-		if (!(str->len  && *((*ptr) - 1) == '&' && (is_number(*ptr) || 
-						(**ptr == '-' && (ft_isspace(*((*ptr) + 1)) || (*((*ptr) + 1)) == EOS)))))
-		{
-			insert_token(list, str, *type);
-			*type = *type & ~SH_REDIRECTION;
-		}
-		else if (is_number(*ptr))
-			while (**ptr && !ft_isspace(**ptr) && !is_special_char(**ptr))
-				push(str, *(*ptr)++);
+		insert_token(list, str, *type);
+		*type = *type & ~SH_REDIRECTION;
+		while (**ptr && !ft_isspace(**ptr) && !is_special_char(**ptr))
+			push(str, *(*ptr)++);
 		if (**ptr && is_special_char(**ptr))
 			return (0);
 	}
@@ -48,7 +43,7 @@ static int			is_special_token(t_token_list *list, char **ptr,
 }
 
 int					split_tok(t_token_list *list,
-		char **ptr, t_string *str, enum token_type type)
+					char **ptr, t_string *str, enum token_type type)
 {
 	int				flag;
 
@@ -78,7 +73,7 @@ int					split_tok(t_token_list *list,
 }
 
 static int			split_special(t_token_list *list,
-		char **ptr, t_string *str)
+					char **ptr, t_string *str)
 {
 	int	flag;
 
@@ -90,22 +85,16 @@ static int			split_special(t_token_list *list,
 	else if (str->len == 2)
 		return (insert_token(list, str, SH_DPIPE));
 	while (**ptr == ';')
+	{
 		if (++flag == 1)
 			push(str, *(*ptr)++);
 		else
 			(*ptr)++;
+	}
 	if (str->len == 1)
 		return (insert_token(list, str, SH_SEMI));
-	while (**ptr && (is_special_char(**ptr) || 
-				(str->len && *((*ptr) - 1) == '&' && (**ptr == '-' 
-				 && (ft_isspace(*((*ptr) + 1)) || *((*ptr) + 1) == EOS)))))
-	{
-		if (**ptr == '&' && is_number((*ptr) + 1))
-			while (**ptr && !ft_isspace(**ptr))
-				push(str, *(*ptr)++);
-		else
-			push(str, *(*ptr)++);
-	}
+	while (**ptr && is_special_char(**ptr))
+		push(str, *(*ptr)++);
 	insert_token(list, str, SH_REDIRECTION);
 	if (split_tok(list, ptr, str, SH_WORD))
 		return (1);
