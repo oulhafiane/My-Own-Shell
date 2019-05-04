@@ -111,6 +111,7 @@ void            free_string(t_string *);
 ** err_number.c
 */
 
-int             err_number();
+int             *err_number();
+int				check_error(t_token_list *tokens);
 
 #endif
