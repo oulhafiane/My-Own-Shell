@@ -114,4 +114,9 @@ void            free_string(t_string *);
 int             *err_number();
 int				check_error(t_token_list *tokens);
 
+/*
+** is_number.c
+*/
+
+int				is_number(char *str);
 #endif
