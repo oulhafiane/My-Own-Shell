@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:34:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 12:08:12 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/04 16:39:46 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ char			**list_to_chars(t_token_list *ptr)
 	int			i;
 
 	cmds = (char**)ft_memalloc(sizeof(char*) * (ptr->node_count + 1));
+	if (cmds == NULL)
+		return (NULL);
 	node = ptr->head;
 	i = 0;
 	while (node)

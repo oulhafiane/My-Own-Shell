@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 12:16:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/04 16:04:20 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "const.h"
 # include "libft.h"
 # include "quote.h"
+# include "redirection.h"
 # include <dirent.h>
 # include <term.h>
 # include <termios.h>
@@ -76,7 +77,7 @@ void					free_builtin(t_list *lst);
 void					init_builtin(t_list **lst);
 int						check_builtin(t_list *elem, void *obj);
 void					run_builtin(t_list **env, t_list *bltin,
-		char **cmd);
+		t_token_list *tokens);
 
 /*
 **	env.c
