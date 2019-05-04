@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/22 11:29:18 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 12:16:39 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int			main(int ac, char **av, char **ev)
 	signals();
 	new_line = init_line();
 	new_line->tail_history = &history;
-	new_line->old_command = NULL;
 	new_line->env = env;
 	new_line->copy = NULL;
 	run_shell(blt, new_line);

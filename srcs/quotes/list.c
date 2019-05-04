@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:34:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 11:50:54 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 12:08:12 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,25 @@ void	free_token_list(t_token_list *list)
 		current = tmp;
 	}
 	free(list);
+}
+
+char			**list_to_chars(t_token_list *ptr)
+{
+	char		**cmds;
+	t_token		*node;
+	int			i;
+
+	cmds = (char**)ft_memalloc(sizeof(char*) * (ptr->node_count + 1));
+	node = ptr->head;
+	i = 0;
+	while (node)
+	{
+		if (node->tok_type & SH_WORD)
+			cmds[i++] = ft_strdup(node->token);
+		node = node->next;
+	}
+	cmds[i] = NULL;
+	return (cmds);
 }
 
 char	*enum_char(enum token_type type)

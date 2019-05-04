@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 13:10:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/20 11:07:11 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 14:37:59 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,9 @@ static void	sig_handler(int sig)
 	ft_printf("\n");
 	ft_printf(MSG);
 	free_line();
-	init_line();
+	line = init_line();
 	if (line->print_msg)
-	{
-		ft_strdel(&line->old_command);
-		ioctl(0, TIOCSTI, RETURN_KEY);
-	}
+		line->print_msg = 1;
 }
 
 void		child_handler(int sig)
@@ -54,14 +51,4 @@ void		exit_shell(char *format, ...)
 	ft_vprintf(2, format, &args);
 	va_end(args);
 	exit(-1);
-}
-
-void		syntax_error(t_duped *duped, char *format, ...)
-{
-	va_list	args;
-
-	va_start(args, format);
-	ft_vprintf(2, format, &args);
-	va_end(args);
-	duped->filed1 = -4;
 }

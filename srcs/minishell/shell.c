@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 10:51:06 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 14:40:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void		run_shell(t_list *blt, t_line *line)
 		if (!ft_str_isnull(line->command))
 		{
 			tokens = handle_quote(&line->command);
-			//add_history(line);
+			add_history(line);
 		//	while (cmds->index)
 			//{
 			//	cmd = separated_by_del(cmds, ';');

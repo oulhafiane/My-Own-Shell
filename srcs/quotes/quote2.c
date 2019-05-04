@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:34 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 11:54:24 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 14:47:19 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,33 +30,31 @@ static char		space(char c)
 		return (0);
 }
 
-int				check_quote_ending(char **line, int flag)
+int				check_quote_ending(char **line)
 {
 	char	*ptr;
 	t_line	*new_line;
 
-	if (flag)
-	{
-		ptr = ft_strdup(*line);
-		free_line();
-		new_line = init_line();
-		new_line->print_msg = 0;
-		ft_printf(GET_MSG(new_line->print_msg));
-		read_line(new_line);
-		*line = ft_strjoin(ptr, "\n");
-		ft_strdel(&ptr);
-		ptr = *line;
-		*line = ft_strjoin(ptr, new_line->command);
-		ft_strdel(&ptr);
-		ft_strdel(&new_line->command);
-		new_line->command = *line;
-		return (1);
-	}
-	return (0);
+	ptr = ft_strdup(*line);
+	free_line();
+	new_line = init_line();
+	new_line->print_msg = 0;
+	ft_printf(GET_MSG(new_line->print_msg));
+	read_line(new_line);
+	if (new_line->print_msg)
+		ptr[0] = '\0';
+	*line = ft_strjoin(ptr, (new_line->print_msg) ? "\0" : "\n");
+	ft_strdel(&ptr);
+	ptr = *line;
+	*line = ft_strjoin(ptr, new_line->command);
+	ft_strdel(&ptr);
+	ft_strdel(&new_line->command);
+	new_line->command = *line;
+	return (1);
 }
 
 int				insert_token(t_token_list *list,
-				t_string *str, enum token_type type)
+		t_string *str, enum token_type type)
 {
 	if (str->len)
 	{
@@ -67,7 +65,7 @@ int				insert_token(t_token_list *list,
 }
 
 static int		is_special_token(char **ptr,
-				t_string *str, int inquote, enum token_type *type)
+		t_string *str, int inquote, enum token_type *type)
 {
 	if (!inquote && **ptr == '&' && !(*type & SH_REDIRECTION))
 		return (0);
@@ -110,7 +108,7 @@ static int		is_quote(char c)
 }
 
 int				split_quote(t_token_list *list, char **ptr,
-				t_string *str, enum token_type	type)
+		t_string *str, enum token_type	type)
 {
 	int				inquote;
 	char			quote;

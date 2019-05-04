@@ -6,8 +6,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 
 # define DEBUG_TTY "/dev/ttys002"
 # define EOS '\0'
@@ -65,7 +63,7 @@ int				is_special_char(char c);
 
 int	          	insert_token(t_token_list *, t_string *, enum token_type);
 int             split_quote(t_token_list *list, char **ptr, t_string *str, enum token_type type);
-int             check_quote_ending(char **line, int flag);
+int             check_quote_ending(char **line);
 
 /*
 ** til_dol.c
@@ -86,6 +84,7 @@ void            debug_msg(const char *format, ...);
 void            init_token_list (t_token_list *list);
 void            push_token(t_token_list *list, char *tok, enum token_type type);
 void            print_tokens(t_token_list *list);
+char			**list_to_chars(t_token_list *ptr);
 void			free_token_list(t_token_list *list);
 void			delete_token(t_token_list *list, t_token *tofind);
 
