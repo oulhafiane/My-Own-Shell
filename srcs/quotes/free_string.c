@@ -6,11 +6,17 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 09:16:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 09:29:02 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 11:49:08 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quote.h"
+
+void	free_token(t_token *node)
+{
+	ft_strdel(&node->token);
+	free(node);
+}
 
 void	free_tokens(t_token_list *list)
 {

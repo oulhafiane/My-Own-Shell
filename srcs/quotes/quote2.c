@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:34 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 09:51:56 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 11:54:24 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char		space(char c)
 
 int				check_quote_ending(char **line, int flag)
 {
-	char 	*ptr;
+	char	*ptr;
 	t_line	*new_line;
 
 	if (flag)
@@ -126,15 +126,12 @@ int				split_quote(t_token_list *list, char **ptr,
 			escaped_char(ptr, str);
 		else if (!inquote && is_quote(**ptr) && ++inquote)
 			quote = **ptr;
-		else if (**ptr && **ptr == '$' && quote != '\'' && handle_dollar(ptr, str))
+		else if (**ptr == '$' && quote != '\'' && handle_dollar(ptr, str))
 			continue;
 		else if (**ptr && **ptr != quote)
 			push(str, *(*ptr));
-		else if (**ptr == quote)
-		{
+		else if (**ptr == quote && !(quote = 0))
 			inquote = 0;
-			quote = 0;
-		}
 		++(*ptr);
 	}
 	if (!inquote)

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:34:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 11:05:26 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 11:50:54 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,16 @@ void	delete_token(t_token_list *list, t_token *tofind)
 	{
 		if (current == tofind)
 		{
-			if (current == list->head && current == list->tail)
-			{
-				list->head = current->next;
-				list->tail = current->next;
-			}
-			else if (current == list->head)
-				list->head = current->next;
-			else if (current == list->tail)
-				list->tail = prev;
-			else
+			if (current != list->head && current != list->tail)
 				prev->next = current->next;
-			ft_strdel(&current->token);
-			free(current);
+			else
+			{
+				if (current == list->head)
+					list->head = current->next;
+				if (current == list->tail)
+					list->tail = prev;
+			}
+			free_token(current);
 			list->node_count--;
 			return ;
 		}

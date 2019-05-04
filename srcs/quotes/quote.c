@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 11:07:12 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 11:57:25 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,8 @@ int					split_tok(t_token_list *list,
 			if (split_quote(list, ptr, str, type | SH_QUOTED))
 				return (0);
 		}
-		else if (**ptr && **ptr == '$' && handle_dollar(ptr, str))
-			;
-		else if (**ptr && **ptr == '~' && handle_tilda(ptr, str))
+		else if ((**ptr && **ptr == '$' && handle_dollar(ptr, str)) || 
+				(**ptr && **ptr == '~' && handle_tilda(ptr, str)))
 			;
 		else if (**ptr && !ft_isspace(**ptr))
 			push(str, *(*ptr)++);

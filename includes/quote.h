@@ -90,9 +90,10 @@ void			free_token_list(t_token_list *list);
 void			delete_token(t_token_list *list, t_token *tofind);
 
 /*
-** free.c
+** free_string.c
 */
 
+void			free_token(t_token *node);
 void            free_tokens(t_token_list *list);
 void            free_string(t_string *);
 
