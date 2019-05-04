@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 15:41:57 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 16:52:55 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ static int			split_special(t_token_list *list,
 		return (insert_token(list, str, SH_SEMI));
 	while (**ptr && is_special_char(**ptr))
 		push(str, *(*ptr)++);
-	if (split_tok(list, ptr, str, SH_REDIRECTION))
+	insert_token(list, str, SH_REDIRECTION);
+	if (split_tok(list, ptr, str, SH_WORD))
 		return (1);
 	return (0);
 }
