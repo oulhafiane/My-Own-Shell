@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 18:31:59 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 19:24:51 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,23 +90,24 @@ static int			split_special(t_token_list *list,
 	else if (str->len == 2)
 		return (insert_token(list, str, SH_DPIPE));
 	while (**ptr == ';')
-	{
 		if (++flag == 1)
 			push(str, *(*ptr)++);
 		else
 			(*ptr)++;
-	}
 	if (str->len == 1)
 		return (insert_token(list, str, SH_SEMI));
-	while (**ptr && is_special_char(**ptr))
-		push(str, *(*ptr)++);
-	if (!(str->len  && *((*ptr) - 1) == '&' && (is_number(*ptr) || 
-					(**ptr == '-' && (ft_isspace(*((*ptr) + 1)) || (*((*ptr) + 1)) == EOS)))))
-		insert_token(list, str, SH_WORD);
-	else if (is_number(*ptr))
-		while (**ptr && !ft_isspace(**ptr) && !is_special_char(**ptr))
+	while (**ptr && (is_special_char(**ptr) || 
+				(str->len && *((*ptr) - 1) == '&' && (**ptr == '-' 
+				 && (ft_isspace(*((*ptr) + 1)) || *((*ptr) + 1) == EOS)))))
+	{
+		if (**ptr == '&' && is_number((*ptr) + 1))
+			while (**ptr && !ft_isspace(**ptr))
+				push(str, *(*ptr)++);
+		else
 			push(str, *(*ptr)++);
-	if (split_tok(list, ptr, str, SH_REDIRECTION))
+	}
+	insert_token(list, str, SH_REDIRECTION);
+	if (split_tok(list, ptr, str, SH_WORD))
 		return (1);
 	return (0);
 }
