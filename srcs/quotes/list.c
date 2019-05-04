@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:34:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 09:27:30 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 11:05:26 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,42 @@ void	push_token(t_token_list *list, char *tok, enum token_type type)
 		list->tail = token;
 	}
 	list->node_count++;
+}
+
+/*
+** Delete a node from a list of tokens
+*/
+
+void	delete_token(t_token_list *list, t_token *tofind)
+{
+	t_token *current;
+	t_token	*prev;
+
+	current = list->head;
+	prev = NULL;
+	while (current)
+	{
+		if (current == tofind)
+		{
+			if (current == list->head && current == list->tail)
+			{
+				list->head = current->next;
+				list->tail = current->next;
+			}
+			else if (current == list->head)
+				list->head = current->next;
+			else if (current == list->tail)
+				list->tail = prev;
+			else
+				prev->next = current->next;
+			ft_strdel(&current->token);
+			free(current);
+			list->node_count--;
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
 }
 
 void	free_token_list(t_token_list *list)
@@ -97,5 +133,5 @@ void	print_tokens(t_token_list *list)
 				current->token, enum_char(current->tok_type));
 		current = current->next;
 	}
-	debug_msg("=========================================\n");
+	debug_msg("\n=========================================\n");
 }

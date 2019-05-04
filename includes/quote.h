@@ -87,6 +87,7 @@ void            init_token_list (t_token_list *list);
 void            push_token(t_token_list *list, char *tok, enum token_type type);
 void            print_tokens(t_token_list *list);
 void			free_token_list(t_token_list *list);
+void			delete_token(t_token_list *list, t_token *tofind);
 
 /*
 ** free.c
