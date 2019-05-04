@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 14:40:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/04 16:48:36 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@
 **	the parent waits the child to finish
 */
 
-static void	forkit(char *full_path, t_list **env, char **command)
+static void	forkit(char *full_path, t_list **env, t_token_list *tokens)
 {
 	pid_t		child;
 	char		**env_tab;
+	char		**cmds;
 	int			status;
 
 	env_tab = env_to_tab(*env);
@@ -37,7 +38,12 @@ static void	forkit(char *full_path, t_list **env, char **command)
 		signals();
 	}
 	else if (child == 0)
-		execve(full_path, command, env_tab);
+	{
+		handle_redirection(tokens);
+		if (*(cmds = list_to_chars(tokens)) == NULL)
+			return ;
+		execve(full_path, cmds, env_tab);
+	}
 }
 
 /*
@@ -48,19 +54,19 @@ static void	forkit(char *full_path, t_list **env, char **command)
 **	otherwise, it prints an error msg.
 */
 
-static void	exec_local(char **cmds, t_list **env, char **command)
+static void	exec_local(t_token_list *tokens, t_list **env)
 {
-	if (access(*cmds, F_OK) == 0)
+	if (access(tokens->head->token, F_OK) == 0)
 	{
-		if (is_directory(*cmds))
-			ft_printf_fd(2, "%s: Is a Directory.\n", *cmds);
-		else if (access(*cmds, X_OK) == 0)
-			forkit(*cmds, env, command);
+		if (is_directory(tokens->head->token))
+			ft_printf_fd(2, "%s: Is a Directory.\n", tokens->head->token);
+		else if (access(tokens->head->token, X_OK) == 0)
+			forkit(tokens->head->token, env, tokens);
 		else
-			ft_printf_fd(2, "%s: Permission denied.\n", *cmds);
+			ft_printf_fd(2, "%s: Permission denied.\n", tokens->head->token);
 	}
 	else
-		ft_printf_fd(2, "%s: Command not found.\n", *cmds);
+		ft_printf_fd(2, "%s: Command not found.\n", tokens->head->token);
 }
 
 /*
@@ -71,7 +77,7 @@ static void	exec_local(char **cmds, t_list **env, char **command)
 **	otherwise, it prints an error msg.
 */
 
-static void	exec_cmd(char **command, char **path, t_list **env)
+static void	exec_cmd(t_token_list *tokens, char **path, t_list **env)
 {
 	char	*full_path;
 	char	*error;
@@ -81,10 +87,10 @@ static void	exec_cmd(char **command, char **path, t_list **env)
 	head_path = path;
 	while (*path)
 	{
-		full_path = ft_strjoin_pre(*path, "/", *command);
+		full_path = ft_strjoin_pre(*path, "/", tokens->head->token);
 		if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
 		{
-			forkit(full_path, env, command);
+			forkit(full_path, env, tokens);
 			return (free_exec_cmd(error, full_path, head_path));
 		}
 		else if (error != NULL && access(full_path, F_OK) == 0)
@@ -92,17 +98,18 @@ static void	exec_cmd(char **command, char **path, t_list **env)
 		path++;
 		free(full_path);
 	}
-	print_error(error, *command);
+	print_error(error, tokens->head->token);
 	ft_free_strtab(head_path);
 }
 
-static void	shell(t_list *blt, t_list **env, t_token_list *command)
+static void	shell(t_list *blt, t_list **env, t_token_list *tokens)
 {
-	char			**cmds;
 	t_list			*bltin;
+	t_token			*node;
 
-	if (command->head == NULL)
+	if (tokens->head == NULL)
 		return ;
+	node = tokens->head;
 	/*
 	if (is_piped(command))
 	{
@@ -111,22 +118,17 @@ static void	shell(t_list *blt, t_list **env, t_token_list *command)
 	}
 	*/
 
-	if (*(cmds = list_to_chars(command)) == NULL)
-		return ;
-
-	if (ft_strcmp(*cmds, "exit") == 0)
+	if (ft_strcmp(node->token, "exit") == 0)
 	{
 		free_line();
-		ft_free_strtab(cmds);
 		exit(-1);
 	}
-	else if ((bltin = ft_lstsearch(blt, *cmds, &check_builtin)) != NULL)
-		run_builtin(env, bltin, cmds);
-	else if (ft_strchr(*cmds, '/') != NULL)
-		exec_local(cmds, env, cmds);
+	else if ((bltin = ft_lstsearch(blt, node->token, &check_builtin)) != NULL)
+		run_builtin(env, bltin, tokens);
+	else if (ft_strchr(node->token, '/') != NULL)
+		exec_local(tokens, env);
 	else
-		exec_cmd(cmds, get_path(*env), env);
-	ft_free_strtab(cmds);
+		exec_cmd(tokens, get_path(*env), env);
 }
 
 /*

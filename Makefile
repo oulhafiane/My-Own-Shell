@@ -10,7 +10,7 @@ SRC_MIN = $(wildcard $(SRC)/minishell/*.c)
 SRC_PIP = $(wildcard $(SRC)/pipe/*.c)
 SRC_QUO = $(wildcard $(SRC)/quotes/*.c)
 SRC_REA = $(wildcard $(SRC)/readline/*.c)
-SRC_RED = $(wildcard $(SRC)/redirect/*.c)
+SRC_RED = $(wildcard $(SRC)/redirection/*.c)
 
 OBJ_MIN = $(patsubst %.c, %.o, $(SRC_MIN))
 OBJ_PIP = $(patsubst %.c, %.o, $(SRC_PIP))
