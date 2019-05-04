@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/03 15:53:03 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 09:40:57 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,23 @@
 **	the parent waits the child to finish
 */
 
-static void	forkit(char *full_path, t_list **env, t_command_list *command)
+static void	forkit(char *full_path, t_list **env, char **command)
 {
 	pid_t		child;
 	char		**env_tab;
-	t_duped		*current;
-	t_redirect	*redirect;
 	int			status;
 
 	env_tab = env_to_tab(*env);
 	signal(SIGINT, child_handler);
-	redirect = handle_redirect(command);
-	current = redirect->dup_head;
 	child = fork();
 	if (child > 0)
 	{
 		waitpid(child, &status, 0);
 		ft_free_strtab(env_tab);
-		free_duped(redirect);
 		signals();
 	}
 	else if (child == 0)
-	{
-		if (loop_dup2(current, 0))
-			exit_shell("Ambiguous input redirect.\n");
-		loop_dup(current, 1);
-		execve(full_path, redirect->command, env_tab);
-	}
+		execve(full_path, command, env_tab);
 }
 
 /*
@@ -58,7 +48,7 @@ static void	forkit(char *full_path, t_list **env, t_command_list *command)
 **	otherwise, it prints an error msg.
 */
 
-static void	exec_local(char **cmds, t_list **env, t_command_list *command)
+static void	exec_local(char **cmds, t_list **env, char **command)
 {
 	if (access(*cmds, F_OK) == 0)
 	{
@@ -81,49 +71,49 @@ static void	exec_local(char **cmds, t_list **env, t_command_list *command)
 **	otherwise, it prints an error msg.
 */
 
-static void	exec_cmd(t_command_list *command, char **path, t_list **env)
+static void	exec_cmd(char **command, char **path, t_list **env)
 {
 	char	*full_path;
 	char	*error;
 	char	**head_path;
-	char	*binary_file;
 
 	error = NULL;
 	head_path = path;
-	if ((binary_file = get_first_non_empty(command)) != NULL)
+	while (*path)
 	{
-		while (*path)
+		full_path = ft_strjoin_pre(*path, "/", *command);
+		if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
 		{
-			full_path = ft_strjoin_pre(*path, "/", binary_file);
-			if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
-			{
-				forkit(full_path, env, command);
-				return (free_exec_cmd(error, full_path, head_path));
-			}
-			else if (error != NULL && access(full_path, F_OK) == 0)
-				error = ft_strjoin(full_path, ": Permission denied.\n");
-			path++;
-			free(full_path);
+			forkit(full_path, env, command);
+			return (free_exec_cmd(error, full_path, head_path));
 		}
-		print_error(error, binary_file);
+		else if (error != NULL && access(full_path, F_OK) == 0)
+			error = ft_strjoin(full_path, ": Permission denied.\n");
+		path++;
+		free(full_path);
 	}
+	print_error(error, *command);
 	ft_free_strtab(head_path);
 }
 
-static void	shell(t_list *blt, t_list **env, t_command_list *command)
+static void	shell(t_list *blt, t_list **env, t_token_list *command)
 {
 	char			**cmds;
 	t_list			*bltin;
 
 	if (command->head == NULL)
 		return ;
+	/*
 	if (is_piped(command))
 	{
 		handle_piping(command, env, blt);
 		return ;
 	}
+	*/
+
 	if (*(cmds = list_to_chars(command)) == NULL)
 		return ;
+
 	if (ft_strcmp(*cmds, "exit") == 0)
 	{
 		free_line();
@@ -131,11 +121,11 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 		exit(-1);
 	}
 	else if ((bltin = ft_lstsearch(blt, *cmds, &check_builtin)) != NULL)
-		run_builtin(env, bltin, command);
+		run_builtin(env, bltin, cmds);
 	else if (ft_strchr(*cmds, '/') != NULL)
-		exec_local(cmds, env, command);
+		exec_local(cmds, env, cmds);
 	else
-		exec_cmd(command, get_path(*env), env);
+		exec_cmd(cmds, get_path(*env), env);
 	ft_free_strtab(cmds);
 }
 
@@ -155,28 +145,27 @@ static void	shell(t_list *blt, t_list **env, t_command_list *command)
 
 void		run_shell(t_list *blt, t_line *line)
 {
-	t_command_list	commands;
-	t_command_list	*cmds;
-	t_command_list	*cmd;
+	//t_command_list	commands;
+	t_token_list	*cmds;
+	//t_command_list	*cmd;
 
 	while (read_line(line) == 0)
 	{
 		if (!ft_str_isnull(line->command))
 		{
-			cmds = init_quotes(line, &commands);
-			add_history(line);
-			while (cmds->index)
-			{
-				cmd = separated_by_del(cmds, ';');
-				shell(blt, &(line->env), cmd);
-				free_list(cmd, 1);
-			}
-			free_list(&commands, 0);
+			cmds = handle_quote(&line->command);
+			//add_history(line);
+		//	while (cmds->index)
+			//{
+			//	cmd = separated_by_del(cmds, ';');
+				shell(blt, &(line->env), cmds);
+				free_token_list(cmds);
+				//free_list(cmd, 1);
+			//}
+			//free_list(&commands, 0);
 		}
 		free_line();
 		line = init_line();
-		free(line->old_command);
-		line->old_command = NULL;
 	}
 	free_line();
 }

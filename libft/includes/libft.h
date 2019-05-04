@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 17:24:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/03/20 17:49:25 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/04 08:59:27 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int					ft_tolower(int c);
 /*
 ** Second Part
 */
+void				*xrealloc(void *ptr, size_t size);
 void				*ft_realloc(void *buf, size_t size, size_t old_size);
 void				*ft_memalloc(size_t size);
 void				ft_memdel(void **ap);
@@ -151,6 +152,7 @@ int					ft_printf_fd(int fd, const char *format, ...);
 int					ft_vprintf(int fd, const char *format, va_list *ap);
 int					ft_nbrlen(int n);
 int					ft_iswhitespace(int c);
+int					ft_isspace(int c);
 void				ft_swap_pt(void **pt1, void **pt2);
 int					ft_sqrt(int nb);
 

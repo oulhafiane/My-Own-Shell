@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/21 19:08:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/04 09:02:52 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ void		handle_history(int buf, t_line *line)
 		down_history(line);
 }
 
-void		add_history(t_line *line)
+/*
+static void		addhistory(t_line *line)
 {
 	t_list	**history;
 	t_list	*new_history;
@@ -91,10 +92,11 @@ void		add_history(t_line *line)
 		tmp = ft_strjoin(line->old_command, line->command);
 	else
 		tmp = ft_strdup(line->command);
-	tmp = remove_new_line(tmp, ft_strlen(tmp));
+	//tmp = remove_new_line(tmp, ft_strlen(tmp));
 	new_history = ft_lstnew(tmp, ft_strlen(tmp));
 	ft_lstadd_end(history, new_history);
 	*history = new_history;
 	line->index_history = NULL;
 	free(tmp);
 }
+*/

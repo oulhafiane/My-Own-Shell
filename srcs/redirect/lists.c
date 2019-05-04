@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 14:57:32 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/22 12:09:40 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/04 09:17:20 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void			init_list(t_command_list *listptr)
 	listptr->node_count = 0;
 }
 
-void			push(t_command_list *listptr, char *command, int is_quoted)
+void			push_cmd(t_command_list *listptr, char *command, int is_quoted)
 {
 	t_command *new_node_ptr;
 
@@ -44,6 +44,7 @@ void			push(t_command_list *listptr, char *command, int is_quoted)
 	}
 	listptr->node_count++;
 }
+
 
 /*
 ** The option param intention is to decide whether to free
@@ -71,10 +72,10 @@ void			free_list(t_command_list *ptr, int option)
 		init_list(ptr);
 }
 
-char			**list_to_chars(t_command_list *ptr)
+char			**list_to_chars(t_token_list *ptr)
 {
 	char		**cmds;
-	t_command	*node;
+	t_token		*node;
 	int			i;
 
 	cmds = (char**)ft_memalloc(sizeof(char*) * (ptr->node_count + 1));
@@ -82,9 +83,8 @@ char			**list_to_chars(t_command_list *ptr)
 	i = 0;
 	while (node)
 	{
-		if (node->argv && is_not_only_spaces(node->argv)
-				&& node->is_skiped == 0 && ft_strlen(node->argv) != 0)
-			cmds[i++] = ft_strdup(node->argv);
+		if (node->tok_type & SH_WORD)
+			cmds[i++] = ft_strdup(node->token);
 		node = node->next;
 	}
 	cmds[i] = NULL;
@@ -108,10 +108,11 @@ t_command_list	*separated_by_del(t_command_list *ptr, char del)
 			ptr->index = current->next;
 			break ;
 		}
-		push(commands, ft_strdup(current->argv), current->is_quoted);
+		push_cmd(commands, ft_strdup(current->argv), current->is_quoted);
 		current = current->next;
 	}
 	if (current == NULL)
 		ptr->index = NULL;
 	return (commands);
 }
+

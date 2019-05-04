@@ -36,7 +36,7 @@ all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJECT)
 	@echo "$(RED)Linking...$(NC)"
-	@$(CC) $(REAL_OBJECT) -ltermcap $(LIBFT) -o $(NAME)
+	@$(CC) $(REAL_OBJECT) -ltermcap -lreadline $(LIBFT) -o $(NAME)
 	@echo "$(GREEN)Finished...$(NC)"
 
 $(LIBFT):
@@ -44,6 +44,7 @@ $(LIBFT):
 	@make -C $(LIB)
 
 %.o : %.c
+	@mkdir -p $(BIN)
 	@$(CC) $(FLAGS) $(CFLAGS) $(CPP_FLAGS) -c $< -o $(BIN)/$(notdir $@)
 
 clean:

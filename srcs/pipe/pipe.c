@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 10:45:28 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/22 12:21:40 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/04 09:11:31 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static t_list	*get_command(t_command_list *command)
 		tmp = separated_by_del(command, '|');
 		if (tmp != NULL)
 		{
-			redirect = handle_redirect(tmp);
+			redirect = NULL;//handle_redirect(tmp);
 			ft_lstadd_end(&list_commands, ft_lstnew(redirect, 0));
 			free_list(tmp, 1);
 		}

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/03 16:57:54 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/04 09:05:58 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 # include "const.h"
 # include "libft.h"
+# include "quote.h"
 # include <dirent.h>
 # include <term.h>
 # include <termios.h>
@@ -116,7 +117,7 @@ void					free_builtin(t_list *lst);
 void					init_builtin(t_list **lst);
 int						check_builtin(t_list *elem, void *obj);
 void					run_builtin(t_list **env, t_list *bltin,
-		t_command_list *cmd);
+		char **cmd);
 
 /*
 **	env.c
@@ -216,7 +217,7 @@ void					syntax_error(t_duped *duped, char *format, ...);
 **	history.c
 */
 void					handle_history(int buf, t_line *line);
-void					add_history(t_line *line);
+//void					add_history(t_line *line);
 
 /*
 **	line.c
@@ -290,10 +291,11 @@ int						is_digit(char **tmp, t_duped *duped);
 ** lists.c
 */
 void					init_list(t_command_list *ptr);
-void					push(t_command_list *ptr, char *command, int is_quoted);
 void					free_list(t_command_list *ptr, int option);
-char					**list_to_chars(t_command_list *ptr);
+char					**list_to_chars(t_token_list *ptr);
 t_command_list			*separated_by_del(t_command_list *ptr, char del);
+void					push_cmd(t_command_list *listptr,
+		char *command, int is_quoted);
 
 /*
 ** miscellaneous.c
@@ -343,39 +345,5 @@ int						loop_dup(t_duped *current, int option);
 /*
 **	=============================== QUOTES ==================================
 */
-
-/*
-** quotes.c
-*/
-char					*remove_new_line(char *line, int len);
-void					is_match(char spliter, t_line *current,
-		t_command_list *command, char *start);
-int						is_not_only_spaces(char *line);
-
-/*
-** quotes2.c
-*/
-void					add_to_list(t_command_list *command,
-						char *line, int *index, int is_quoted);
-char					check_quote(char **line, char *spliter, char *start);
-void					push_non_quoted(char *new_line, int *i,
-		t_command_list *command);
-void					init_var(t_line *current,
-							char **line, char **start, char *spliter);
-
-/*
-** quotes3.c
-*/
-int						handle_dollar(char **line, char **new_line,
-		t_list *env, t_spliter *spl);
-int						handle_tilda(char **line, char **new_line,
-		t_list *env, t_spliter *spl);
-t_command_list			*init_quotes(t_line *line, t_command_list *commands);
-
-/*
-** quotes4.c
-*/
-void					handle_quote(t_line *current, t_command_list *command,
-		char flag, t_list *env);
 
 #endif
