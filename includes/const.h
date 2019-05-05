@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/21 13:33:15 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/05 14:18:30 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,11 @@
 # define TILDA '~'
 # define WRITE_END 1
 # define READ_END 0
-# define ERROR_MSG "21sh :syntax error near unexprected token"
+# define ERROR_MSG "21sh: syntax error near unexprected token"
 # define FN_EXIST "No such file or directory"
+# define SYNTAX_ERROR 101
+# define PERM_DENIED 102
+# define BAD_DESCRIPTOR 103
 # define WHITESPACE ft_iswhitespace(*(*line))
 # define END_OR_SEMI (!**line || **line == ';')
 # define SPACE_OR_COMMA(line) (WHITESPACE || END_OR_SEMI)

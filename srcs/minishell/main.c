@@ -6,11 +6,26 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 12:16:39 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/05 17:08:08 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+void		exit_fork(char status)
+{
+	if (status == -1)
+		status = PERM_DENIED;
+	else if (status == -2)
+		status = SYNTAX_ERROR;
+	if (status == PERM_DENIED)
+		ft_printf_fd(2, "21sh: Permission denied\n");
+	else if (status == BAD_DESCRIPTOR)
+		ft_printf_fd(2, "21sh: Bad file descriptor\n");
+	else if (status == SYNTAX_ERROR)
+		ft_printf_fd(2, "21sh: Syntax error\n");
+	exit(EXIT_FAILURE);
+}
 
 int			is_directory(const char *path)
 {

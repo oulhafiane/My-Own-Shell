@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 16:04:20 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/05 14:15:19 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct			s_line
 /*
 ** main.c
 */
+void					exit_fork(char status);
 int						is_directory(const char *path);
 
 /*

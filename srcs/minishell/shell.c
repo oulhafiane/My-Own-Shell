@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 22:30:15 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/05 14:11:11 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ static void	forkit(char *full_path, t_list **env, t_token_list *tokens)
 	}
 	else if (child == 0)
 	{
-		if (handle_redirection(tokens) == -1)
+		if ((status = handle_redirection(tokens)) != 0)
 		{
 			ft_free_strtab(env_tab);
-			exit(EXIT_FAILURE);
+			exit_fork(status);
 		}
 		if (*(cmds = list_to_chars(tokens)) == NULL)
 			return ;
