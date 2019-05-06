@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 15:35:45 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 00:56:33 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,12 @@ void		free_builtin(t_list *lst)
 ** Running a builtin command
 */
 
-void		run_builtin(t_list **env, t_list *bltin, t_token_list *tokens)
+void		run_builtin(t_list **env, t_list *bltin, t_token *node, int std[2])
 {
 	char	**cmds;
 
-	if (*(cmds = list_to_chars(tokens)) == NULL)
+	(void)std;
+	if (*(cmds = list_to_chars(node)) == NULL)
 		return ;
 	((t_builtin*)bltin->content)->f(cmds + 1, env);
 	ft_free_strtab(cmds);

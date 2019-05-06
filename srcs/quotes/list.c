@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:34:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 16:39:46 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/05 23:48:00 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,24 +96,32 @@ void	free_token_list(t_token_list *list)
 	free(list);
 }
 
-char			**list_to_chars(t_token_list *ptr)
+char			**list_to_chars(t_token *node)
 {
 	char		**cmds;
-	t_token		*node;
-	int			i;
+	int			count;
+	t_token		*copy;
 
-	cmds = (char**)ft_memalloc(sizeof(char*) * (ptr->node_count + 1));
+	count = 0;
+	copy = node;
+	while(copy && !(node->tok_type & SH_SEMI) && !(node->tok_type & SH_PIPE))
+	{
+		count++;
+		copy = copy->next;
+	}
+	cmds = (char**)ft_memalloc(sizeof(char*) * (count + 1));
 	if (cmds == NULL)
 		return (NULL);
-	node = ptr->head;
-	i = 0;
+	count = 0;
 	while (node)
 	{
+		if ((node->tok_type & SH_SEMI) || (node->tok_type & SH_PIPE))
+			break;
 		if (node->tok_type & SH_WORD)
-			cmds[i++] = ft_strdup(node->token);
+			cmds[count++] = ft_strdup(node->token);
 		node = node->next;
 	}
-	cmds[i] = NULL;
+	cmds[count] = NULL;
 	return (cmds);
 }
 

@@ -6,48 +6,19 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/05 14:11:11 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 01:22:26 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-/*
-**	The Fork Function
-**	it creates a copy (child process) of the current process (parent process)
-**	man fork -> for more info.
-**	after that there will be two processes one is parent and the other is child
-**	the child executes the cmds with the environment given on the parameters
-**	the parent waits the child to finish
-*/
-
-static void	forkit(char *full_path, t_list **env, t_token_list *tokens)
+static int		is_directory(const char *path)
 {
-	pid_t		child;
-	char		**env_tab;
-	char		**cmds;
-	int			status;
+	struct stat statbuf;
 
-	env_tab = env_to_tab(*env);
-	signal(SIGINT, child_handler);
-	child = fork();
-	if (child > 0)
-	{
-		waitpid(child, &status, 0);
-		ft_free_strtab(env_tab);
-		signals();
-	}
-	else if (child == 0)
-	{
-		if ((status = handle_redirection(tokens)) != 0)
-		{
-			ft_free_strtab(env_tab);
-			exit_fork(status);
-		}
-		if (*(cmds = list_to_chars(tokens)) == NULL)
-			return ;
-		execve(full_path, cmds, env_tab);
-	}
+	if (stat(path, &statbuf) != 0)
+		return (0);
+	return (M_ISDIR(statbuf.st_mode));
 }
 
 /*
@@ -58,19 +29,19 @@ static void	forkit(char *full_path, t_list **env, t_token_list *tokens)
 **	otherwise, it prints an error msg.
 */
 
-static void	exec_local(t_token_list *tokens, t_list **env)
+static void	exec_local(t_token *token, t_list **env, int std[2])
 {
-	if (access(tokens->head->token, F_OK) == 0)
+	if (access(token->token, F_OK) == 0)
 	{
-		if (is_directory(tokens->head->token))
-			ft_printf_fd(2, "%s: Is a Directory.\n", tokens->head->token);
-		else if (access(tokens->head->token, X_OK) == 0)
-			forkit(tokens->head->token, env, tokens);
+		if (is_directory(token->token))
+			ft_printf_fd(2, "%s: Is a Directory.\n", token->token);
+		else if (access(token->token, X_OK) == 0)
+			forkit(token->token, env, token, std);
 		else
-			ft_printf_fd(2, "%s: Permission denied.\n", tokens->head->token);
+			ft_printf_fd(2, "%s: Permission denied.\n", token->token);
 	}
 	else
-		ft_printf_fd(2, "%s: Command not found.\n", tokens->head->token);
+		ft_printf_fd(2, "%s: Command not found.\n", token->token);
 }
 
 /*
@@ -81,7 +52,8 @@ static void	exec_local(t_token_list *tokens, t_list **env)
 **	otherwise, it prints an error msg.
 */
 
-static void	exec_cmd(t_token_list *tokens, char **path, t_list **env)
+static void	exec_cmd(t_token *token, char **path, t_list **env,
+		int std[2])
 {
 	char	*full_path;
 	char	*error;
@@ -91,10 +63,10 @@ static void	exec_cmd(t_token_list *tokens, char **path, t_list **env)
 	head_path = path;
 	while (*path)
 	{
-		full_path = ft_strjoin_pre(*path, "/", tokens->head->token);
+		full_path = ft_strjoin_pre(*path, "/", token->token);
 		if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
 		{
-			forkit(full_path, env, tokens);
+			forkit(full_path, env, token, std);
 			return (free_exec_cmd(error, full_path, head_path));
 		}
 		else if (error != NULL && access(full_path, F_OK) == 0)
@@ -102,77 +74,52 @@ static void	exec_cmd(t_token_list *tokens, char **path, t_list **env)
 		path++;
 		free(full_path);
 	}
-	print_error(error, tokens->head->token);
+	print_error(error, token->token);
 	ft_free_strtab(head_path);
 }
 
-static void	shell(t_list *blt, t_list **env, t_token_list *tokens)
+static void	exec(t_list *blt, t_list **env, t_token *node, int std[2])
 {
 	t_list			*bltin;
-	t_token			*node;
 
-	if (tokens->head == NULL)
+	if (node == NULL)
 		return ;
-	node = tokens->head;
-	/*
-	if (is_piped(command))
-	{
-		handle_piping(command, env, blt);
-		return ;
-	}
-	*/
-
 	if (ft_strcmp(node->token, "exit") == 0)
 	{
 		free_line();
 		exit(-1);
 	}
 	else if ((bltin = ft_lstsearch(blt, node->token, &check_builtin)) != NULL)
-		run_builtin(env, bltin, tokens);
+		run_builtin(env, bltin, node, std);
 	else if (ft_strchr(node->token, '/') != NULL)
-		exec_local(tokens, env);
+		exec_local(node, env, std);
 	else
-		exec_cmd(tokens, get_path(*env), env);
+		exec_cmd(node, get_path(*env), env, std);
 }
 
-/*
-**	The loop function of minishell
-**	it prints the minishell msg : My_Minishell $>
-**	and reads from the input standard the command
-**	and check it which type is it : exit, builtins,
-**                                  Cmd with path, Cmd Without Path
-**	and sends the list of agruments to appropriate function.
-**	Notes : (libft functions)
-**	get_next_line  : reads a line from the standard input.
-**	ft_strsplit_ws : splits a line to a multiple words by whitespace delimiters
-**			 returns a char** and last pointer is NULL.
-**	free_strtab    : frees all strings (char**) returned by ft_strsplit_ws.
-*/
-
-void		run_shell(t_list *blt, t_line *line)
+void	shell(t_list *blt, t_list **env, t_token_list *tokens)
 {
-	//t_command_list	commands;
-	t_token_list	*tokens;
-	//t_command_list	*cmd;
+	int		std[2];
+	int     pp[2];
+	char    piping;
 
-	while (read_line(line) == 0)
+	pipe(pp);
+	std[0] = 0;
+	std[1] = 1;
+	if ((piping = check_pipe(tokens->head)))
+		std[1] = pp[1];
+	exec(blt, env, tokens->head, std);
+	while (piping)
 	{
-		if (!ft_str_isnull(line->command))
-		{
-			tokens = handle_quote(&line->command);
-			add_history(line);
-		//	while (cmds->index)
-			//{
-			//	cmd = separated_by_del(cmds, ';');
-				shell(blt, &(line->env), tokens);
-				print_tokens(tokens);
-				free_token_list(tokens);
-				//free_list(cmd, 1);
-			//}
-			//free_list(&commands, 0);
-		}
-		free_line();
-		line = init_line();
+		next_pipe(tokens);
+		std[0] = pp[0];
+		std[1] = 1;
+		close(pp[1]);
+		pipe(pp);
+		if ((piping = check_pipe(tokens->head)))
+			std[1] = pp[1];
+		if (tokens->head)
+			exec(blt, env, tokens->head, std);
 	}
-	free_line();
+	close(pp[0]);
 }

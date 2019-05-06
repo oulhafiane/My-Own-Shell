@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/05 14:15:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 01:05:08 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,18 @@ typedef struct			s_line
 */
 
 /*
-** main.c
-*/
-void					exit_fork(char status);
-int						is_directory(const char *path);
-
-/*
 **	shell.c
 */
-void					run_shell(t_list *builtin, t_line *line);
+void					shell(t_list *blt, t_list **env, t_token_list *tokens); 
+
+/*
+** fork.c
+*/
+void					next_pipe(t_token_list *tokens);
+char					check_pipe(t_token *token);
+void					forkit(char *path, t_list **env, t_token *token,
+		int pipe[2]);
+
 
 /*
 **	builtin.c
@@ -78,7 +81,7 @@ void					free_builtin(t_list *lst);
 void					init_builtin(t_list **lst);
 int						check_builtin(t_list *elem, void *obj);
 void					run_builtin(t_list **env, t_list *bltin,
-		t_token_list *tokens);
+		t_token *node, int std[2]);
 
 /*
 **	env.c

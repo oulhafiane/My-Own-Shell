@@ -6,7 +6,7 @@
 /*   By: amoutik  <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 16:54:52 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 16:55:43 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/05 23:12:53 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ enum token_type
 	SH_REDIRECTION = 4,
 	SH_SEMI = 8,
 	SH_QUOTED = 16,
-	SH_DPIPE = 32
+	SH_DPIPE = 32,
 };
 
 typedef struct  s_token
@@ -95,7 +95,7 @@ void            debug_msg(const char *format, ...);
 void            init_token_list (t_token_list *list);
 void            push_token(t_token_list *list, char *tok, enum token_type type);
 void            print_tokens(t_token_list *list);
-char			**list_to_chars(t_token_list *ptr);
+char			**list_to_chars(t_token *node);
 void			free_token_list(t_token_list *list);
 void			delete_token(t_token_list *list, t_token *tofind);
 

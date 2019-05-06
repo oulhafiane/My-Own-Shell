@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 16:03:54 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/05 17:08:05 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 01:25:53 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,21 +60,20 @@ static char	apply_redirection(t_token *token, char fd_to_replace)
 	return (0);
 }
 
-char		handle_redirection(t_token_list *tokens)
+char		handle_right_redirect(t_token *token)
 {
-	t_token		*token;
 	char		fd_to_rep;
 	char		status;
 
-	token = tokens->head;
-	while (token)
+	while (token && (token->tok_type & SH_PIPE) == 0 &&
+			(token->tok_type & SH_SEMI) == 0)
 	{
 		if ((token->tok_type & SH_REDIRECTION) != 0 && token->next &&
 				(token->next->tok_type & SH_REDIRECTION) == 0)
 		{
 			fd_to_rep = 1;
 			if ((token->tok_type & SH_WORD) != 0)
-				fd_to_rep = *(token->token) - '0';
+				fd_to_rep = token->token[0] - '0';
 			if ((status = apply_redirection(token, fd_to_rep)) != 0)
 				return (status);
 		}

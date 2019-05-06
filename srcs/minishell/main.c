@@ -6,42 +6,70 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/05 17:08:08 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 01:22:28 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void		exit_fork(char status)
+static int search_semi(t_list *blt, t_list **env, t_token_list *tokens)
 {
-	if (status == -1)
-		status = PERM_DENIED;
-	else if (status == -2)
-		status = SYNTAX_ERROR;
-	if (status == PERM_DENIED)
-		ft_printf_fd(2, "21sh: Permission denied\n");
-	else if (status == BAD_DESCRIPTOR)
-		ft_printf_fd(2, "21sh: Bad file descriptor\n");
-	else if (status == SYNTAX_ERROR)
-		ft_printf_fd(2, "21sh: Syntax error\n");
-	exit(EXIT_FAILURE);
-}
+	t_token     *ptr;
 
-int			is_directory(const char *path)
-{
-	struct stat statbuf;
-
-	if (stat(path, &statbuf) != 0)
-		return (0);
-	return (M_ISDIR(statbuf.st_mode));
+	ptr = tokens->head;
+	while (ptr)
+	{
+		if ((ptr->tok_type & SH_SEMI) != 0)
+		{
+			tokens->head = ptr->next;
+			shell(blt, env, tokens);
+		}
+		ptr = ptr->next;
+	}
+	return (0);
 }
 
 /*
-**	The Main Function of Minishell
-**	it initiates the builtins and environment lists,
-**	after calls the loop function of minishell,
-**	after frees all memory allocated on the heap
+**  The loop function of minishell
+**  it prints the minishell msg : My_Minishell $>
+**  and reads from the input standard the command
+**  and check it which type is it : exit, builtins,
+**                                  Cmd with path, Cmd Without Path
+**  and sends the list of agruments to appropriate function.
+**  Notes : (libft functions)
+**  get_next_line  : reads a line from the standard input.
+**  ft_strsplit_ws : splits a line to a multiple words by whitespace delimiters
+**           returns a char** and last pointer is NULL.
+**  free_strtab    : frees all strings (char**) returned by ft_strsplit_ws.
 */
+
+static void		run_shell(t_list *blt, t_line *line)
+{
+	t_token_list	*tokens;
+
+	while (read_line(line) == 0)
+	{
+		if (!ft_str_isnull(line->command))
+		{
+			tokens = handle_quote(&line->command);
+			add_history(line);
+			shell(blt, &(line->env), tokens);
+			//print_tokens(tokens);
+			search_semi(blt, &(line->env), tokens);
+			free_token_list(tokens);
+		}
+		free_line();
+		line = init_line();
+	}
+	free_line();
+}
+
+/*
+ **	The Main Function of Minishell
+ **	it initiates the builtins and environment lists,
+ **	after calls the loop function of minishell,
+ **	after frees all memory allocated on the heap
+ */
 
 int			main(int ac, char **av, char **ev)
 {
