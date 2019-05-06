@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 16:03:54 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 17:50:48 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 23:44:59 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static char	make_dup(int fd, char fd_to_replace, t_token *token, char *file)
 {
 	char status;
-
 
 	if ((status = dup2(fd, fd_to_replace)) == -1)
 		return (BAD_DESCRIPTOR);
@@ -72,7 +71,7 @@ char		handle_right_redirect(t_token *token)
 		{
 			fd_to_rep = 1;
 			if ((token->tok_type & SH_WORD) != 0)
-				fd_to_rep = token->token[0] - '0';
+				fd_to_rep = ft_atoi(token->token);
 			if ((status = apply_redirection(token, fd_to_rep)) != 0)
 				return (status);
 		}
