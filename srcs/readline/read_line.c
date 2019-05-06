@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 15:39:28 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/06 20:27:48 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ static void	get_line(t_line *line)
 	buf = 0;
 	init_terms();
 	line->col = tgetnum("co");
-	while (read(0, &buf, 4) >= 0)
+	while (read(line->std[0], &buf, 4) >= 0)
 	{
-		if (buf == RETURN_KEY || (buf == EOT_KEY && !line->print_msg))
+		if (buf == RETURN_KEY || (buf == EOT_KEY && !line->print_msg && line->top == -1))
 			break ;
-		tputs(tgetstr("vi", NULL), 1, ft_putchar);
+		tputs(tgetstr("vi", NULL), 1, my_putchar);
 		check_keys(buf, line);
-		tputs(tgetstr("ve", NULL), 1, ft_putchar);
+		tputs(tgetstr("ve", NULL), 1, my_putchar);
 		buf = 0;
 	}
 	go_end(line);
@@ -72,11 +72,11 @@ void		clr_screen(int sig)
 
 	(void)sig;
 	line = get_t_line();
-	tputs(tgetstr("cl", NULL), 1, ft_putchar);
+	tputs(tgetstr("cl", NULL), 1, my_putchar);
 	if (line->print_msg)
-		ft_printf(MSG);
+		ft_printf_fd(line->std[1], MSG);
 	else
-		ft_printf(MSG_QUOTE);
+		ft_printf_fd(line->std[1], MSG_QUOTE);
 	line->index = -1;
 	line->current_index = -1;
 	line->top = -1;
@@ -101,13 +101,15 @@ int			read_line(t_line *line)
 	if (init_terms() == -1)
 		return (-1);
 	if (line->print_msg)
-		ft_printf(MSG);
+		ft_printf_fd(line->std[1], MSG);
+	else
+		ft_printf_fd(line->std[1], MSG_QUOTE);
 	line->tmp_history = NULL;
 	line->buf_size = BUF_S;
 	get_line(line);
 	free(line->tmp_history);
 	if (line->command[line->index] != EOT_KEY)
-		ft_printf("\n");
+		ft_printf_fd(line->std[1], "\n");
 	if (tcsetattr(0, TCSANOW, term) == -1)
 		return (-1);
 	return (0);

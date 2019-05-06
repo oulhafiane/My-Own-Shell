@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/22 22:52:46 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/19 22:40:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 20:22:10 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		get_current_row(int height)
 
 	begin = 0;
 	row = 0;
-	tputs("\E[6n", 1, ft_putchar);
+	tputs("\E[6n", 1, my_putchar);
 	while (read(0, &buf, 1) > 0)
 	{
 		if (begin == 3 && buf == 'R')

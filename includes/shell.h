@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 15:26:34 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/06 20:24:54 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct			s_env
 
 typedef struct			s_line
 {
+	int					std[3];
 	char				*command;
 	char				*copy;
 	int					buf_size;
@@ -187,6 +188,7 @@ void					add_history(t_line *line);
 **	line.c
 */
 t_line					*get_t_line(void);
+int						my_putchar(int c);
 void					free_line(void);
 t_line					*init_line(void);
 void					handle_eot(t_line *line);

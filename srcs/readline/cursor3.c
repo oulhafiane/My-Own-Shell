@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 20:27:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/22 12:22:04 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 20:22:35 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ void		update_line(t_line *line, char *tmp, char buf)
 
 	i = -1;
 	current_rows = get_current_rows(line);
-	tputs(tgetstr("sc", NULL), 1, ft_putchar);
-	tputs(tgetstr("cd", NULL), 1, ft_putchar);
+	tputs(tgetstr("sc", NULL), 1, my_putchar);
+	tputs(tgetstr("cd", NULL), 1, my_putchar);
 	index = line->index;
 	current_index = line->current_index;
 	line->top = line->index;
@@ -112,10 +112,10 @@ void		update_line(t_line *line, char *tmp, char buf)
 		print_newchar(line, tmp[i]);
 	if (buf != -1)
 	{
-		tputs(tgetstr("rc", NULL), 1, ft_putchar);
+		tputs(tgetstr("rc", NULL), 1, my_putchar);
 		line->index = index;
 		line->current_index = current_index;
 	}
 	if (buf != 0 && decision_top_down_left(line, current_rows))
-		tputs(tgetstr("up", NULL), 1, ft_putchar);
+		tputs(tgetstr("up", NULL), 1, my_putchar);
 }

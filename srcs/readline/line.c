@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 14:12:55 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 20:21:12 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@ t_line	*get_t_line(void)
 	static t_line	line;
 
 	return (&line);
+}
+
+int		my_putchar(int c)
+{
+	write(get_t_line()->std[1], &c, 1);
+	return (1);
 }
 
 void	free_line(void)

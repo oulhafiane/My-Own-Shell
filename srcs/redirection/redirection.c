@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/06 02:45:45 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 18:01:41 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 20:10:55 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static char	*getdoc(t_token *token)
 	free_line();
 	line = init_line();
 	line->print_msg = 0;
-	ft_printf("> ");
 	doc = NULL;
 	while (read_line(line) == 0 && ft_strcmp(line->command, token->token) != 0
 			&& line->command[line->index] != EOT_KEY)
@@ -32,7 +31,6 @@ static char	*getdoc(t_token *token)
 		free_line();
 		init_line();
 		line->print_msg = 0;
-		ft_printf("> ");
 	}
 	return (doc);
 }

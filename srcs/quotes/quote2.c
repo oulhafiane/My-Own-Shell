@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:34 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 14:47:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 20:12:31 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int				check_quote_ending(char **line)
 	free_line();
 	new_line = init_line();
 	new_line->print_msg = 0;
-	ft_printf(GET_MSG(new_line->print_msg));
 	read_line(new_line);
 	if (new_line->print_msg)
 		ptr[0] = '\0';
