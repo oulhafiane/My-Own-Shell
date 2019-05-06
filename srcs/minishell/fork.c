@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 01:24:16 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 03:03:19 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void	exit_fork(char status)
 		status = SYNTAX_ERROR;
 	if (status == PERM_DENIED)
 		ft_printf_fd(2, "21sh: Permission denied\n");
+	else if (status == PERM_DENIED2)
+		ft_printf_fd(2, "21sh: Permission denied or file not found\n");
 	else if (status == BAD_DESCRIPTOR)
 		ft_printf_fd(2, "21sh: Bad file descriptor\n");
 	else if (status == SYNTAX_ERROR)
@@ -38,17 +40,12 @@ static void	exit_fork(char status)
 
 char	check_pipe(t_token *token)
 {
-	debug_msg("checking pipe %s : \n", token->token);
 	while (token)
 	{
 		if (token->tok_type & SH_PIPE)
-		{
-	debug_msg("there is pipe\n");
 			return (1);
-		}
 		token = token->next;
 	}
-	debug_msg("no pipe\n");
 	return (0);
 }
 
@@ -68,7 +65,7 @@ void	forkit(char *path, t_list **env, t_token *token, int pipe[2])
 	{
 		dup2(pipe[0], 0);
 		dup2(pipe[1], 1);
-		if ((status = handle_right_redirect(token)) != 0)
+		if ((status = handle_redirection(token, pipe)) != 0)
 		{
 			ft_free_strtab(env_tab);
 			exit_fork(status);

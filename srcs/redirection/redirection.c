@@ -5,81 +5,107 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/04 16:03:54 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 01:25:53 by zoulhafi         ###   ########.fr       */
+/*   Created: 2019/05/06 02:45:45 by zoulhafi          #+#    #+#             */
+/*   Updated: 2019/05/06 04:07:15 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	make_dup(int fd, char fd_to_replace, t_token *token, char *file)
+static char	*getdoc(t_token *token)
 {
-	dup2(fd, fd_to_replace);
-	if (token->token[0] == '&' && token->token[1] == '>')
-		dup2(fd, 2);
-	else if (*file == '&' && ft_isdigit(token->next->token[0]) &&
-			token->next->token[1] == '-' &&
-			(fd = ft_atoi(token->next->token) != fd_to_replace))
-		dup2(open("/dev/null", O_WRONLY), fd);
-	token->tok_type = 0;
-	token->next->tok_type = 0;
-}
+	t_line	*line;
+	char	*doc;
 
-static int	get_fd(t_token *token, char *file)
-{
-	int		fd;
-
-	fd = -2;
-	if (*file == '\0')
-		fd = open(token->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (*file == '>' && *(file + 1) == '\0')
-		fd = open(token->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else if (*file == '&' && token->next->token[0] == '-')
-		fd = open("/dev/null", O_WRONLY);
-	return (fd);
-}
-
-static char	apply_redirection(t_token *token, char fd_to_replace)
-{
-	char	*file;
-	int		fd;
-
-	file = ft_strchr(token->token, '>') + 1;
-	if (*file == '&' && ft_isdigit(token->next->token[0]))
+	free_line();
+	line = init_line();
+	line->print_msg = 0;
+	ft_printf("> ");
+	doc = NULL;
+	while (read_line(line) == 0 && ft_strcmp(line->command, token->token) != 0
+			&& line->command[line->index] != EOT_KEY)
 	{
-		fd = ft_atoi(token->next->token);
-		if (fd < 0 || fd > 2)
-			return (BAD_DESCRIPTOR);
+		if (doc != NULL)
+			doc = ft_strjoin_pre_free(doc, "\n", line->command);
+		else
+			doc = ft_strdup(line->command);
+		free_line();
+		init_line();
+		line->print_msg = 0;
+		ft_printf("> ");
 	}
-	else
-		fd = get_fd(token, file);
-	if (fd != -2 && fd != -1)
-		make_dup(fd, fd_to_replace, token, file);
-	else
-		return (fd);
+	return (doc);
+}
+
+static void	heredoc(t_token *token, int std[2])
+{
+	char	*doc;
+	int		pp[2];
+
+	doc = getdoc(token);
+	if (doc != NULL)
+	{
+		pipe(pp);
+		dup2(pp[0], std[0]);
+		ft_printf_fd(pp[1], "%s\n", doc);
+		close(pp[1]);
+	}
+	free(doc);
+}
+
+static char	theredoc(t_token *token, int std[2])
+{
+	int		fd;
+	int		pp[2];
+	char	buf;
+
+	if ((fd = open(token->token, O_RDONLY)) == -1)
+		return (PERM_DENIED2);
+	pipe(pp);
+	dup2(pp[0], std[0]);
+	while (read(fd, &buf, 1) > 0)
+		write(pp[1], &buf, 1);
+	close(pp[1]);
 	return (0);
 }
 
-char		handle_right_redirect(t_token *token)
+static char	handle_left_redirect(t_token *token, int std[2])
 {
-	char		fd_to_rep;
-	char		status;
+	t_token		*left;
+	char		*file;
 
-	while (token && (token->tok_type & SH_PIPE) == 0 &&
-			(token->tok_type & SH_SEMI) == 0)
+	while (token && !(token->tok_type & SH_SEMI) &&
+			!(token->tok_type & SH_PIPE))
 	{
-		if ((token->tok_type & SH_REDIRECTION) != 0 && token->next &&
-				(token->next->tok_type & SH_REDIRECTION) == 0)
+		if ((token->tok_type & SH_REDIRECTION) && ft_strchr(token->token, '<'))
 		{
-			fd_to_rep = 1;
-			if ((token->tok_type & SH_WORD) != 0)
-				fd_to_rep = token->token[0] - '0';
-			if ((status = apply_redirection(token, fd_to_rep)) != 0)
-				return (status);
+			left = token;
+			token->tok_type = 0;
+			if (token->next)
+				token->next->tok_type = 0;
 		}
-		else if ((token->tok_type & SH_REDIRECTION) != 0)
-			return (SYNTAX_ERROR);
 		token = token->next;
 	}
+	if (left)
+	{
+		file = ft_strchr(left->token, '<') + 1;
+		if (*file == '\0' && left->next)
+			return (theredoc(left->next, std));
+		else if (*file == '<' && left->next)
+			heredoc(left->next, std);
+		else
+			return (SYNTAX_ERROR);
+	}
+	return (0);
+}
+
+char	handle_redirection(t_token *token, int std[2])
+{
+	char	status;
+
+	if ((status = handle_left_redirect(token, std)) != 0)
+		return (status);
+//	if ((status = handle_right_redirect(token)) != 0)
+//		return (status);
 	return (0);
 }

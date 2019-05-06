@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/06 01:22:28 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 04:07:19 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void		run_shell(t_list *blt, t_line *line)
 			tokens = handle_quote(&line->command);
 			add_history(line);
 			shell(blt, &(line->env), tokens);
-			//print_tokens(tokens);
+			print_tokens(tokens);
 			search_semi(blt, &(line->env), tokens);
 			free_token_list(tokens);
 		}

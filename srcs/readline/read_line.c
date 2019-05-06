@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 09:34:59 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/06 03:24:58 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	get_line(t_line *line)
 		line->command = ft_realloc(line->command,
 				line->buf_size, line->top + 1);
 	}
-	line->command[++(line->index)] = (buf == '\n') ? '\0' : buf;
+	line->command[++(line->index)] = (buf == RETURN_KEY) ? '\0' : buf;
 	line->top++;
 }
 
