@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 23:52:31 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 16:00:11 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,5 +151,7 @@ t_token_list		*handle_quote(char **line)
 		free_tokens(list);
 	}
 	*line = ptr;
+	if(check_syntax_error(list))
+		return (NULL);
 	return (list);
 }

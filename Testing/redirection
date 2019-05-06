@@ -4,6 +4,7 @@ ls [n]>file
 ls /not_a_file 2> file
 ls > file 2>&1
 ls &>> file
+cat -e 2< file
 ls 2>> file : need to be addressed
 ls >> /tmp/bash.out 2>&1
 ls | wc

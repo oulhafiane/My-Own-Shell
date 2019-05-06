@@ -6,7 +6,7 @@
 /*   By: amoutik  <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 16:54:52 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/05 23:12:53 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 15:43:26 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void            free_string(t_string *);
 
 int             *err_number();
 int				check_error(t_token_list *tokens);
+int				check_syntax_error(t_token_list *tokens);
 
 /*
 ** is_number.c

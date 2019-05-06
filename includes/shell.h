@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 01:05:08 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 15:26:34 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sys/ioctl.h>
 # include <dirent.h>
 # include <string.h>
+# include <glob.h>
 # define BUF_S 1000
 
 typedef struct			s_builtin
@@ -208,5 +209,11 @@ int						read_line(t_line *line);
 struct termios			*get_termios(void);
 int						init_termios(struct termios term);
 int						init_terms(void);
+
+/*
+**	tabulation.c
+*/
+
+void					handle_tabulation(t_line *line);
 
 #endif

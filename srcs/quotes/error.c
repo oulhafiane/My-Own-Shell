@@ -6,17 +6,76 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:23:52 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/05 19:15:18 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 17:18:49 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quote.h"
 
-int	*err_number(void)
+int	parse_error(char *ptr)
 {
-	static int	err;
+	ft_printf_fd(2, "21sh: parse error near %s\n", ptr != NULL ? ptr : "\\n");
+	return (1);
+}
 
-	return (&err);
+int	redirection_error2(t_token *token, char **ptr)
+{
+	if (**ptr != EOS)
+		return (parse_error(*ptr));
+	else if (!token->next)
+		return (parse_error(NULL));
+	else if (token->next->tok_type & SH_REDIRECTION)
+		return (parse_error(token->next->token));
+	else if (!(token->next->tok_type & SH_QUOTED) &&
+		(ft_strchr(*ptr, '<') || ft_strchr(*ptr, '>')))
+		return (parse_error(token->next->token));
+	return (0);
+}
+
+int	redirection_error(t_token *token, char *ptr)
+{
+	int		flag;
+	int		and;
+	int		c;
+
+	flag = 0;
+	and = 0;
+	if (ft_isdigit(*ptr) || (*ptr == '&' && ++and))
+		ptr++;
+	c = *ptr;
+	if (*ptr == '>' || *ptr == '<')
+	{
+		while (*ptr == c && ++flag)
+		{
+			if (flag > 2)
+				break ;
+			ptr++;
+		}
+		if (and && (flag > 2 || *ptr != EOS))
+			return (parse_error(ptr));
+		if (!and && *ptr == '&')
+			ptr++;
+		return (redirection_error2(token, &ptr));
+	}
+	return (0);
+}
+
+int	check_syntax_error(t_token_list *tokens)
+{
+	t_token *current;
+
+	current = tokens->head;
+	while (current)
+	{
+		if (current->tok_type & SH_REDIRECTION)
+			if (redirection_error(current, current->token))
+			{
+				free_token_list(tokens);
+				return (1);
+			}
+		current = current->next;
+	}
+	return (0);
 }
 
 /*
