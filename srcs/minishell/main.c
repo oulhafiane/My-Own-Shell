@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/06 04:07:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 14:48:46 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,19 @@ static int search_semi(t_list *blt, t_list **env, t_token_list *tokens)
 static void		run_shell(t_list *blt, t_line *line)
 {
 	t_token_list	*tokens;
+	t_token			*head;
 
 	while (read_line(line) == 0)
 	{
 		if (!ft_str_isnull(line->command))
 		{
 			tokens = handle_quote(&line->command);
+			head = tokens->head;
 			add_history(line);
 			shell(blt, &(line->env), tokens);
 			print_tokens(tokens);
 			search_semi(blt, &(line->env), tokens);
+			tokens->head = head;
 			free_token_list(tokens);
 		}
 		free_line();

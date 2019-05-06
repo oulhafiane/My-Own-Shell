@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 03:24:58 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 15:00:40 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static void	check_keys(int buf, t_line *line)
 			buf == GO_DOWN || buf == GO_RIGHT || buf == GO_LEFT ||
 			buf == HOME_LINE || buf == END_LINE)
 		move_cursor(buf, line);
+	else if (buf == TAB_KEY)
+		handle_tabulation(line);
 	else if (buf == ALT_LEFT || buf == ALT_RIGHT || buf == ALT_C ||
 			buf == CTRL_K || buf == CTRL_U || buf == CTRL_X)
 		handle_copy(line, buf);
