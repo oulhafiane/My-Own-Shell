@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 04:07:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 17:55:07 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void	shell(t_list *blt, t_list **env, t_token_list *tokens)
 			std[1] = pp[1];
 		if (tokens->head)
 			exec(blt, env, tokens->head, std);
+		close(std[0]);
 	}
 	close(pp[1]);
 	close(pp[0]);

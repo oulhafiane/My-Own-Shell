@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:23:34 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/29 16:23:36 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/06 18:01:17 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,5 @@ void	debug_msg(const char *fm, ...)
 	file = fopen(DEBUG_TTY, "a+");
 	vfprintf(file, fm, ap);
 	va_end(ap);
+	fclose(file);
 }

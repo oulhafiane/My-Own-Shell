@@ -6,15 +6,19 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 16:03:54 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 01:25:53 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/06 17:50:48 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	make_dup(int fd, char fd_to_replace, t_token *token, char *file)
+static char	make_dup(int fd, char fd_to_replace, t_token *token, char *file)
 {
-	dup2(fd, fd_to_replace);
+	char status;
+
+
+	if ((status = dup2(fd, fd_to_replace)) == -1)
+		return (BAD_DESCRIPTOR);
 	if (token->token[0] == '&' && token->token[1] == '>')
 		dup2(fd, 2);
 	else if (*file == '&' && ft_isdigit(token->next->token[0]) &&
@@ -23,6 +27,7 @@ static void	make_dup(int fd, char fd_to_replace, t_token *token, char *file)
 		dup2(open("/dev/null", O_WRONLY), fd);
 	token->tok_type = 0;
 	token->next->tok_type = 0;
+	return (0);
 }
 
 static int	get_fd(t_token *token, char *file)
@@ -30,7 +35,9 @@ static int	get_fd(t_token *token, char *file)
 	int		fd;
 
 	fd = -2;
-	if (*file == '\0')
+	if (*file == '&' && ft_isdigit(token->next->token[0]))
+		fd = ft_atoi(token->next->token);
+	else if (*file == '\0')
 		fd = open(token->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (*file == '>' && *(file + 1) == '\0')
 		fd = open(token->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -45,16 +52,9 @@ static char	apply_redirection(t_token *token, char fd_to_replace)
 	int		fd;
 
 	file = ft_strchr(token->token, '>') + 1;
-	if (*file == '&' && ft_isdigit(token->next->token[0]))
-	{
-		fd = ft_atoi(token->next->token);
-		if (fd < 0 || fd > 2)
-			return (BAD_DESCRIPTOR);
-	}
-	else
-		fd = get_fd(token, file);
+	fd = get_fd(token, file);
 	if (fd != -2 && fd != -1)
-		make_dup(fd, fd_to_replace, token, file);
+		return (make_dup(fd, fd_to_replace, token, file));
 	else
 		return (fd);
 	return (0);
@@ -68,8 +68,7 @@ char		handle_right_redirect(t_token *token)
 	while (token && (token->tok_type & SH_PIPE) == 0 &&
 			(token->tok_type & SH_SEMI) == 0)
 	{
-		if ((token->tok_type & SH_REDIRECTION) != 0 && token->next &&
-				(token->next->tok_type & SH_REDIRECTION) == 0)
+		if ((token->tok_type & SH_REDIRECTION) != 0 && token->next)
 		{
 			fd_to_rep = 1;
 			if ((token->tok_type & SH_WORD) != 0)
