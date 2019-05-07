@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:34:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 09:36:55 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 09:48:04 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	init_token_list(t_token_list *list)
 ** This should not happen ever, if it did then we are in trouble
 */
 
-void	push_token(t_token_list *list, char *tok, enum token_type type)
+void	push_token(t_token_list *list, char *tok, enum e_token_type type)
 {
 	t_token *token;
 
@@ -125,7 +125,7 @@ char			**list_to_chars(t_token *node)
 	return (cmds);
 }
 
-char	*enum_char(enum token_type type)
+char	*enum_char(enum e_token_type type)
 {
 	char	*name;
 

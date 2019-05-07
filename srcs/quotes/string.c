@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:12:36 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 09:35:17 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 09:48:45 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char				space(char c)
 }
 
 int					insert_token(t_token_list *list,
-		t_string *str, enum token_type type)
+		t_string *str, enum e_token_type type)
 {
 	if (str->len)
 	{

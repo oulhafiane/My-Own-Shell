@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:23:52 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 09:28:16 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 09:49:28 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	redirection_error(t_token *token, char *ptr)
 				break ;
 			ptr++;
 		}
-		if ((and && (flag > 2 || *ptr != EOS)) || flag >= 2 && *ptr != EOS)
+		if ((and && (flag > 2 || *ptr != EOS)) || (flag >= 2 && *ptr != EOS))
 			return (parse_error(ptr));
 		if (!and && *ptr == '&')
 			ptr++;

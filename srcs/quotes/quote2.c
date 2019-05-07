@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:34 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 09:33:17 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 09:48:33 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int				check_quote_ending(char **line)
 }
 
 static int		is_special_token(char **ptr,
-		t_string *str, int inquote, enum token_type *type)
+		t_string *str, int inquote, enum e_token_type *type)
 {
 	if (!inquote && **ptr == '&' && !(*type & SH_REDIRECTION))
 		return (0);
@@ -78,7 +78,7 @@ static int		is_quote(char c)
 }
 
 int				split_quote(t_token_list *list, char **ptr,
-		t_string *str, enum token_type	type)
+		t_string *str, enum e_token_type	type)
 {
 	int				inquote;
 	char			quote;
