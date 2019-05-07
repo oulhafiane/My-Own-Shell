@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:34:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/05 23:48:00 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 09:36:55 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char			**list_to_chars(t_token *node)
 
 	count = 0;
 	copy = node;
-	while(copy && !(node->tok_type & SH_SEMI) && !(node->tok_type & SH_PIPE))
+	while (copy && !(node->tok_type & SH_SEMI) && !(node->tok_type & SH_PIPE))
 	{
 		count++;
 		copy = copy->next;
@@ -116,7 +116,7 @@ char			**list_to_chars(t_token *node)
 	while (node)
 	{
 		if ((node->tok_type & SH_SEMI) || (node->tok_type & SH_PIPE))
-			break;
+			break ;
 		if (node->tok_type & SH_WORD)
 			cmds[count++] = ft_strdup(node->token);
 		node = node->next;

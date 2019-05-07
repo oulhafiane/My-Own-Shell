@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:12:36 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 08:59:50 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 09:35:17 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,33 @@ void				push(t_string *str, char c)
 		str->string[str->len++] = c;
 		str->string[str->len] = '\0';
 	}
+}
+
+char				space(char c)
+{
+	if (c == 'n')
+		return ('\n');
+	else if (c == 'a')
+		return ('\a');
+	else if (c == 'f')
+		return ('\f');
+	else if (c == 'v')
+		return ('\v');
+	else if (c == 'r')
+		return ('\r');
+	else if (c == 'b')
+		return ('\b');
+	else
+		return (0);
+}
+
+int					insert_token(t_token_list *list,
+		t_string *str, enum token_type type)
+{
+	if (str->len)
+	{
+		push_token(list, ft_strdup(str->string), type);
+		new_string(str);
+	}
+	return (1);
 }

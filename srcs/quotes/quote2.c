@@ -6,29 +6,11 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:34 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/06 20:12:31 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 09:33:17 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-static char		space(char c)
-{
-	if (c == 'n')
-		return ('\n');
-	else if (c == 'a')
-		return ('\a');
-	else if (c == 'f')
-		return ('\f');
-	else if (c == 'v')
-		return ('\v');
-	else if (c == 'r')
-		return ('\r');
-	else if (c == 'b')
-		return ('\b');
-	else
-		return (0);
-}
 
 int				check_quote_ending(char **line)
 {
@@ -49,17 +31,6 @@ int				check_quote_ending(char **line)
 	ft_strdel(&ptr);
 	ft_strdel(&new_line->command);
 	new_line->command = *line;
-	return (1);
-}
-
-int				insert_token(t_token_list *list,
-		t_string *str, enum token_type type)
-{
-	if (str->len)
-	{
-		push_token(list, ft_strdup(str->string), type);
-		new_string(str);
-	}
 	return (1);
 }
 

@@ -6,18 +6,11 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/06 16:00:11 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 09:36:23 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quote.h"
-
-int					is_special_char(char c)
-{
-	if (c == '<' || c == '>' || c == '&')
-		return (1);
-	return (0);
-}
 
 static int			is_special_token(t_token_list *list, char **ptr,
 					t_string *str, enum token_type *type)
@@ -62,7 +55,7 @@ int					split_tok(t_token_list *list,
 			if (split_quote(list, ptr, str, type | SH_QUOTED))
 				return (0);
 		}
-		else if ((**ptr && **ptr == '$' && handle_dollar(ptr, str)) || 
+		else if ((**ptr && **ptr == '$' && handle_dollar(ptr, str)) ||
 				(**ptr && **ptr == '~' && handle_tilda(ptr, str)))
 			;
 		else if (**ptr && !ft_isspace(**ptr))
@@ -99,12 +92,6 @@ static int			split_special(t_token_list *list,
 	if (split_tok(list, ptr, str, SH_WORD))
 		return (1);
 	return (0);
-}
-
-static int			ret_with_str_free(t_string *str, int ret)
-{
-	free_string(str);
-	return (ret);
 }
 
 static int			stringtok(const char *line, t_token_list *list)
@@ -151,7 +138,7 @@ t_token_list		*handle_quote(char **line)
 		free_tokens(list);
 	}
 	*line = ptr;
-	if(check_syntax_error(list))
+	if (check_syntax_error(list))
 		return (NULL);
 	return (list);
 }
