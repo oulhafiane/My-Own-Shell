@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/06 02:45:45 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/07 03:01:58 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 17:15:16 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static t_token	*get_left_redirect(t_token *token)
 	return (left);
 }
 
-char		handle_left_redirect(t_token *token)
+char		handle_redirection(t_token *token)
 {
 	t_token		*left;
 	char		*file;
@@ -89,5 +89,5 @@ char		handle_left_redirect(t_token *token)
 		else
 			return (SYNTAX_ERROR);
 	}
-	return (0);
+	return (handle_right_redirect(token));
 }

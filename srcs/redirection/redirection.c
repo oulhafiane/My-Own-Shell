@@ -6,22 +6,11 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/06 23:21:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/07 13:51:40 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 18:34:06 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-char	handle_redirection(t_token *token)
-{
-	char	status;
-
-	if ((status = handle_left_redirect(token)) != 0)
-		return (status);
-	if ((status = handle_right_redirect(token)) != 0)
-		return (status);
-	return (0);
-}
 
 static char	*getdoc(t_token *token)
 {
@@ -46,7 +35,7 @@ static char	*getdoc(t_token *token)
 	return (doc);
 }
 
-void	parse_heredoc(t_token_list *tokens)
+static void	parse_heredoc(t_token_list *tokens)
 {
 	t_token		*ptr;
 	t_token		*tmp_node;
@@ -65,6 +54,57 @@ void	parse_heredoc(t_token_list *tokens)
 			free(ptr->next);
 			ptr->next = tmp_node;
 		}
+		ptr = ptr->next;
+	}
+}
+
+void	fix_nodes(t_token_list *tokens, t_token *token, t_token *previous)
+{
+	t_token		*tmp;
+
+	if (previous != NULL)
+		previous->next = token->next->next;
+	else
+		tokens->head = token->next->next;
+	if (token->next && (token->next->tok_type & SH_WORD) && token->next->next &&
+			(token->next->next->tok_type & SH_WORD))
+	{
+		tmp = token->next->next->next;
+		token->next->next->next = token;
+		token->next->next = tmp;
+	}
+	else
+	{
+		if (ft_strstr(token->token, ">>"))
+			close(open(token->next->token, O_RDONLY | O_CREAT, 0644));
+		else if (ft_strstr(token->token, ">"))
+			close(open(token->next->token, O_RDONLY | O_TRUNC | O_CREAT, 0644));
+		ft_strdel(&(token->next->token));
+		free(token->next);
+		ft_strdel(&(token->token));
+		free(token);
+	}
+}
+
+void	parse_nodes(t_token_list *tokens)
+{
+	t_token		*ptr;
+	t_token		*previous;
+
+	parse_heredoc(tokens);	
+	ptr = tokens->head;
+	previous = NULL;
+	while (ptr)
+	{
+		if ((ptr->tok_type & SH_REDIRECTION) && (previous == NULL ||
+					(previous->tok_type & SH_SEMI) || (previous->tok_type & SH_PIPE)))
+		{
+			fix_nodes(tokens, ptr, previous);
+			previous = NULL;
+			ptr = tokens->head;
+			continue;
+		}
+		previous = ptr;
 		ptr = ptr->next;
 	}
 }

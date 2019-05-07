@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 03:05:16 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 18:15:23 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ static void		run_shell(t_list *blt, t_line *line)
 		{
 			if ((tokens = handle_quote(&line->command)) != NULL)
 			{
+				parse_nodes(tokens);
 				head = tokens->head;
-				parse_heredoc(tokens);
 				add_history(line);
 				shell(blt, &(line->env), tokens);
 				search_semi(blt, &(line->env), tokens);
