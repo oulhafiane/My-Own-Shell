@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 09:42:19 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 09:46:39 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 14:34:56 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,4 +131,12 @@ int						check_syntax_error(t_token_list *tokens);
 */
 
 int						is_number(char *str);
+
+/*
+** util.c
+*/
+
+char					check_pipe(t_token *token);
+void					next_pipe(t_token_list *tokens);
+
 #endif

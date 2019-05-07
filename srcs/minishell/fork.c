@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/07 14:27:10 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 14:33:36 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,6 @@ static void	exit_fork(char status)
 **  the parent waits the child to finish
 */
 
-char	check_pipe(t_token *token)
-{
-	while (token)
-	{
-		if (token->tok_type & SH_PIPE)
-			return (1);
-		if (token->tok_type & SH_SEMI)
-			return (0);
-		token = token->next;
-	}
-	return (0);
-}
-
 void	forkit(char *path, t_list **env, t_token *token, int pipe[2])
 {
 	pid_t		child;
@@ -78,20 +65,4 @@ void	forkit(char *path, t_list **env, t_token *token, int pipe[2])
 	}
 	ft_free_strtab(env_tab);
 	signals();
-}
-
-void		next_pipe(t_token_list *tokens)
-{
-	t_token *token;
-
-	token = tokens->head;
-	while (token)
-	{
-		if ((token->tok_type & SH_PIPE) || (token->tok_type & SH_SEMI))
-		{
-			tokens->head = token->next;
-			return ;
-		}
-		token = token->next;
-	}
 }
