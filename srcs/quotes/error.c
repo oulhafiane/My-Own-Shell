@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:23:52 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 16:49:25 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 17:45:12 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	redirection_error2(t_token *token, char **ptr)
 		return (parse_error(*ptr));
 	else if (!token->next)
 		return (parse_error(NULL));
-	else if (token->next->tok_type & SH_REDIRECTION)
+	else if (!(token->next->tok_type & SH_WORD))
 		return (parse_error(token->next->token));
 	else if (!(token->next->tok_type & SH_QUOTED) &&
 		(ft_strchr(*ptr, '<') || ft_strchr(*ptr, '>')))
@@ -103,12 +103,25 @@ int	check_syntax_error(t_token_list *tokens)
 
 int	check_error(t_token_list *tokens)
 {
+	t_token *current;
+
+	current = tokens->head;
 	if (tokens->tail == NULL)
 		return (0);
 	if (tokens->tail == tokens->head)
 		return (0);
-	if (tokens->tail->tok_type & SH_PIPE
-			|| tokens->tail->tok_type & SH_DPIPE)
-		return (1);
+	while (current)
+	{
+		if (current->next == tokens->tail)
+		{
+			if (current->tok_type == SH_REDIRECTION 
+					&& tokens->tail->tok_type == SH_PIPE)
+				return (0);
+			if (tokens->tail->tok_type & SH_PIPE
+				|| tokens->tail->tok_type & SH_DPIPE)
+				return (1);
+		}
+		current = current->next;
+	}
 	return (0);
 }
