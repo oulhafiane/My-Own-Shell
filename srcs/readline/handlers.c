@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 13:10:15 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/06 20:23:22 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/04 14:37:59 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static void	sig_handler(int sig)
 	(void)sig;
 	line = get_t_line();
 	go_end(line);
-	ft_printf_fd(line->std[1], "\n");
-	ft_printf_fd(line->std[1], MSG);
+	ft_printf("\n");
+	ft_printf(MSG);
 	free_line();
 	line = init_line();
 	if (line->print_msg)
@@ -30,7 +30,7 @@ static void	sig_handler(int sig)
 void		child_handler(int sig)
 {
 	(void)sig;
-	ft_printf_fd(get_t_line()->std[1], "\n");
+	ft_printf("\n");
 }
 
 void		signals(void)
@@ -44,11 +44,11 @@ void		exit_shell(char *format, ...)
 	va_list			args;
 	struct termios	*term;
 
-	tputs(tgetstr("ve", NULL), 1, my_putchar);
+	tputs(tgetstr("ve", NULL), 1, ft_putchar);
 	term = get_termios();
 	tcsetattr(0, TCSANOW, term);
 	va_start(args, format);
-	ft_vprintf(get_t_line()->std[2], format, &args);
+	ft_vprintf(2, format, &args);
 	va_end(args);
 	exit(-1);
 }

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/06 20:23:10 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 11:55:06 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	update_newlines(t_line *line)
 
 void		print_newchar(t_line *line, int buf)
 {
-	my_putchar(buf);
+	ft_putchar(buf);
 	if (line->top + 2 >= line->buf_size)
 	{
 		line->buf_size *= 2;
@@ -85,6 +85,6 @@ void		print_char_inline(t_line *line, int buf)
 
 void		go_down_left(void)
 {
-	tputs(tgetstr("do", NULL), 1, my_putchar);
-	tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, my_putchar);
+	tputs(tgetstr("do", NULL), 1, ft_putchar);
+	tputs(tgoto(tgetstr("ch", NULL), 0, 0), 1, ft_putchar);
 }

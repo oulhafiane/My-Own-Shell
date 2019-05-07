@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/06 20:21:56 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/19 22:53:01 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void		go_right(t_line *line)
 	if (line->index >= line->top)
 		return ;
 	update_index(line, 1);
-	ft_printf_fd(line->std[1], "%c", line->command[line->index]);
+	ft_printf("%c", line->command[line->index]);
 	if (line->command[line->index] != '\n' && decision_up_down(line))
 		go_down_left();
 	if (line->command[line->index] == '\n' && line->new_lines != NULL)
@@ -35,18 +35,18 @@ void		go_left(t_line *line)
 	if (line->command[line->index] == '\n')
 	{
 		set_new_current_index(line);
-		tputs(tgetstr("up", NULL), 1, my_putchar);
+		tputs(tgetstr("up", NULL), 1, ft_putchar);
 		step = *((int*)line->new_lines->content);
-		tputs(tgoto(tgetstr("ch", NULL), 0, line->col - step), 1, my_putchar);
+		tputs(tgoto(tgetstr("ch", NULL), 0, line->col - step), 1, ft_putchar);
 		line->new_lines = line->new_lines->previous;
 	}
 	else if (decision_up_down(line))
 	{
-		tputs(tgetstr("up", NULL), 1, my_putchar);
-		tputs(tgoto(tgetstr("ch", NULL), 0, line->col - 1), 1, my_putchar);
+		tputs(tgetstr("up", NULL), 1, ft_putchar);
+		tputs(tgoto(tgetstr("ch", NULL), 0, line->col - 1), 1, ft_putchar);
 	}
 	else
-		tputs(tgetstr("le", NULL), 1, my_putchar);
+		tputs(tgetstr("le", NULL), 1, ft_putchar);
 	update_index(line, -1);
 }
 

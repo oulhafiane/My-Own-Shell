@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/06 20:28:29 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 03:05:16 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,6 @@ static void		run_shell(t_list *blt, t_line *line)
 	t_token_list	*tokens;
 	t_token			*head;
 
-	line->std[0] = dup(0);
-	line->std[1] = dup(1);
-	line->std[2] = dup(2);
 	while (read_line(line) == 0)
 	{
 		if (!ft_str_isnull(line->command))
@@ -58,11 +55,12 @@ static void		run_shell(t_list *blt, t_line *line)
 			if ((tokens = handle_quote(&line->command)) != NULL)
 			{
 				head = tokens->head;
+				parse_heredoc(tokens);
 				add_history(line);
 				shell(blt, &(line->env), tokens);
-				print_tokens(tokens);
 				search_semi(blt, &(line->env), tokens);
 				tokens->head = head;
+				print_tokens(tokens);
 				free_token_list(tokens);
 			}
 		}

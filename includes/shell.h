@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 20:24:54 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 03:04:50 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef struct			s_env
 
 typedef struct			s_line
 {
-	int					std[3];
 	char				*command;
 	char				*copy;
 	int					buf_size;

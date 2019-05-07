@@ -6,50 +6,24 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/06 02:45:45 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/07 00:30:32 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 03:01:58 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static char	*getdoc(t_token *token)
-{
-	t_line	*line;
-	char	*doc;
-
-	free_line();
-	line = init_line();
-	line->print_msg = 0;
-	doc = NULL;
-	while (read_line(line) == 0 && ft_strcmp(line->command, token->token) != 0
-			&& line->command[line->index] != EOT_KEY)
-	{
-		if (doc != NULL)
-			doc = ft_strjoin_pre_free(doc, "\n", line->command);
-		else
-			doc = ft_strdup(line->command);
-		free_line();
-		init_line();
-		line->print_msg = 0;
-	}
-	return (doc);
-}
-
 static void	heredoc(t_token *token, int fd_to_rep)
 {
-	char	*doc;
 	int		pp[2];
 
-	doc = getdoc(token);
-	if (doc != NULL)
+	if (token->token != NULL)
 	{
 		pipe(pp);
 		dup2(pp[0], fd_to_rep);
-		ft_printf_fd(pp[1], "%s\n", doc);
+		ft_printf_fd(pp[1], "%s\n", token->token);
 		close(pp[0]);
 		close(pp[1]);
 	}
-	free(doc);
 }
 
 static char	theredoc(t_token *token, int fd_to_rep)

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 22:57:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 20:23:52 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 12:26:04 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void	paste_chars(int *buf, t_line *line)
 	int		j;
 
 	str = (char*)ft_memalloc(sizeof(char) * line->buf_size);
-	tputs("\E[6n", 1, my_putchar);
+	tputs("\E[6n", 1, ft_putchar);
 	get_pasted_str(line, &str);
 	c = (char*)buf;
 	i = -1;

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 18:34:39 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 20:21:31 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/04/22 12:18:17 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	after(t_line *line, char mode)
 	ft_strcpy(line->copy, line->command + line->index + 1);
 	if (mode == MODE_CUT)
 	{
-		tputs(tgetstr("cd", NULL), 1, my_putchar);
+		tputs(tgetstr("cd", NULL), 1, ft_putchar);
 		line->top = line->index;
 	}
 }
@@ -57,7 +57,7 @@ static void	all(t_line *line, char mode)
 	if (mode == MODE_CUT)
 	{
 		go_home(line);
-		tputs(tgetstr("cd", NULL), 1, my_putchar);
+		tputs(tgetstr("cd", NULL), 1, ft_putchar);
 		free_line();
 		init_line();
 	}
