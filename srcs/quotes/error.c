@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:23:52 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 09:49:28 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 16:49:25 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,39 @@ int	redirection_error(t_token *token, char *ptr)
 	return (0);
 }
 
+int	semi_pipe_error(t_token *current, t_token_list *list)
+{
+	int type;
+
+	type = current->tok_type;
+	if (current == list->head || ((current->next && 
+				type == current->next->tok_type))
+			|| ft_strlen(current->token) > 1)
+		return (parse_error(current->token));
+	return (0);
+}
+
 int	check_syntax_error(t_token_list *tokens)
 {
 	t_token *current;
+	int		error;
 
+	error  = 0;
 	current = tokens->head;
 	while (current)
 	{
 		if (current->tok_type & SH_REDIRECTION)
-			if (redirection_error(current, current->token))
-			{
-				free_token_list(tokens);
-				return (1);
-			}
+			error = redirection_error(current, current->token);
+		else if (current->tok_type & SH_SEMI || current->tok_type & SH_PIPE)
+			error = semi_pipe_error(current, tokens);
+		if (error)
+			break ;
 		current = current->next;
+	}
+	if (error)
+	{
+		free_token_list(tokens);
+		return (1);
 	}
 	return (0);
 }
@@ -85,6 +104,8 @@ int	check_syntax_error(t_token_list *tokens)
 int	check_error(t_token_list *tokens)
 {
 	if (tokens->tail == NULL)
+		return (0);
+	if (tokens->tail == tokens->head)
 		return (0);
 	if (tokens->tail->tok_type & SH_PIPE
 			|| tokens->tail->tok_type & SH_DPIPE)
