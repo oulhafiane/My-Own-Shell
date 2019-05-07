@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 17:55:07 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 16:08:06 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,9 @@ void	shell(t_list *blt, t_list **env, t_token_list *tokens)
 	int     pp[2];
 	char    piping;
 
-	pipe(pp);
 	std[0] = 0;
 	std[1] = 1;
-	if ((piping = check_pipe(tokens->head)))
+	if ((piping = check_pipe(tokens->head)) && pipe(pp) != -1)
 		std[1] = pp[1];
 	exec(blt, env, tokens->head, std);
 	while (piping)
@@ -115,8 +114,7 @@ void	shell(t_list *blt, t_list **env, t_token_list *tokens)
 		std[0] = pp[0];
 		std[1] = 1;
 		close(pp[1]);
-		pipe(pp);
-		if ((piping = check_pipe(tokens->head)))
+		if ((piping = check_pipe(tokens->head)) && pipe(pp) != -1)
 			std[1] = pp[1];
 		if (tokens->head)
 			exec(blt, env, tokens->head, std);
