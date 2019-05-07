@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 23:16:34 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 14:27:10 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ char	check_pipe(t_token *token)
 	{
 		if (token->tok_type & SH_PIPE)
 			return (1);
+		if (token->tok_type & SH_SEMI)
+			return (0);
 		token = token->next;
 	}
 	return (0);
@@ -85,7 +87,7 @@ void		next_pipe(t_token_list *tokens)
 	token = tokens->head;
 	while (token)
 	{
-		if (token->tok_type & SH_PIPE)
+		if ((token->tok_type & SH_PIPE) || (token->tok_type & SH_SEMI))
 		{
 			tokens->head = token->next;
 			return ;
