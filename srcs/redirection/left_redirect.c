@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/06 02:45:45 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 23:53:08 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/07 00:30:32 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ static t_token	*get_left_redirect(t_token *token)
 		}
 		token = token->next;
 	}
-	left->tok_type = tok_type;
+	if (left)
+		left->tok_type = tok_type;
 	return (left);
 }
 
