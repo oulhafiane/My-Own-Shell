@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 01:17:06 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 14:35:10 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	exit_fork(char status)
 	else if (status == BAD_DESCRIPTOR)
 		ft_printf_fd(2, "21sh: Bad file descriptor\n");
 	else if (status == SYNTAX_ERROR)
-		ft_printf_fd(2, "21sh: Syntax error\n");
+		ft_printf_fd(2, "21sh: Ambiguous redirect\n");
 	exit(EXIT_FAILURE);
 }
 
