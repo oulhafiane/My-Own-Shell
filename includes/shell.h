@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/07 14:36:42 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 15:28:52 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void					shell(t_list *blt, t_list **env, t_token_list *tokens);
 /*
 ** fork.c
 */
+void					handle_errors(char status, char exit_flag);
 void					forkit(char *path, t_list **env, t_token *token,
 		int pipe[2]);
 

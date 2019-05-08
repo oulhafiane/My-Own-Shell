@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 01:22:49 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 15:28:05 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,21 @@ void		free_builtin(t_list *lst)
 void		run_builtin(t_list **env, t_list *bltin, t_token *node, int std[2])
 {
 	char	**cmds;
+	char	status;
 	int		tmp[2];
 
 	tmp[0] = dup(0);
 	tmp[1] = dup(1);
 	dup2(std[0], 0);
 	dup2(std[1], 1);
-	if (handle_redirection(node) == 0 &&
+	if ((status = handle_redirection(node)) == 0 &&
 			bltin && (*(cmds = list_to_chars(node)) != NULL))
 	{
 		((t_builtin*)bltin->content)->f(cmds + 1, env);
 		ft_free_strtab(cmds);
 	}
+	else
+		handle_errors(status, 0);
 	dup2(tmp[0], 0);
 	dup2(tmp[1], 1);
 	close(tmp[0]);

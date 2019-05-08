@@ -6,13 +6,13 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 14:35:10 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 15:28:37 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	exit_fork(char status)
+void	handle_errors(char status, char exit_flag)
 {
 	if (status == -1)
 		status = PERM_DENIED;
@@ -26,7 +26,8 @@ static void	exit_fork(char status)
 		ft_printf_fd(2, "21sh: Bad file descriptor\n");
 	else if (status == SYNTAX_ERROR)
 		ft_printf_fd(2, "21sh: Ambiguous redirect\n");
-	exit(EXIT_FAILURE);
+	if (exit_flag)
+		exit(EXIT_FAILURE);
 }
 
 /*
@@ -57,7 +58,7 @@ void	forkit(char *path, t_list **env, t_token *token, int pipe[2])
 		if ((status = handle_redirection(token)) != 0)
 		{
 			ft_free_strtab(env_tab);
-			exit_fork(status);
+			handle_errors(status, 1);
 		}
 		if (*(cmds = list_to_chars(token)) == NULL)
 			return ;
