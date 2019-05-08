@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 16:03:54 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 15:23:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 18:45:45 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,18 @@ char		handle_right_redirect(t_token *token)
 			if ((token->tok_type & SH_WORD) != 0)
 				fd_to_rep = ft_atoi(token->token);
 			if ((status = apply_redirection(token, fd_to_rep)) != 0)
+			{
+				debug_msg("return apply\n");
 				return (status);
+			}
 		}
 		else if ((token->tok_type & SH_REDIRECTION) != 0)
+		{
+			debug_msg("return syntax\n");
 			return (SYNTAX_ERROR);
+		}
 		token = token->next;
 	}
+	debug_msg("rah kmal\n");
 	return (0);
 }
