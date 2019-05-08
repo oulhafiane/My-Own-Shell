@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/06 03:01:18 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 00:20:05 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@
 # define READ_END 0
 # define ERROR_MSG "21sh: syntax error near unexprected token"
 # define FN_EXIST "No such file or directory"
+# define WRONG_READ "21sh: Something went wrong, cannot get termios or set it\nClosing shell...\n"
 # define SYNTAX_ERROR 101
 # define PERM_DENIED 102
 # define PERM_DENIED2 103

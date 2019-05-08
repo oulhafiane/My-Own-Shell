@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 14:32:37 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/07 14:33:11 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 01:17:08 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,58 @@ void	next_pipe(t_token_list *tokens)
 		}
 		token = token->next;
 	}
+}
+
+t_token		*get_cmd_token(t_token *ptr)
+{
+	int			count;
+
+	count = 0;
+	while (ptr && !(ptr->tok_type & SH_SEMI) && !(ptr->tok_type & SH_PIPE))
+	{
+		if (ptr->tok_type & SH_REDIRECTION)
+			count = 1;
+		else if (count == 1 && (ptr->tok_type & SH_WORD))
+			count = 0;
+		else if (count == 0 && (ptr->tok_type & SH_WORD))
+			return (ptr);
+		ptr = ptr->next;
+	}
+	return (NULL);
+}
+
+int				count_nodes(t_token *node)
+{
+	int		count;
+
+	count = 0;
+	while (node && !(node->tok_type & SH_SEMI) && !(node->tok_type & SH_PIPE))
+	{
+		count++;
+		node = node->next;
+	}
+	return (count);
+}
+
+char			**list_to_chars(t_token *token)
+{
+	char		**cmds;
+	int			count;
+	t_token		*node;
+
+	node = get_cmd_token(token);
+	cmds = (char**)ft_memalloc(sizeof(char*) * (count_nodes(node) + 1));
+	if (cmds == NULL)
+		return (NULL);
+	count = 0;
+	while (node)
+	{
+		if ((node->tok_type & SH_SEMI) || (node->tok_type & SH_PIPE))
+			break ;
+		if (node->tok_type & SH_WORD)
+			cmds[count++] = ft_strdup(node->token);
+		node = node->next;
+	}
+	cmds[count] = NULL;
+	return (cmds);
 }

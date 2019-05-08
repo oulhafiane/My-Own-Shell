@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/07 16:08:06 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 01:22:51 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,21 @@ static int		is_directory(const char *path)
 
 static void	exec_local(t_token *token, t_list **env, int std[2])
 {
-	if (access(token->token, F_OK) == 0)
+	t_token	*cmd;
+
+	if ((cmd = get_cmd_token(token)) == NULL)
+		return ;
+	if (access(cmd->token, F_OK) == 0)
 	{
 		if (is_directory(token->token))
-			ft_printf_fd(2, "%s: Is a Directory.\n", token->token);
-		else if (access(token->token, X_OK) == 0)
-			forkit(token->token, env, token, std);
+			ft_printf_fd(2, "%s: Is a Directory.\n", cmd->token);
+		else if (access(cmd->token, X_OK) == 0)
+			forkit(cmd->token, env, token, std);
 		else
-			ft_printf_fd(2, "%s: Permission denied.\n", token->token);
+			ft_printf_fd(2, "%s: Permission denied.\n", cmd->token);
 	}
 	else
-		ft_printf_fd(2, "%s: Command not found.\n", token->token);
+		ft_printf_fd(2, "%s: Command not found.\n", cmd->token);
 }
 
 /*
@@ -58,12 +62,15 @@ static void	exec_cmd(t_token *token, char **path, t_list **env,
 	char	*full_path;
 	char	*error;
 	char	**head_path;
+	t_token	*cmd;
 
 	error = NULL;
+	if ((cmd = get_cmd_token(token)) == NULL)
+		return ;
 	head_path = path;
 	while (*path)
 	{
-		full_path = ft_strjoin_pre(*path, "/", token->token);
+		full_path = ft_strjoin_pre(*path, "/", cmd->token);
 		if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
 		{
 			forkit(full_path, env, token, std);
@@ -74,24 +81,29 @@ static void	exec_cmd(t_token *token, char **path, t_list **env,
 		path++;
 		free(full_path);
 	}
-	print_error(error, token->token);
+	print_error(error, cmd->token);
 	ft_free_strtab(head_path);
 }
 
 static void	exec(t_list *blt, t_list **env, t_token *node, int std[2])
 {
 	t_list			*bltin;
+	t_token			*cmd;
 
-	if (node == NULL)
+	cmd = get_cmd_token(node);
+	if (cmd == NULL)
+	{
+		run_builtin(env, NULL, node, std);
 		return ;
-	if (ft_strcmp(node->token, "exit") == 0)
+	}
+	if (ft_strcmp(cmd->token, "exit") == 0)
 	{
 		free_line();
 		exit(-1);
 	}
-	else if ((bltin = ft_lstsearch(blt, node->token, &check_builtin)) != NULL)
+	else if ((bltin = ft_lstsearch(blt, cmd->token, &check_builtin)) != NULL)
 		run_builtin(env, bltin, node, std);
-	else if (ft_strchr(node->token, '/') != NULL)
+	else if (ft_strchr(cmd->token, '/') != NULL)
 		exec_local(node, env, std);
 	else
 		exec_cmd(node, get_path(*env), env, std);

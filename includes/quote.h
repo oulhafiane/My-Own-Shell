@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 09:42:19 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 14:34:56 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 01:13:17 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void					init_token_list (t_token_list *list);
 void					push_token(t_token_list *list,
 		char *tok, enum e_token_type type);
 void					print_tokens(t_token_list *list);
-char					**list_to_chars(t_token *node);
 void					free_token_list(t_token_list *list);
 void					delete_token(t_token_list *list, t_token *tofind);
 
@@ -138,5 +137,7 @@ int						is_number(char *str);
 
 char					check_pipe(t_token *token);
 void					next_pipe(t_token_list *tokens);
+t_token					*get_cmd_token(t_token *ptr);
+char					**list_to_chars(t_token *token);
 
 #endif
