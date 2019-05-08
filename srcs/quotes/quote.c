@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 13:16:42 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/07 16:45:48 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,8 @@ static int			split_special(t_token_list *list,
 	else if (str->len == 2)
 		return (insert_token(list, str, SH_DPIPE));
 	while (**ptr == ';')
-	{
-		if (++flag == 1)
-			push(str, *(*ptr)++);
-		else
-			(*ptr)++;
-	}
-	if (str->len == 1)
+		push(str, *(*ptr)++);
+	if (str->len)
 		return (insert_token(list, str, SH_SEMI));
 	while (**ptr && is_special_char(**ptr))
 		push(str, *(*ptr)++);
@@ -137,8 +132,8 @@ t_token_list		*handle_quote(char **line)
 		check_quote_ending(&ptr);
 		free_tokens(list);
 	}
-	*line = ptr;
 	if (check_syntax_error(list))
 		return (NULL);
+	*line = ptr;
 	return (list);
 }
