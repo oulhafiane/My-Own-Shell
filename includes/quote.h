@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 09:42:19 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/08 01:13:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 17:41:42 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ typedef struct			s_string
 t_token_list			*handle_quote(char **line);
 int						split_tok(t_token_list *list,
 		char **ptr, t_string *str, enum e_token_type type);
-int						is_special_char(char c);
 
 /*
 ** quote2.c
@@ -122,7 +121,6 @@ void					free_string(t_string *str);
 ** err_number.c
 */
 
-int						check_error(t_token_list *tokens);
 int						check_syntax_error(t_token_list *tokens);
 
 /*
@@ -139,5 +137,12 @@ char					check_pipe(t_token *token);
 void					next_pipe(t_token_list *tokens);
 t_token					*get_cmd_token(t_token *ptr);
 char					**list_to_chars(t_token *token);
+
+/*
+** spliters.c
+*/
+
+int						is_pipe_at_end(t_token_list *tokens);
+int						is_special_char(char c);
 
 #endif

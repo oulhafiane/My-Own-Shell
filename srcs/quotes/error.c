@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:23:52 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 17:45:12 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/08 17:39:59 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,35 +93,6 @@ int	check_syntax_error(t_token_list *tokens)
 	{
 		free_token_list(tokens);
 		return (1);
-	}
-	return (0);
-}
-
-/*
-** Here we check if our line command end in proper way or not
-*/
-
-int	check_error(t_token_list *tokens)
-{
-	t_token *current;
-
-	current = tokens->head;
-	if (tokens->tail == NULL)
-		return (0);
-	if (tokens->tail == tokens->head)
-		return (0);
-	while (current)
-	{
-		if (current->next == tokens->tail)
-		{
-			if (current->tok_type == SH_REDIRECTION 
-					&& tokens->tail->tok_type == SH_PIPE)
-				return (0);
-			if (tokens->tail->tok_type & SH_PIPE
-				|| tokens->tail->tok_type & SH_DPIPE)
-				return (1);
-		}
-		current = current->next;
 	}
 	return (0);
 }
