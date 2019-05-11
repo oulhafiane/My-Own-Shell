@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:34:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/09 02:19:51 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/11 18:57:43 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	delete_token(t_token_list *list, t_token *tofind)
 	}
 }
 
-void	free_token_list(t_token_list *list)
+char	free_token_list(t_token_list *list)
 {
 	t_token *current;
 	t_token *tmp;
@@ -94,4 +94,5 @@ void	free_token_list(t_token_list *list)
 		current = tmp;
 	}
 	free(list);
+	return (1);
 }

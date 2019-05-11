@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 09:42:19 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/09 02:33:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/11 18:53:47 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void					init_token_list (t_token_list *list);
 void					push_token(t_token_list *list,
 		char *tok, enum e_token_type type);
 void					delete_token(t_token_list *list, t_token *tofind);
-void					free_token_list(t_token_list *list);
+char					free_token_list(t_token_list *list);
 
 /*
 ** free_string.c
