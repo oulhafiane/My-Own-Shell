@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/09 02:16:51 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/11 17:19:19 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void					free_env(t_list *lst);
 /*
 **	errors.c
 */
-void					print_error(char *error, char *cmd);
+void					print_error(char *error);
+void					run_redirection_with_errors(char *error, t_token *node, int std[2]);
 
 /*
 **	free.c

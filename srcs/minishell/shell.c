@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/09 00:23:58 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/11 17:22:00 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,23 @@ static int	is_directory(const char *path)
 static void	exec_local(t_token *token, t_list **env, int std[2])
 {
 	t_token	*cmd;
+	char	*error;
 
+	error = NULL;
 	if ((cmd = get_cmd_token(token)) == NULL)
 		return ;
 	if (access(cmd->token, F_OK) == 0)
 	{
 		if (is_directory(token->token))
-			ft_printf_fd(2, "%s: Is a Directory.\n", cmd->token);
+			error = ft_strjoin(cmd->token, ": Is a Directory.\n");
 		else if (access(cmd->token, X_OK) == 0)
-			forkit(cmd->token, env, token, std);
+			return (forkit(cmd->token, env, token, std));
 		else
-			ft_printf_fd(2, "%s: Permission denied.\n", cmd->token);
+			error = ft_strjoin(cmd->token, ": Permission denied.\n");
 	}
 	else
-		ft_printf_fd(2, "%s: Command not found.\n", cmd->token);
+		error = ft_strjoin(cmd->token, ": Command not found.\n");
+	run_redirection_with_errors(error, token, std);
 }
 
 /*
@@ -81,7 +84,8 @@ static void	exec_cmd(t_token *token, char **path, t_list **env,
 		path++;
 		free(full_path);
 	}
-	print_error(error, cmd->token);
+	error = (error) ? error : ft_strjoin(cmd->token, ": Command not found\n");
+	run_redirection_with_errors(error, token, std);
 	ft_free_strtab(head_path);
 }
 
@@ -93,7 +97,7 @@ static void	exec(t_list *blt, t_list **env, t_token *node, int std[2])
 	cmd = get_cmd_token(node);
 	if (cmd == NULL)
 	{
-		run_builtin(env, NULL, node, std);
+		run_redirection_with_errors(NULL, node, std);
 		return ;
 	}
 	if (ft_strcmp(cmd->token, "exit") == 0)
