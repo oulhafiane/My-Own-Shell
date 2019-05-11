@@ -6,15 +6,25 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/08 15:29:45 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 01:49:38 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static int search_semi(t_list *blt, t_list **env, t_token_list *tokens)
+void			restore_std(int std[3])
 {
-	t_token     *ptr;
+	dup2(std[0], 0);
+	dup2(std[1], 1);
+	dup2(std[2], 2);
+	close(std[0]);
+	close(std[1]);
+	close(std[2]);
+}
+
+static int		search_semi(t_list *blt, t_list **env, t_token_list *tokens)
+{
+	t_token		*ptr;
 
 	ptr = tokens->head;
 	while (ptr)
@@ -60,7 +70,6 @@ static void		run_shell(t_list *blt, t_line *line)
 				shell(blt, &(line->env), tokens);
 				search_semi(blt, &(line->env), tokens);
 				tokens->head = head;
-				print_tokens(tokens);
 				free_token_list(tokens);
 			}
 		}
@@ -72,13 +81,13 @@ static void		run_shell(t_list *blt, t_line *line)
 }
 
 /*
- **	The Main Function of Minishell
- **	it initiates the builtins and environment lists,
- **	after calls the loop function of minishell,
- **	after frees all memory allocated on the heap
- */
+**	The Main Function of Minishell
+**	it initiates the builtins and environment lists,
+**	after calls the loop function of minishell,
+**	after frees all memory allocated on the heap
+*/
 
-int			main(int ac, char **av, char **ev)
+int				main(int ac, char **av, char **ev)
 {
 	t_list		*env;
 	t_list		*blt;

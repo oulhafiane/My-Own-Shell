@@ -6,19 +6,13 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 09:42:19 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/08 17:41:42 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/09 02:33:17 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef QUOTE_H
 # define QUOTE_H
-
 # include "libft.h"
-# include <string.h>
-# include <stdlib.h>
-# include <stdio.h>
-
-# define DEBUG_TTY "/dev/ttys002"
 # define EOS '\0'
 # define SH_TOKEN "<>&|;"
 
@@ -63,17 +57,17 @@ typedef struct			s_string
 ** Quote.c
 */
 
-t_token_list			*handle_quote(char **line);
 int						split_tok(t_token_list *list,
 		char **ptr, t_string *str, enum e_token_type type);
+t_token_list			*handle_quote(char **line);
 
 /*
 ** quote2.c
 */
 
+int						check_quote_ending(char **line);
 int						split_quote(t_token_list *list, char **ptr,
 		t_string *str, enum e_token_type type);
-int						check_quote_ending(char **line);
 
 /*
 ** string.c
@@ -93,20 +87,13 @@ int						handle_dollar(char **ptr, t_string *str);
 int						handle_tilda(char **ptr, t_string *str);
 
 /*
-** debug.c
-*/
-
-void					debug_msg(const char *format, ...);
-
-/*
 ** List.c
 */
 void					init_token_list (t_token_list *list);
 void					push_token(t_token_list *list,
 		char *tok, enum e_token_type type);
-void					print_tokens(t_token_list *list);
-void					free_token_list(t_token_list *list);
 void					delete_token(t_token_list *list, t_token *tofind);
+void					free_token_list(t_token_list *list);
 
 /*
 ** free_string.c
@@ -118,9 +105,10 @@ void					free_tokens(t_token_list *list);
 void					free_string(t_string *str);
 
 /*
-** err_number.c
+** error.c
 */
 
+int						parse_error(char *ptr, int err);
 int						check_syntax_error(t_token_list *tokens);
 
 /*
@@ -142,7 +130,7 @@ char					**list_to_chars(t_token *token);
 ** spliters.c
 */
 
-int						is_pipe_at_end(t_token_list *tokens);
 int						is_special_char(char c);
+int						is_pipe_at_end(t_token_list *tokens);
 
 #endif

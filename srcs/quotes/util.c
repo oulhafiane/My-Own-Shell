@@ -6,13 +6,13 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 14:32:37 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 18:38:33 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 02:31:54 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-char	check_pipe(t_token *token)
+char		check_pipe(t_token *token)
 {
 	while (token)
 	{
@@ -25,7 +25,7 @@ char	check_pipe(t_token *token)
 	return (0);
 }
 
-void	next_pipe(t_token_list *tokens)
+void		next_pipe(t_token_list *tokens)
 {
 	t_token		*token;
 
@@ -59,7 +59,7 @@ t_token		*get_cmd_token(t_token *ptr)
 	return (NULL);
 }
 
-int				count_nodes(t_token *node)
+static int	count_nodes(t_token *node)
 {
 	int		count;
 
@@ -72,7 +72,7 @@ int				count_nodes(t_token *node)
 	return (count);
 }
 
-char			**list_to_chars(t_token *token)
+char		**list_to_chars(t_token *token)
 {
 	char		**cmds;
 	int			count;

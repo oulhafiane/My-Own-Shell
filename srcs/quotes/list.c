@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:34:02 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/08 01:14:57 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 02:19:51 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,41 +94,4 @@ void	free_token_list(t_token_list *list)
 		current = tmp;
 	}
 	free(list);
-}
-
-char	*enum_char(enum e_token_type type)
-{
-	char	*name;
-
-	if (type & SH_WORD)
-	{
-		name = "SH_WORD";
-		if (type & SH_QUOTED)
-			name = "SH_WORD SH_QUOTE";
-		else if (type & SH_REDIRECTION)
-			name = "SH_WORD SH_REDIRECTION";
-	}
-	else if (type == SH_PIPE)
-		name = "SH_PIPE";
-	else if (type == SH_REDIRECTION)
-		name = "SH_REDIRECTION";
-	else if (type == SH_SEMI)
-		name = "SH_SEMI";
-	else
-		name = (char *)NULL;
-	return (name);
-}
-
-void	print_tokens(t_token_list *list)
-{
-	t_token *current;
-
-	current = list->head;
-	while (current)
-	{
-		debug_msg("token is |%s| and type is |%s|\n",\
-				current->token, enum_char(current->tok_type));
-		current = current->next;
-	}
-	debug_msg("\n=========================================\n");
 }

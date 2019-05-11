@@ -6,13 +6,13 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/06 02:45:45 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 18:49:53 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 00:37:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	heredoc(t_token *token, int fd_to_rep)
+static void		heredoc(t_token *token, int fd_to_rep)
 {
 	int		pp[2];
 
@@ -26,7 +26,7 @@ static void	heredoc(t_token *token, int fd_to_rep)
 	}
 }
 
-static char	theredoc(t_token *token, int fd_to_rep)
+static char		theredoc(t_token *token, int fd_to_rep)
 {
 	int		fd;
 	int		pp[2];
@@ -92,13 +92,13 @@ static char		handle_left_redirect(t_token *token)
 	return (0);
 }
 
-char			handle_redirection(t_token *token)
+char			handle_redirection(t_token *token, int *fd_backup)
 {
 	char	status;
 
 	if ((status = handle_left_redirect(token)) != 0)
 		return (status);
-	if ((status = handle_right_redirect(token)) != 0)
+	if ((status = handle_right_redirect(token, fd_backup)) != 0)
 		return (status);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:34 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/07 09:48:33 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/09 10:27:30 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,19 @@
 int				check_quote_ending(char **line)
 {
 	char	*ptr;
+	int		flag;
 	t_line	*new_line;
 
+	flag = 1;
 	ptr = ft_strdup(*line);
 	free_line();
 	new_line = init_line();
 	new_line->print_msg = 0;
 	read_line(new_line);
-	if (new_line->print_msg)
+	if (new_line->print_msg || new_line->command[new_line->index] == EOT_KEY)
 		ptr[0] = '\0';
+	if (new_line->command[new_line->index] == EOT_KEY)
+		flag = 0;
 	*line = ft_strjoin(ptr, (new_line->print_msg) ? "\0" : "\n");
 	ft_strdel(&ptr);
 	ptr = *line;
@@ -31,7 +35,7 @@ int				check_quote_ending(char **line)
 	ft_strdel(&ptr);
 	ft_strdel(&new_line->command);
 	new_line->command = *line;
-	return (1);
+	return (flag);
 }
 
 static int		is_special_token(char **ptr,

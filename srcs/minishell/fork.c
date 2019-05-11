@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 18:47:27 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 00:39:28 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	forkit(char *path, t_list **env, t_token *token, int pipe[2])
 	{
 		dup2(pipe[0], 0);
 		dup2(pipe[1], 1);
-		if ((status = handle_redirection(token)) != 0)
+		if ((status = handle_redirection(token, NULL)) != 0)
 		{
 			ft_free_strtab(env_tab);
 			handle_errors(status, 1);

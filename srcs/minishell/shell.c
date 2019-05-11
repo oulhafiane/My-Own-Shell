@@ -6,13 +6,13 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 01:22:51 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 00:23:58 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static int		is_directory(const char *path)
+static int	is_directory(const char *path)
 {
 	struct stat statbuf;
 
@@ -109,11 +109,11 @@ static void	exec(t_list *blt, t_list **env, t_token *node, int std[2])
 		exec_cmd(node, get_path(*env), env, std);
 }
 
-void	shell(t_list *blt, t_list **env, t_token_list *tokens)
+void		shell(t_list *blt, t_list **env, t_token_list *tokens)
 {
 	int		std[2];
-	int     pp[2];
-	char    piping;
+	int		pp[2];
+	char	piping;
 
 	std[0] = 0;
 	std[1] = 1;
@@ -132,6 +132,4 @@ void	shell(t_list *blt, t_list **env, t_token_list *tokens)
 			exec(blt, env, tokens->head, std);
 		close(std[0]);
 	}
-	close(pp[1]);
-	close(pp[0]);
 }

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 12:42:14 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/04 10:15:17 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/09 11:52:03 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		handle_dollar(char **ptr, t_string *str)
 		head++;
 	while (*head && ft_isalnum(*head))
 		head++;
-	tmp = strndup(*ptr, head - *ptr);
+	tmp = ft_strndup(*ptr, head - *ptr);
 	if ((env = get_env_value((tmp + 1), env_list)) == NULL)
 		env = "";
 	free(tmp);
@@ -47,7 +47,7 @@ int		handle_tilda(char **ptr, t_string *str)
 	j = 0;
 	head = *ptr;
 	env_list = get_t_line()->env;
-	if (ft_isprint(*(head + 1)) || str->len > 0)
+	if ((ft_isprint(*(head + 1)) && *(head + 1) != '/') || str->len > 0)
 		return (0);
 	if ((home = get_env_value("HOME", env_list)) == NULL)
 		home = "";

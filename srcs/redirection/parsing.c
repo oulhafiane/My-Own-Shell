@@ -6,13 +6,13 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/06 23:21:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 16:07:47 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 00:05:58 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	parse_string(char **doc, char *line, char flag_dollar)
+static void		parse_string(char **doc, char *line, char flag_dollar)
 {
 	char		*str;
 	t_string	str_dollar;
@@ -40,7 +40,7 @@ static void	parse_string(char **doc, char *line, char flag_dollar)
 	ft_strdel(&str);
 }
 
-static char	*getdoc(t_token *token)
+static char		*getdoc(t_token *token)
 {
 	t_line	*line;
 	char	*doc;
@@ -51,7 +51,7 @@ static char	*getdoc(t_token *token)
 	line->print_msg = 0;
 	doc = NULL;
 	flag_dollar = 0;
-	if (!(token->tok_type & SH_QUOTED) && !(ft_strchr(token->token, '\'') 
+	if (!(token->tok_type & SH_QUOTED) && !(ft_strchr(token->token, '\'')
 			|| ft_strchr(token->token, '"')))
 		flag_dollar = 1;
 	while (read_line(line) == 0 && ft_strcmp(line->command, token->token) != 0
@@ -62,10 +62,12 @@ static char	*getdoc(t_token *token)
 		init_line();
 		line->print_msg = 0;
 	}
+	if (doc == NULL)
+		doc = ft_strdup("");
 	return (doc);
 }
 
-void	parse_heredoc(t_token_list *tokens)
+void			parse_heredoc(t_token_list *tokens)
 {
 	t_token		*ptr;
 	t_token		*tmp_node;

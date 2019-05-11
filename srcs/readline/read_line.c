@@ -6,11 +6,39 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 00:16:17 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 00:08:00 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+static int	get_current_column(int width)
+{
+	char	buf;
+	int		column;
+	char	begin;
+
+	begin = 0;
+	column = 0;
+	tputs("\E[6n", 1, ft_putchar);
+	while (read(0, &buf, 1) > 0)
+	{
+		if (begin == 3 && buf == 'R')
+			break ;
+		else if (begin == 2 && buf == ';')
+			begin = 3;
+		else if (begin == 1 && buf == 91)
+			begin = 2;
+		else if (begin == 0 && buf == 27)
+			begin = 1;
+		else if (begin == 3)
+			column = (column * 10) + (buf - '0');
+	}
+	if (column >= 0 && column <= width)
+		return (column);
+	else
+		return (get_current_column(width));
+}
 
 static void	check_keys(int buf, t_line *line)
 {
@@ -100,6 +128,8 @@ int			read_line(t_line *line)
 		return (-1);
 	if (init_terms() == -1)
 		return (-1);
+	if (get_current_column(tgetnum("co")) != 1)
+		ft_printf("\033[7m%%\033[m\n");
 	if (line->print_msg)
 		ft_printf(MSG);
 	else

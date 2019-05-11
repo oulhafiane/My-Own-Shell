@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/08 17:38:49 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/08 18:52:23 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,12 @@ t_token_list		*handle_quote(char **line)
 	init_token_list(list);
 	while (!stringtok(ptr, list) || is_pipe_at_end(list))
 	{
-		check_quote_ending(&ptr);
+		if (!check_quote_ending(&ptr))
+		{
+			parse_error(NULL, 2);
+			free_token_list(list);
+			return (NULL);
+		}
 		free_tokens(list);
 	}
 	if (check_syntax_error(list))

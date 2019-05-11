@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 15:28:05 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 01:47:36 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,16 @@ void		run_builtin(t_list **env, t_list *bltin, t_token *node, int std[2])
 {
 	char	**cmds;
 	char	status;
-	int		tmp[2];
+	int		tmp[3];
+	int		fd_backup;
 
 	tmp[0] = dup(0);
 	tmp[1] = dup(1);
+	tmp[2] = dup(2);
 	dup2(std[0], 0);
 	dup2(std[1], 1);
-	if ((status = handle_redirection(node)) == 0 &&
+	fd_backup = -1;
+	if ((status = handle_redirection(node, &fd_backup)) == 0 &&
 			bltin && (*(cmds = list_to_chars(node)) != NULL))
 	{
 		((t_builtin*)bltin->content)->f(cmds + 1, env);
@@ -100,8 +103,7 @@ void		run_builtin(t_list **env, t_list *bltin, t_token *node, int std[2])
 	}
 	else
 		handle_errors(status, 0);
-	dup2(tmp[0], 0);
-	dup2(tmp[1], 1);
-	close(tmp[0]);
-	close(tmp[1]);
+	if (fd_backup != -1 && fd_backup != -3)
+		close(fd_backup);
+	restore_std(tmp);
 }

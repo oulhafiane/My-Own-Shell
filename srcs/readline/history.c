@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 12:15:30 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 17:47:32 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void		handle_history(int buf, t_line *line)
 	else if (buf == DOWN_KEY)
 		down_history(line);
 }
-
 
 void		add_history(t_line *line)
 {

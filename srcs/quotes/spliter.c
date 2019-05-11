@@ -6,13 +6,13 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 09:29:20 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/08 17:39:46 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/08 17:46:42 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int					is_special_char(char c)
+int	is_special_char(char c)
 {
 	if (c == '<' || c == '>' || c == '&')
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/06 16:32:23 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 00:20:05 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/08 17:52:06 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,25 +79,10 @@
 # define READ_END 0
 # define ERROR_MSG "21sh: syntax error near unexprected token"
 # define FN_EXIST "No such file or directory"
-# define WRONG_READ "21sh: Something went wrong, cannot get termios or set it\nClosing shell...\n"
+# define WRONG_READ "21sh: Something went wrong, cannot get termios or set it\n"
 # define SYNTAX_ERROR 101
 # define PERM_DENIED 102
 # define PERM_DENIED2 103
 # define BAD_DESCRIPTOR 104
-# define WHITESPACE ft_iswhitespace(*(*line))
-# define END_OR_SEMI (!**line || **line == ';')
-# define SPACE_OR_COMMA(line) (WHITESPACE || END_OR_SEMI)
-# define QUOTE_S_D(line) (**line == SINGLE_QUOTE || **line == DOUBLE_QUOTE)
-# define IS_CHAR *(*line -2 ) > 32 && *(*line - 2) <= '~'
-# define FT_STRCHR !(IS_CHAR && !ft_strchr("<>", *(*line - 2)))
-# define CONTAIN_S_D(line, start) (*line - 2) >= start && FT_STRCHR
-# define RM_NEW_LINE(start) remove_new_line(ft_strdup(start), ft_strlen(start))
-/*
-** DOLAR CONDITION
-*/
-# define D_COND (spl->spliter != SINGLE_QUOTE && **line == DOLLAR_SIGN)
-# define IS_BSLASH (*spliter == 0 && **line == BACK_SLASH)
-# define IS_SINGLE_QUOTE (*spliter != DOUBLE_QUOTE && **line == SINGLE_QUOTE)
-# define IS_DOUBLE_QUOTE (*spliter != SINGLE_QUOTE && **line == DOUBLE_QUOTE)
 
 #endif

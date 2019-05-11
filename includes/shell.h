@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 15:28:52 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/05/09 02:16:51 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <sys/stat.h>
 # include <sys/ioctl.h>
 # include <dirent.h>
-# include <string.h>
 # include <glob.h>
 # define BUF_S 1000
 
@@ -62,9 +61,14 @@ typedef struct			s_line
 */
 
 /*
+**	main.c
+*/
+void					restore_std(int std[3]);
+
+/*
 **	shell.c
 */
-void					shell(t_list *blt, t_list **env, t_token_list *tokens); 
+void					shell(t_list *blt, t_list **env, t_token_list *tokens);
 
 /*
 ** fork.c
@@ -73,13 +77,12 @@ void					handle_errors(char status, char exit_flag);
 void					forkit(char *path, t_list **env, t_token *token,
 		int pipe[2]);
 
-
 /*
 **	builtin.c
 */
-void					free_builtin(t_list *lst);
 void					init_builtin(t_list **lst);
 int						check_builtin(t_list *elem, void *obj);
+void					free_builtin(t_list *lst);
 void					run_builtin(t_list **env, t_list *bltin,
 		t_token *node, int std[2]);
 
@@ -100,9 +103,9 @@ void					print_error(char *error, char *cmd);
 /*
 **	free.c
 */
-void					free_elem_env(t_list *elem);
 void					free_exec_cmd(char *error, char *full_path,
 		char **head_path);
+void					free_elem_env(t_list *elem);
 
 /*
 **	ft_env.c
@@ -165,8 +168,8 @@ void					set_new_current_index(t_line *line);
 **	edit_line.c
 */
 void					print_newchar(t_line *line, int buf);
-void					print_char_inline(t_line *line, int buf);
 t_list					*free_next_newlines(t_line *line);
+void					print_char_inline(t_line *line, int buf);
 void					go_down_left(void);
 
 /*
@@ -186,7 +189,6 @@ void					add_history(t_line *line);
 **	line.c
 */
 t_line					*get_t_line(void);
-int						my_putchar(int c);
 void					free_line(void);
 t_line					*init_line(void);
 void					handle_eot(t_line *line);
@@ -209,11 +211,5 @@ int						read_line(t_line *line);
 struct termios			*get_termios(void);
 int						init_termios(struct termios term);
 int						init_terms(void);
-
-/*
-**	tabulation.c
-*/
-
-void					handle_tabulation(t_line *line);
 
 #endif
