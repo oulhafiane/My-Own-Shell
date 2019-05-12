@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/08 18:52:23 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/12 13:39:57 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,10 @@ static int			stringtok(const char *line, t_token_list *list)
 				return (ret_with_str_free(&str, 0));
 		}
 		else if (*ptr && !ft_isspace(*ptr) && !ft_strchr(SH_TOKEN, *ptr))
-			split_tok(list, &ptr, &str, SH_WORD);
+		{
+			if (!split_tok(list, &ptr, &str, SH_WORD))
+				return (ret_with_str_free(&str, 0));
+		}
 		else if (*ptr && ft_strchr(SH_TOKEN, *ptr))
 			if (!split_special(list, &ptr, &str))
 				return (ret_with_str_free(&str, 0));
