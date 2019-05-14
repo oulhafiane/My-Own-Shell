@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:34 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/09 10:27:30 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/05/14 17:31:10 by amoutik          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void		escaped_char(char **ptr, t_string *str)
 		if ((escaped = space(*((*ptr) + 1))))
 			push(str, escaped);
 		if (escaped == 0)
-			push(str, *((*ptr)));
+			push(str, *(++(*ptr)));
 		else
 			(*ptr)++;
 	}
