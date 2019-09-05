@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 17:24:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 08:59:27 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/08/23 20:55:14 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdarg.h>
+# include <stdint.h>
 # define LEN 10
 # define LEN_BUF 1000
 # define BUFF_SIZE 1000

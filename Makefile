@@ -10,13 +10,18 @@ SRC_MIN = $(patsubst %.c, $(SRC)/minishell/%.c, builtin.c env.c errors.c fork.c 
 SRC_QUO = $(patsubst %.c, $(SRC)/quotes/%.c, error.c free_string.c is_number.c list.c quote.c quote2.c spliter.c string.c til_dol.c util.c)
 SRC_REA = $(patsubst %.c, $(SRC)/readline/%.c, copy.c cursor.c cursor2.c cursor3.c cursor4.c edit_line.c handlers.c history.c line.c paste.c read_line.c terms.c)
 SRC_RED = $(patsubst %.c, $(SRC)/redirection/%.c, left_redirect.c parsing.c right_redirect.c)
+SRC_JOB	= $(patsubst %.c, $(SRC)/jobcontrol/%.c, init.c job_builtins.c ft_addjob.c signal.c\
+								ft_proccess.c ft_free.c ft_fg.c ft_bg.c ft_jobs.c ft_wait.c\
+								ft_tools.c ft_deljob.c ft_join.c ft_strsignal.c ft_kill.c\
+								ft_changestate.c)
 
 OBJ_MIN = $(patsubst %.c, %.o, $(SRC_MIN))
 OBJ_QUO = $(patsubst %.c, %.o, $(SRC_QUO))
 OBJ_REA = $(patsubst %.c, %.o, $(SRC_REA))
 OBJ_RED = $(patsubst %.c, %.o, $(SRC_RED))
+OBJ_JOB = $(patsubst %.c, %.o, $(SRC_JOB))
 
-OBJECT = $(OBJ_MIN) $(OBJ_QUO) $(OBJ_REA) $(OBJ_RED)
+OBJECT = $(OBJ_MIN) $(OBJ_QUO) $(OBJ_REA) $(OBJ_RED) $(OBJ_JOB)
 REAL_OBJECT = $(patsubst %, $(BIN)/%, /$(notdir $(OBJECT)))
 
 CC = gcc
@@ -34,7 +39,7 @@ all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJECT)
 	@echo "$(RED)Linking...$(NC)"
-	@$(CC) $(REAL_OBJECT) -ltermcap -lreadline $(LIBFT) -o $(NAME)
+	@$(CC) $(REAL_OBJECT) -ltermcap $(LIBFT) -o $(NAME)
 	@echo "$(GREEN)Finished...$(NC)"
 
 $(LIBFT):

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/09 00:39:28 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/01 20:02:07 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,31 +39,32 @@ void	handle_errors(char status, char exit_flag)
 **  the parent waits the child to finish
 */
 
-void	forkit(char *path, t_list **env, t_token *token, int pipe[2])
+void	forkit(char *path, t_list **env, t_token *token, int pip[2])
 {
 	pid_t		child;
 	char		**cmds;
 	char		**env_tab;
 	int			status;
 
-	env_tab = env_to_tab(*env);
 	signal(SIGINT, child_handler);
-	child = fork();
-	if (child > 0 && check_pipe(token) == 0)
-		waitpid(child, &status, 0);
-	else if (child == 0)
+	dup2(pip[0], 0); 
+	dup2(pip[1], 1);
+	if ((status = handle_redirection(token, NULL)) != 0)
+		handle_errors(status, 1);
+	if (ft_jobid_expansion(token))
 	{
-		dup2(pipe[0], 0);
-		dup2(pipe[1], 1);
-		if ((status = handle_redirection(token, NULL)) != 0)
-		{
-			ft_free_strtab(env_tab);
-			handle_errors(status, 1);
-		}
+		env_tab = env_to_tab(*env);
 		if (*(cmds = list_to_chars(token)) == NULL)
 			return ;
-		execve(path, cmds, env_tab);
+		if (!(child = fork()))
+		{
+			ft_jobs_in_child();
+			execve(path, cmds, env_tab);
+			exit(0);
+		}
+		ft_handle_jobs(token, child, path);
+		ft_free_strtab(env_tab);
+		ft_free_strtab(cmds);
 	}
-	ft_free_strtab(env_tab);
 	signals();
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   21sh.c                                             :+:      :+:    :+:   */
+/*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/11 17:22:00 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/01 22:17:06 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,28 +29,6 @@ static int	is_directory(const char *path)
 **	otherwise, it prints an error msg.
 */
 
-static void	exec_local(t_token *token, t_list **env, int std[2])
-{
-	t_token	*cmd;
-	char	*error;
-
-	error = NULL;
-	if ((cmd = get_cmd_token(token)) == NULL)
-		return ;
-	if (access(cmd->token, F_OK) == 0)
-	{
-		if (is_directory(token->token))
-			error = ft_strjoin(cmd->token, ": Is a Directory.\n");
-		else if (access(cmd->token, X_OK) == 0)
-			return (forkit(cmd->token, env, token, std));
-		else
-			error = ft_strjoin(cmd->token, ": Permission denied.\n");
-	}
-	else
-		error = ft_strjoin(cmd->token, ": Command not found.\n");
-	run_redirection_with_errors(error, token, std);
-}
-
 /*
 **	the command given to be search in all paths stored
 **  in environment variable $PATH
@@ -59,34 +37,62 @@ static void	exec_local(t_token *token, t_list **env, int std[2])
 **	otherwise, it prints an error msg.
 */
 
+char	*getpath(char *cmd, char **path)
+{
+	char	*full_path;
+
+	if (ft_strchr(cmd, '/'))
+		return (ft_strdup(cmd));
+	else
+	{
+		while (*path)
+		{
+			full_path = ft_strjoin_pre(*path, "/", cmd);
+			if (!access(full_path, F_OK))
+				return (full_path);
+			free(full_path);
+			path++;
+		}
+	}
+	return (NULL);
+}
+
+char	*ft_handle_errors(t_token *cmd, char *full_path)
+{
+	char	*error;
+
+	error = NULL;
+	if (access(full_path, F_OK))
+		error = ft_strjoin(full_path, ": no such file or directory.\n");
+	else if (access(full_path, X_OK))
+		error = ft_strjoin(full_path, ": Permission denied.\n");
+	else if (is_directory(full_path))
+		error = ft_strjoin(cmd->token, ": Is a Directory.\n");
+	return (error);
+}
+
 static void	exec_cmd(t_token *token, char **path, t_list **env,
 		int std[2])
 {
 	char	*full_path;
 	char	*error;
-	char	**head_path;
 	t_token	*cmd;
 
 	error = NULL;
 	if ((cmd = get_cmd_token(token)) == NULL)
 		return ;
-	head_path = path;
-	while (*path)
+	if ((full_path = getpath(cmd->token, path)))
 	{
-		full_path = ft_strjoin_pre(*path, "/", cmd->token);
-		if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
+		if (!(error = ft_handle_errors(cmd, full_path)))
 		{
 			forkit(full_path, env, token, std);
-			return (free_exec_cmd(error, full_path, head_path));
+			return (free_exec_cmd(error, full_path, path));
 		}
-		else if (error != NULL && access(full_path, F_OK) == 0)
-			error = ft_strjoin(full_path, ": Permission denied.\n");
-		path++;
 		free(full_path);
 	}
 	error = (error) ? error : ft_strjoin(cmd->token, ": Command not found\n");
 	run_redirection_with_errors(error, token, std);
-	ft_free_strtab(head_path);
+	ft_free_strtab(path);
 }
 
 static void	exec(t_list *blt, t_list **env, t_token *node, int std[2])
@@ -102,13 +108,17 @@ static void	exec(t_list *blt, t_list **env, t_token *node, int std[2])
 	}
 	if (ft_strcmp(cmd->token, "exit") == 0)
 	{
-		free_line();
-		exit(-1);
+		if (ft_getset(NULL)->list)
+			ft_putendl("42sh: you have suspended jobs.");
+		else
+		{
+			free(ft_getset(NULL));
+			free_line();
+			exit(ft_atoi(cmd->next ? cmd->next->token : "0"));
+		}
 	}
 	else if ((bltin = ft_lstsearch(blt, cmd->token, &check_builtin)) != NULL)
 		run_builtin(env, bltin, node, std);
-	else if (ft_strchr(cmd->token, '/') != NULL)
-		exec_local(node, env, std);
 	else
 		exec_cmd(node, get_path(*env), env, std);
 }
@@ -136,4 +146,5 @@ void		shell(t_list *blt, t_list **env, t_token_list *tokens)
 			exec(blt, env, tokens->head, std);
 		close(std[0]);
 	}
+	ft_init_wait();
 }

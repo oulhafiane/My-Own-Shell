@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/11 17:19:19 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/08/13 16:43:06 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sys/ioctl.h>
 # include <dirent.h>
 # include <glob.h>
+# include "jobcontrol.h"
 # define BUF_S 1000
 
 typedef struct			s_builtin
@@ -63,7 +64,7 @@ typedef struct			s_line
 /*
 **	main.c
 */
-void					restore_std(int std[3]);
+void					restore_std();
 
 /*
 **	shell.c

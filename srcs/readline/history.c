@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 17:03:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/08 17:47:32 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/01 19:52:55 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,15 @@ static void	down_history(t_line *line)
 		new_line = ft_strnew(ft_strlen(line->index_history->content));
 		ft_strcpy(new_line, line->index_history->content);
 	}
-	else
+	else if (line->tmp_history)
 	{
 		new_line = ft_strnew(ft_strlen(line->tmp_history));
 		ft_strcpy(new_line, line->tmp_history);
 		free(line->tmp_history);
 		line->tmp_history = NULL;
 	}
+	else
+		new_line = ft_strdup("");
 	print_history(line, new_line, 1);
 }
 

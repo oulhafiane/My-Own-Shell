@@ -1,0 +1,4 @@
+ls | ;ls
+ls 1>&-
+ls -lR ~ > file
+echo 51 2>&-

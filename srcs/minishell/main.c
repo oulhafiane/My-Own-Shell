@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/11 18:54:06 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/01 20:11:33 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-void			restore_std(int std[3])
-{
-	dup2(std[0], 0);
-	dup2(std[1], 1);
-	dup2(std[2], 2);
-	close(std[0]);
-	close(std[1]);
-	close(std[2]);
-}
 
 static int		search_semi(t_list *blt, t_list **env, t_token_list *tokens)
 {
@@ -67,7 +57,7 @@ static void		run_shell(t_list *blt, t_line *line)
 				break;
 			add_history(line);
 			if (parse_heredoc(tokens) != 0 && free_token_list(tokens))
-				continue;	
+				continue;
 			head = tokens->head;
 			shell(blt, &(line->env), tokens);
 			search_semi(blt, &(line->env), tokens);
@@ -77,6 +67,7 @@ static void		run_shell(t_list *blt, t_line *line)
 		}
 		free_line();
 		line = init_line();
+		ft_notify();
 	}
 	ft_printf(WRONG_READ);
 	free_line();
@@ -103,6 +94,7 @@ int				main(int ac, char **av, char **ev)
 	history = NULL;
 	init_env(&env, ev);
 	init_builtin(&blt);
+	ft_init_jobcontrol();
 	signals();
 	new_line = init_line();
 	new_line->tail_history = &history;
