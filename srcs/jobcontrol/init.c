@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 16:48:10 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/01 20:11:09 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 15:59:26 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,27 @@ t_container	*ft_getset(t_container *container)
 void		ft_init_jobcontrol(void)
 {
 	t_container		*container;
+	pid_t			pid;
+	pid_t			pgid;
 
+	pid = getpid();
+	while (1)
+	{
+		pgid = tcgetpgrp(0);
+		if (pgid == pid)
+			break ;
+		kill(pid, SIGTTIN);
+	}
 	container = malloc(sizeof(t_container));
 	container->list = NULL;
 	container->current = NULL;
 	container->notify = NULL;
+	container->last_status = 0;
 	tcgetattr(0, &container->term);
 	ft_getset(container);
 	signal(SIGTSTP, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
-	//signal(SIGCHLD, ft_sigchld);
 	signal(SIGHUP, SIG_IGN);
 }
 

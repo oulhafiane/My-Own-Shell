@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_addjob.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 17:49:23 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/04 16:33:00 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/14 19:59:00 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "jobcontrol.h"
 
-int		ft_newid()
+int		ft_newid(void)
 {
 	int id;
 
@@ -42,7 +42,7 @@ t_job	*ft_newjob(t_token *token, pid_t pid, char *cmd, char wait)
 	forgrounded = 1;
 	while (token)
 	{
-		if (!token->next && token->tok_type == 64)
+		if (!token->next && token->tok_type & 64)
 			forgrounded = 0;
 		token = token->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   jobcontrol.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 16:49:44 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/01 20:10:57 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/15 15:40:43 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct	s_container
 	t_term	term;
 	t_list	*notify;
 	t_job	*last;
+	int		last_status;
 }				t_container;
 
 t_container		*ft_getset(t_container *container);
@@ -73,7 +74,7 @@ void			ft_addprocess(t_job **job, pid_t pid, char wait);
 void			ft_wait(t_job *job);
 t_job			*ft_jobgetter(t_job *job, char reset);
 void			ft_handle_jobs(t_token *token, pid_t pid, char *cmd);
-void			ft_jobs_in_child();
+void			ft_jobs_in_child(void);
 t_job			*ft_newjob(t_token *token, pid_t pid, char *cmd, char wait);
 t_job			*ft_getjob_byindex(int index);
 void			ft_sort(t_list *list);
@@ -83,7 +84,7 @@ t_job			*ft_getbypgid(t_list *list, pid_t pgid);
 int				ft_isstopped(t_job	*job);
 t_job			*ft_getjob(char **arg, char *caller);
 void			ft_free_job(t_job *job);
-void			restore_std();
+void			restore_std(void);
 char			*ft_join(char *f, ...);
 void			ft_notify(void);
 void			ft_init_wait(void);

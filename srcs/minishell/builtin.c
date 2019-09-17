@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/08/02 21:47:50 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/15 15:50:13 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,8 @@ void		run_builtin(t_list **env, t_list *bltin, t_token *node, int std[2])
 {
 	char	**cmds;
 	char	status;
-	int		tmp[3];
 	int		fd_backup;
 
-	tmp[0] = dup(0);
-	tmp[1] = dup(1);
-	tmp[2] = dup(2);
 	dup2(std[0], 0);
 	dup2(std[1], 1);
 	fd_backup = -1;
@@ -108,5 +104,5 @@ void		run_builtin(t_list **env, t_list *bltin, t_token *node, int std[2])
 		handle_errors(status, 0);
 	if (fd_backup != -1 && fd_backup != -3)
 		close(fd_backup);
-	restore_std(tmp);
+	restore_std();
 }

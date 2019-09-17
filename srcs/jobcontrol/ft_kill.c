@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_kill.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 11:28:14 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/04 16:34:02 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/15 15:33:09 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char		ft_jobid_expansion(t_token *token)
 			if (*token->token == '%')
 			{
 				ft_killjob(&token->token);
-				prev->next = token->next;;
+				prev->next = token->next;
 				free(token->token);
 				free(token);
 				token = prev;

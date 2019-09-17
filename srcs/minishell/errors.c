@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 15:12:12 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/11 17:21:57 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/15 15:50:41 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,8 @@ void	print_error(char *error)
 void	run_redirection_with_errors(char *error, t_token *node, int std[2])
 {
 	char	status;
-	int		tmp[3];
 	int		fd_backup;
 
-	tmp[0] = dup(0);
-	tmp[1] = dup(1);
-	tmp[2] = dup(2);
 	dup2(std[0], 0);
 	dup2(std[1], 1);
 	fd_backup = -1;
@@ -45,5 +41,5 @@ void	run_redirection_with_errors(char *error, t_token *node, int std[2])
 	print_error(error);
 	if (fd_backup != -1 && fd_backup != -3)
 		close(fd_backup);
-	restore_std(tmp);
+	restore_std();
 }
