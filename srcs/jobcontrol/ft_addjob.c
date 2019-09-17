@@ -6,7 +6,7 @@
 /*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 17:49:23 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/04 16:33:00 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 15:03:15 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_job	*ft_newjob(t_token *token, pid_t pid, char *cmd, char wait)
 	forgrounded = 1;
 	while (token)
 	{
-		if (!token->next && token->tok_type == 64)
+		if (!token->next && token->tok_type & 64)
 			forgrounded = 0;
 		token = token->next;
 	}
