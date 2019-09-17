@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 09:42:19 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/11 18:53:47 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/18 00:08:09 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ enum					e_token_type
 	SH_SEMI = 8,
 	SH_QUOTED = 16,
 	SH_DPIPE = 32,
+	SH_LOGOR = 64,
+	SH_LOGAND = 128
 };
 
 typedef struct			s_token

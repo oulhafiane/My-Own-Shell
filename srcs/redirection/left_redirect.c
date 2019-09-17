@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   left_redirect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/06 02:45:45 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/09 00:37:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/18 00:09:09 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ static t_token	*get_left_redirect(t_token *token)
 
 	left = NULL;
 	while (token && !(token->tok_type & SH_SEMI) &&
-			!(token->tok_type & SH_PIPE))
+		!(token->tok_type & SH_PIPE) && !(token->tok_type & SH_DPIPE)
+			&& !(token->tok_type & SH_LOGAND))
 	{
 		if ((token->tok_type & SH_REDIRECTION) && ft_strchr(token->token, '<'))
 		{

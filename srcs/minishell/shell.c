@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/17 20:37:06 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 00:13:25 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,11 +136,43 @@ static void	exec(t_list *blt, t_list **env, t_token *node, int std[2])
 		exec_cmd(node, get_path(*env), env, std);
 }
 
-void		shell(t_list *blt, t_list **env, t_token_list *tokens)
+int			check_and_or(t_token *token)
+{
+	while (token)
+	{
+		if (token->tok_type & SH_SEMI)
+			return (0);
+		if (token->tok_type == SH_DPIPE)
+			return (SH_LOGOR);
+		if (token->tok_type & SH_LOGAND)
+			return (SH_LOGAND);
+		token = token->next;
+	}
+	return (0);
+}
+
+void		next_and_or(t_token_list *tokens)
+{
+	t_token		*token;
+
+	token = tokens->head;
+	while (token)
+	{
+		if ((token->tok_type & SH_DPIPE) || (token->tok_type & SH_SEMI) || token->tok_type & 128)
+		{
+			tokens->head = token->next;
+			return ;
+		}
+		token = token->next;
+	}
+}
+
+void	pre_run(t_list *blt, t_list **env, t_token_list *tokens)
 {
 	int		std[2];
 	int		pp[2];
 	char	piping;
+
 
 	std[0] = 0;
 	std[1] = 1;
@@ -160,4 +192,26 @@ void		shell(t_list *blt, t_list **env, t_token_list *tokens)
 		close(std[0]);
 	}
 	ft_init_wait();
+	
+}
+
+void		shell(t_list *blt, t_list **env, t_token_list *tokens)
+{
+	int			and_or;
+	int			status;
+	t_container	*container;
+
+	container = ft_getset(NULL);
+	container->last_status = 127;
+	pre_run(blt, env, tokens);
+	while ((and_or = check_and_or(tokens->head)))
+	{
+		next_and_or(tokens);
+		status = container->last_status;
+		if (((and_or & SH_LOGOR) && status) || ((and_or & SH_LOGAND) && !status))
+		{
+			container->last_status = 127;
+			pre_run(blt, env, tokens);
+		}
+	}
 }

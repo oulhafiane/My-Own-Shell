@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 17:49:23 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/17 20:34:10 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 00:10:26 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_exec_mode(t_token *token, char *forgrounded)
 	while (token)
 	{
 		if ((!token->next || token->next->tok_type & SH_SEMI)
-			&& token->tok_type & 64)
+			&& token->tok_type & SH_LOGOR)
 			*forgrounded = 0;
 		token = token->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/17 20:03:54 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 23:50:25 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,13 @@ void	forkit(char *path, t_list **env, t_token *token, int pip[2])
 		env_tab = env_to_tab(*env);
 		if (*(cmds = list_to_chars(token)) == NULL)
 			return ;
+		ft_getset(NULL)->last_status = 0;
 		if (!(child = fork()))
 		{
 			ft_jobs_in_child();
 			execve(path, cmds, env_tab);
-			exit(0);
+			ft_printf_fd(2, "exec format error\n");
+			exit(1);
 		}
 		ft_handle_jobs(token, child, path);
 		ft_free_strtab(env_tab);
