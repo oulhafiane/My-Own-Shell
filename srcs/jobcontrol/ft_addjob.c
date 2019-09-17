@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 17:49:23 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/17 16:14:53 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 20:34:10 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,24 @@ void	ft_addjob(t_job *job, t_container *container)
 	list = container->list;
 }
 
+void	ft_exec_mode(t_token *token, char *forgrounded)
+{
+	while (token)
+	{
+		if ((!token->next || token->next->tok_type & SH_SEMI)
+			&& token->tok_type & 64)
+			*forgrounded = 0;
+		token = token->next;
+	}
+}
+
 t_job	*ft_newjob(t_token *token, pid_t pid, char *cmd, char wait)
 {
 	t_job	*job;
 	char	forgrounded;
 
 	forgrounded = 1;
-	while (token)
-	{
-		if (!token->next && token->tok_type & 64)
-			forgrounded = 0;
-		token = token->next;
-	}
+	ft_exec_mode(token, &forgrounded);
 	signal(SIGCHLD, SIG_DFL);
 	job = malloc(sizeof(t_job));
 	job->pids = NULL;
@@ -53,7 +59,6 @@ t_job	*ft_newjob(t_token *token, pid_t pid, char *cmd, char wait)
 	job->pgid = pid;
 	job->suspended = 0;
 	job->foreground = forgrounded;
-	job->notified = 1;
 	job->pids = NULL;
 	job->killed = 0;
 	job->id = ft_newid();

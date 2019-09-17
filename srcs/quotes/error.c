@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:23:52 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/04 17:25:49 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 20:19:36 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	ft_is_spec(t_token *token)
 	{
 		if (ft_strequ(token->token, "&"))
 		{
-			if (!(token->next && token->tok_type != SH_SEMI))
+			if (!(token->next && token->next->tok_type != SH_SEMI))
 			{
 				token->tok_type = 64;
 				return (1);

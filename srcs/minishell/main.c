@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/17 16:04:59 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 20:28:52 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,16 @@ static void		run_shell(t_list *blt, t_line *line)
 		{
 			if (ft_str_isnull(line->command) ||
 				(tokens = handle_quote(&line->command)) == NULL)
-				break;
+				break ;
 			add_history(line);
 			if (parse_heredoc(tokens) != 0 && free_token_list(tokens))
-				continue;
+				continue ;
 			head = tokens->head;
 			shell(blt, &(line->env), tokens);
 			search_semi(blt, &(line->env), tokens);
 			tokens->head = head;
 			free_token_list(tokens);
-			break;
+			break ;
 		}
 		free_line();
 		line = init_line();

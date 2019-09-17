@@ -13,7 +13,7 @@ SRC_RED = $(patsubst %.c, $(SRC)/redirection/%.c, left_redirect.c parsing.c righ
 SRC_JOB	= $(patsubst %.c, $(SRC)/jobcontrol/%.c, init.c job_builtins.c ft_addjob.c signal.c\
 								ft_proccess.c ft_free.c ft_fg.c ft_bg.c ft_jobs.c ft_wait.c\
 								ft_tools.c ft_deljob.c ft_join.c ft_strsignal.c ft_kill.c\
-								ft_changestate.c)
+								ft_changestate.c ft_notify.c)
 
 OBJ_MIN = $(patsubst %.c, %.o, $(SRC_MIN))
 OBJ_QUO = $(patsubst %.c, %.o, $(SRC_QUO))

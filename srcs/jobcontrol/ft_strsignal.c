@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 10:37:23 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/08/17 19:57:29 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 19:42:51 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ char	*ft_getsigstr13_31(int sig)
 char	*ft_strsignal(int sig)
 {
 	char	*str;
-
 
 	if (sig <= 12)
 		str = ft_getsigstr1_12(sig);

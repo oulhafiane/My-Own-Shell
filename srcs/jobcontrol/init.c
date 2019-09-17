@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 16:48:10 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/17 15:59:26 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 20:28:23 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void		ft_init_jobcontrol(void)
 	container->current = NULL;
 	container->notify = NULL;
 	container->last_status = 0;
+	container->time_to_exit = 1;
 	tcgetattr(0, &container->term);
 	ft_getset(container);
 	signal(SIGTSTP, SIG_IGN);

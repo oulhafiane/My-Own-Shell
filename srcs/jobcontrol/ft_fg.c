@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_fg.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/10 03:01:02 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/04 16:38:56 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 19:42:01 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ void	ft_fg(char **arg)
 	else
 	{
 		ft_printf("unable to continue job %s\n", job->cmd);
-		ft_deljob(job, ft_getset(NULL));	}
+		ft_deljob(job, ft_getset(NULL));
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/17 16:01:49 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 20:37:06 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	is_directory(const char *path)
 **	otherwise, it prints an error msg.
 */
 
-char	*getpath(char *cmd, char **path)
+char		*getpath(char *cmd, char **path)
 {
 	char	*full_path;
 
@@ -57,7 +57,7 @@ char	*getpath(char *cmd, char **path)
 	return (NULL);
 }
 
-char	*ft_handle_errors(t_token *cmd, char *full_path)
+char		*ft_handle_errors(t_token *cmd, char *full_path)
 {
 	char	*error;
 
@@ -95,6 +95,28 @@ static void	exec_cmd(t_token *token, char **path, t_list **env,
 	ft_free_strtab(path);
 }
 
+char		ft_exit(t_token *cmd)
+{
+	t_container *container;
+
+	container = ft_getset(NULL);
+	if (ft_strcmp(cmd->token, "exit") == 0)
+	{
+		if (container->list && container->time_to_exit)
+			container->time_to_exit = 0;
+		else
+		{
+			free(ft_getset(NULL));
+			free_line();
+			exit(ft_atoi(cmd->next ? cmd->next->token : "0"));
+		}
+		return (1);
+	}
+	else
+		container->time_to_exit = 1;
+	return (0);
+}
+
 static void	exec(t_list *blt, t_list **env, t_token *node, int std[2])
 {
 	t_list			*bltin;
@@ -106,17 +128,8 @@ static void	exec(t_list *blt, t_list **env, t_token *node, int std[2])
 		run_redirection_with_errors(NULL, node, std);
 		return ;
 	}
-	if (ft_strcmp(cmd->token, "exit") == 0)
-	{
-		if (ft_getset(NULL)->list)
-			ft_putendl("42sh: you have suspended jobs.");
-		else
-		{
-			free(ft_getset(NULL));
-			free_line();
-			exit(ft_atoi(cmd->next ? cmd->next->token : "0"));
-		}
-	}
+	if (ft_exit(cmd))
+		ft_putendl("42sh: you have suspended jobs.");
 	else if ((bltin = ft_lstsearch(blt, cmd->token, &check_builtin)) != NULL)
 		run_builtin(env, bltin, node, std);
 	else

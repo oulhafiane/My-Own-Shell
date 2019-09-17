@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/01 20:02:07 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 20:03:54 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ void	handle_errors(char status, char exit_flag)
 **  the parent waits the child to finish
 */
 
+void	ft_init_fork(int *pip)
+{
+	signal(SIGINT, child_handler);
+	dup2(pip[0], 0);
+	dup2(pip[1], 1);
+}
+
 void	forkit(char *path, t_list **env, t_token *token, int pip[2])
 {
 	pid_t		child;
@@ -46,9 +53,7 @@ void	forkit(char *path, t_list **env, t_token *token, int pip[2])
 	char		**env_tab;
 	int			status;
 
-	signal(SIGINT, child_handler);
-	dup2(pip[0], 0); 
-	dup2(pip[1], 1);
+	ft_init_fork(pip);
 	if ((status = handle_redirection(token, NULL)) != 0)
 		handle_errors(status, 1);
 	if (ft_jobid_expansion(token))

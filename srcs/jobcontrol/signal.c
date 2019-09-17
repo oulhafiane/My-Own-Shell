@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 23:03:34 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/04 18:22:00 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 19:56:22 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,13 @@ void	ft_check_job(t_job *job, t_job *current, t_container *container)
 	t_proc		*proc;
 
 	st = NULL;
-	if (!job)
-		return;
-	
 	proc = job->pids->content;
 	status = proc->status;
-	if (job->notified)
-		return ;
 	if (ft_terminated(job))
 	{
 		if (job != current || WIFSIGNALED(status))
-			st = ft_join("[%d] + %s %s\n", job->id, ft_strsignal(WTERMSIG(status)), job->cmd);
+			st = ft_join("[%d] + %s %s\n", job->id,
+				ft_strsignal(WTERMSIG(status)), job->cmd);
 	}
 	else if (!job->killed && ft_stoped(job))
 	{
@@ -74,7 +70,6 @@ void	ft_check_job(t_job *job, t_job *current, t_container *container)
 	}
 	if (st)
 		ft_lstadd(&container->notify, ft_lstnew(st, 0));
-	job->notified = 1;
 	if (job->killed)
 		ft_deljob(job, container);
 }
@@ -92,7 +87,8 @@ void	ft_check_jobs_status(t_job *current)
 	while (list)
 	{
 		job = list->content;
-		ft_check_job(job, current, container);
+		if (job)
+			ft_check_job(job, current, container);
 		list = list->next;
 	}
 }
@@ -110,23 +106,4 @@ void	ft_sigchld(int sig)
 			break ;
 	}
 	ft_check_jobs_status(NULL);
-}
-
-void ft_notify(void)
-{
-	t_list		*list;
-	t_list		*tmp;
-	t_container	*container;
-
-	container = ft_getset(NULL);
-	list = container->notify;
-	while (list)
-	{
-		ft_printf("%s", list->content);
-		tmp = list;
-		free(list->content);
-		list = list->next;
-		free(tmp);
-	}
-	container->notify = NULL;
 }

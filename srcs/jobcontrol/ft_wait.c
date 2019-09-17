@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wait.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/10 03:03:26 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/04 16:33:36 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 19:42:19 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	ft_wait(t_job *job)
 	if (!job->foreground)
 	{
 		ft_getset(NULL)->current = job;
-			ft_addjob(job, ft_getset(NULL));
-			ft_printf("[%d] %d\n", job->id, job->pgid);
+		ft_addjob(job, ft_getset(NULL));
+		ft_printf("[%d] %d\n", job->id, job->pgid);
 	}
 	else
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_changestate.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 21:51:22 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/04 17:46:00 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/17 19:53:18 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,4 @@ void	ft_change_state(t_job *job, pid_t pid, int status)
 		if (proc)
 			ft_getstat(proc, status);
 	}
-	if (job)
-		job->notified = 0;
 }
