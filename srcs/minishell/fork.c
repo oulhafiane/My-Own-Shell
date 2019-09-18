@@ -6,13 +6,13 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/17 23:50:25 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 15:52:51 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void	handle_errors(char status, char exit_flag)
+void		handle_errors(char status, char exit_flag)
 {
 	if (status == -1)
 		status = PERM_DENIED;
@@ -39,14 +39,20 @@ void	handle_errors(char status, char exit_flag)
 **  the parent waits the child to finish
 */
 
-void	ft_init_fork(int *pip)
+void		ft_init_fork(int *pip)
 {
 	signal(SIGINT, child_handler);
 	dup2(pip[0], 0);
 	dup2(pip[1], 1);
 }
 
-void	forkit(char *path, t_list **env, t_token *token, int pip[2])
+static void	ft_free(char **env_tab, char **cmds)
+{
+	ft_free_strtab(env_tab);
+	ft_free_strtab(cmds);
+}
+
+void		forkit(char *path, t_list **env, t_token *token, int pip[2])
 {
 	pid_t		child;
 	char		**cmds;
@@ -70,8 +76,7 @@ void	forkit(char *path, t_list **env, t_token *token, int pip[2])
 			exit(1);
 		}
 		ft_handle_jobs(token, child, path);
-		ft_free_strtab(env_tab);
-		ft_free_strtab(cmds);
+		ft_free(env_tab, cmds);
 	}
 	signals();
 }

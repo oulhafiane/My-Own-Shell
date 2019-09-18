@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 23:03:34 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/17 19:56:22 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 15:49:46 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	ft_check_job(t_job *job, t_job *current, t_container *container)
 	char		*st;
 	t_proc		*proc;
 
-	st = NULL;
+	if (((st = NULL) || 1) && job->notified)
+		return ;
 	proc = job->pids->content;
 	status = proc->status;
 	if (ft_terminated(job))
@@ -65,11 +66,11 @@ void	ft_check_job(t_job *job, t_job *current, t_container *container)
 	{
 		st = ft_join("[%d] + suspended %s\n", job->id, job->cmd);
 		ft_addjob(job, container);
-		if (job == current)
-			container->current = job;
+		(job == current) ? container->current = job : 0;
 	}
 	if (st)
 		ft_lstadd(&container->notify, ft_lstnew(st, 0));
+	job->notified = 1;
 	if (job->killed)
 		ft_deljob(job, container);
 }

@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/15 15:50:13 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 16:10:50 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void		run_builtin(t_list **env, t_list *bltin, t_token *node, int std[2])
 	if ((status = handle_redirection(node, &fd_backup)) == 0 &&
 			bltin && (*(cmds = list_to_chars(node)) != NULL))
 	{
+		ft_set_last_rvalue(0);
 		((t_builtin*)bltin->content)->f(cmds + 1, env);
 		ft_free_strtab(cmds);
 	}

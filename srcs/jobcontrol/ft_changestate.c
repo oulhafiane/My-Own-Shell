@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 21:51:22 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/17 19:53:18 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 15:41:26 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,6 @@ void	ft_change_state(t_job *job, pid_t pid, int status)
 		if (proc)
 			ft_getstat(proc, status);
 	}
+	if (job)
+		job->notified = 0;
 }

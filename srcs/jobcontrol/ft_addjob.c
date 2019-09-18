@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 17:49:23 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/18 00:10:26 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 15:41:10 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_job	*ft_newjob(t_token *token, pid_t pid, char *cmd, char wait)
 	job->foreground = forgrounded;
 	job->pids = NULL;
 	job->killed = 0;
+	job->notified = 1;
 	job->id = ft_newid();
 	job->cmd = ft_strdup(cmd);
 	ft_addprocess(&job, pid, wait);

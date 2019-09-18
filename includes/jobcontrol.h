@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 16:49:44 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/18 00:11:27 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 16:02:26 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct			s_job
 	char		killed;
 	char		foreground;
 	t_term		term;
+	char		notified;
 }						t_job;
 
 typedef struct			s_container
@@ -99,4 +100,6 @@ int						ft_stoped(t_job *job);
 int						ft_terminated(t_job *job);
 void					ft_resetstatus(t_job *job);
 void					ft_check_jobs_status(t_job *current);
+void					ft_set_last_rvalue(int rvalue);
+int						ft_get_last_rvalue(void);
 #endif

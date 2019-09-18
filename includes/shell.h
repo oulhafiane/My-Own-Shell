@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/08/13 16:43:06 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 15:55:42 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ void					free_env(t_list *lst);
 **	errors.c
 */
 void					print_error(char *error);
-void					run_redirection_with_errors(char *error, t_token *node, int std[2]);
+void					run_redirection_with_errors(char *error,
+							t_token *node, int std[2]);
 
 /*
 **	free.c
@@ -214,4 +215,9 @@ struct termios			*get_termios(void);
 int						init_termios(struct termios term);
 int						init_terms(void);
 
+void					exec_cmd(t_token *token, char **path, t_list **env,
+								int std[2]);
+char					ft_exit(t_token *cmd);
+void					ft_exec(t_list *blt, t_list **env,
+								t_token *node, int std[2]);
 #endif

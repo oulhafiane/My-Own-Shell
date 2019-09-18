@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:23:52 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/18 00:10:39 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 15:53:40 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	redirection_error2(t_token *token, char **ptr)
 	return (0);
 }
 
-char	ft_is_spec(t_token *token)
+char		ft_is_spec(t_token *token)
 {
 	if (token->tok_type == 4)
 	{
