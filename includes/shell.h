@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/18 15:55:42 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/20 01:32:00 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void					shell(t_list *blt, t_list **env, t_token_list *tokens);
 /*
 ** fork.c
 */
-void					handle_errors(char status, char exit_flag);
+void					handle_errors(char status);
 void					forkit(char *path, t_list **env, t_token *token,
 		int pipe[2]);
 

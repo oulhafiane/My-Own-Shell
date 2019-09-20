@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/18 16:05:44 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/19 22:49:32 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int			check_and_or(t_token *token)
 		if (token->tok_type & SH_SEMI)
 			return (0);
 		if (token->tok_type == SH_DPIPE)
-			return (SH_LOGOR);
+			return (SH_DPIPE);
 		if (token->tok_type & SH_LOGAND)
 			return (SH_LOGAND);
 		token = token->next;
@@ -91,16 +91,14 @@ void		shell(t_list *blt, t_list **env, t_token_list *tokens)
 	int			and_or;
 	int			status;
 
-	ft_set_last_rvalue(127);
 	pre_run(blt, env, tokens);
 	while ((and_or = check_and_or(tokens->head)))
 	{
 		next_and_or(tokens);
 		status = ft_get_last_rvalue();
-		if (((and_or & SH_LOGOR) && status)
+		if (((and_or & SH_DPIPE) && status)
 			|| ((and_or & SH_LOGAND) && !status))
 		{
-			ft_set_last_rvalue(127);
 			pre_run(blt, env, tokens);
 		}
 	}

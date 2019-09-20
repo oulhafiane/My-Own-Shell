@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 09:42:19 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/18 00:08:09 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/20 00:40:51 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ enum					e_token_type
 	SH_SEMI = 8,
 	SH_QUOTED = 16,
 	SH_DPIPE = 32,
-	SH_LOGOR = 64,
+	SH_IMPER = 64,
 	SH_LOGAND = 128
 };
 
@@ -135,4 +135,5 @@ char					**list_to_chars(t_token *token);
 int						is_special_char(char c);
 int						is_pipe_at_end(t_token_list *tokens);
 
+char					ft_extra_token(t_token *token);
 #endif

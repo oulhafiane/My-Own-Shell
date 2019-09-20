@@ -6,14 +6,15 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/05 22:36:27 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/18 15:52:51 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/20 01:32:46 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void		handle_errors(char status, char exit_flag)
+void		handle_errors(char status)
 {
+	ft_set_last_rvalue(127);
 	if (status == -1)
 		status = PERM_DENIED;
 	else if (status == -2)
@@ -26,8 +27,6 @@ void		handle_errors(char status, char exit_flag)
 		ft_printf_fd(2, "21sh: Bad file descriptor\n");
 	else if (status == SYNTAX_ERROR)
 		ft_printf_fd(2, "21sh: Ambiguous redirect\n");
-	if (exit_flag)
-		exit(EXIT_FAILURE);
 }
 
 /*
@@ -61,7 +60,7 @@ void		forkit(char *path, t_list **env, t_token *token, int pip[2])
 
 	ft_init_fork(pip);
 	if ((status = handle_redirection(token, NULL)) != 0)
-		handle_errors(status, 1);
+		return (handle_errors(status));
 	if (ft_jobid_expansion(token))
 	{
 		env_tab = env_to_tab(*env);
@@ -75,7 +74,7 @@ void		forkit(char *path, t_list **env, t_token *token, int pip[2])
 			ft_printf_fd(2, "exec format error\n");
 			exit(1);
 		}
-		ft_handle_jobs(token, child, path);
+		ft_handle_jobs(token, child);
 		ft_free(env_tab, cmds);
 	}
 	signals();

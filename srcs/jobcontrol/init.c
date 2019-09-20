@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 16:48:10 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/17 20:28:23 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/20 00:30:45 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		ft_resetsignals(void)
 	signal(SIGCHLD, SIG_DFL);
 }
 
-void		ft_handle_jobs(t_token *token, pid_t pid, char *cmd)
+void		ft_handle_jobs(t_token *token, pid_t pid)
 {
 	t_job		*job;
 	t_stat		st;
@@ -70,7 +70,7 @@ void		ft_handle_jobs(t_token *token, pid_t pid, char *cmd)
 	wait = S_ISFIFO(st.st_mode) ? 0 : 1;
 	job = ft_jobgetter(NULL, GET_JOB);
 	if (!job)
-		job = ft_newjob(token, pid, cmd, wait);
+		job = ft_newjob(token, pid, wait);
 	else
 		ft_addprocess(&job, pid, wait);
 }

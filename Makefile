@@ -7,7 +7,7 @@ LIB = libft
 BUILT = builtin
 
 SRC_MIN = $(patsubst %.c, $(SRC)/minishell/%.c, ft_exit.c ft_exec.c builtin.c env.c errors.c fork.c free.c ft_cd.c ft_echo.c ft_env.c ft_pwd.c main.c shell.c)
-SRC_QUO = $(patsubst %.c, $(SRC)/quotes/%.c, error.c free_string.c is_number.c list.c quote.c quote2.c spliter.c string.c til_dol.c util.c)
+SRC_QUO = $(patsubst %.c, $(SRC)/quotes/%.c, error.c free_string.c is_number.c list.c quote.c quote2.c spliter.c string.c til_dol.c util.c ft_extra_tokens.c)
 SRC_REA = $(patsubst %.c, $(SRC)/readline/%.c, copy.c cursor.c cursor2.c cursor3.c cursor4.c edit_line.c handlers.c history.c line.c paste.c read_line.c terms.c)
 SRC_RED = $(patsubst %.c, $(SRC)/redirection/%.c, left_redirect.c parsing.c right_redirect.c)
 SRC_JOB	= $(patsubst %.c, $(SRC)/jobcontrol/%.c, init.c job_builtins.c ft_addjob.c signal.c\

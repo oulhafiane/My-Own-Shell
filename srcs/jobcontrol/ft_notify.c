@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 19:45:13 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/17 19:45:24 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/18 23:42:17 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ft_notify(void)
 	list = container->notify;
 	while (list)
 	{
-		ft_printf("%s", list->content);
+		ft_printf("%s\n", list->content);
 		tmp = list;
 		free(list->content);
 		list = list->next;

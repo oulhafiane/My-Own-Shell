@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 15:26:47 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/18 15:32:59 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/20 01:26:26 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	ft_exec(t_list *blt, t_list **env, t_token *node, int std[2])
 		run_redirection_with_errors(NULL, node, std);
 		return ;
 	}
+	ft_expand_last_status(node);
 	if (ft_exit(cmd))
 		ft_putendl("42sh: you have suspended jobs.");
 	else if ((bltin = ft_lstsearch(blt, cmd->token, &check_builtin)) != NULL)

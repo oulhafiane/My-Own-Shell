@@ -6,14 +6,16 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:23:52 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/18 15:53:40 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/20 00:40:43 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quote.h"
+#include "jobcontrol.h"
 
 int			parse_error(char *ptr, int err)
 {
+	ft_set_last_rvalue(127);
 	if (err == 1)
 		ft_printf_fd(2, "21sh: parse error near %s\n",
 				ptr != NULL ? ptr : "\\n");
@@ -33,30 +35,6 @@ static int	redirection_error2(t_token *token, char **ptr)
 	else if (!(token->next->tok_type & SH_QUOTED) &&
 		(ft_strchr(*ptr, '<') || ft_strchr(*ptr, '>')))
 		return (parse_error(token->next->token, 1));
-	return (0);
-}
-
-char		ft_is_spec(t_token *token)
-{
-	if (token->tok_type == 4)
-	{
-		if (ft_strequ(token->token, "&"))
-		{
-			if (!(token->next && token->next->tok_type != SH_SEMI))
-			{
-				token->tok_type = SH_LOGOR;
-				return (1);
-			}
-		}
-		else if (ft_strequ(token->token, "&&"))
-		{
-			if (token->next && (token->next->tok_type & SH_WORD))
-			{
-				token->tok_type = SH_LOGAND;
-				return (1);
-			}
-		}
-	}
 	return (0);
 }
 
@@ -87,7 +65,7 @@ static int	redirection_error(t_token *token, char *ptr, int index)
 	}
 	else
 	{
-		if (index > 0 && ft_is_spec(token))
+		if (index > 0 && ft_extra_token(token))
 			return (0);
 		return (parse_error(ptr, 1));
 	}
