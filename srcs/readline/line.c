@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 12:27:10 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/04 14:12:55 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/20 01:10:04 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ t_line	*init_line(void)
 	line->top = -1;
 	line->index = -1;
 	line->current_index = -1;
+	line->total_tabs = 0;
 	line->print_msg = 1;
 	init_terms();
 	line->col = tgetnum("co");

@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 10:37:12 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/19 22:53:01 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/21 01:50:54 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,20 @@ void		go_right(t_line *line)
 	if (line->index >= line->top)
 		return ;
 	update_index(line, 1);
-	ft_printf("%c", line->command[line->index]);
+	if (line->command[line->index] != '\t')
+		ft_printf("%c", line->command[line->index]);
 	if (line->command[line->index] != '\n' && decision_up_down(line))
 		go_down_left();
-	if (line->command[line->index] == '\n' && line->new_lines != NULL)
+	if ((line->command[line->index] == '\n' ||
+				line->command[line->index] == '\t') && line->new_lines != NULL)
 		line->new_lines = line->new_lines->next;
-	else if (line->command[line->index] == '\n')
+	else if (line->command[line->index] == '\n' ||
+			line->command[line->index] == '\t')
 		line->new_lines = line->head_newlines;
+	if (line->command[line->index] == '\t')
+		print_current_tab(line);
+	else if (line->command[line->index] == '\n') //to verify this one...
+		line->total_tabs = get_next_tabs(line);
 }
 
 void		go_left(t_line *line)
@@ -39,14 +46,17 @@ void		go_left(t_line *line)
 		step = *((int*)line->new_lines->content);
 		tputs(tgoto(tgetstr("ch", NULL), 0, line->col - step), 1, ft_putchar);
 		line->new_lines = line->new_lines->previous;
+		line->total_tabs = get_previous_tabs(line); // to verify
 	}
 	else if (decision_up_down(line))
 	{
 		tputs(tgetstr("up", NULL), 1, ft_putchar);
 		tputs(tgoto(tgetstr("ch", NULL), 0, line->col - 1), 1, ft_putchar);
 	}
-	else
+	else if (line->command[line->index] != '\t')
 		tputs(tgetstr("le", NULL), 1, ft_putchar);
+	if (line->command[line->index] == '\t')
+		move_left_tab(line);
 	update_index(line, -1);
 }
 

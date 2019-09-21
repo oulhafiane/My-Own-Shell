@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 13:07:32 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/09 00:08:00 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/18 17:13:15 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	check_keys(int buf, t_line *line)
 		internal_paste(line);
 	else if (buf == UP_KEY || buf == DOWN_KEY)
 		handle_history(buf, line);
-	else if (ft_isprint(buf))
+	else if (ft_isprint(buf) || buf == TAB_KEY)
 		print_char_inline(line, buf);
 	else if (((char*)&buf)[1] && (ft_isprint(*((char*)&buf)) ||
 				(*((char*)&buf)) == '\t' || (*((char*)&buf)) == '\n'))

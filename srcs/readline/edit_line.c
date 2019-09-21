@@ -6,7 +6,7 @@
 /*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 12:44:17 by amoutik           #+#    #+#             */
-/*   Updated: 2019/04/22 11:55:06 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/21 06:29:30 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ static void	update_newlines(t_line *line)
 
 void		print_newchar(t_line *line, int buf)
 {
-	ft_putchar(buf);
+	if (buf != '\t')
+		ft_putchar(buf);
 	if (line->top + 2 >= line->buf_size)
 	{
 		line->buf_size *= 2;
@@ -43,10 +44,15 @@ void		print_newchar(t_line *line, int buf)
 	line->command[line->index + 1] = buf;
 	if (buf == '\n')
 		update_newlines(line);
+	else if (buf == '\t')
+		add_tab(line);
 	update_index(line, 1);
 	line->top++;
 	if (decision_up_down(line))
+	{
+		line->count_down++;
 		go_down_left();
+	}
 }
 
 t_list		*free_next_newlines(t_line *line)

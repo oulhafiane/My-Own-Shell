@@ -6,7 +6,7 @@
 /*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 17:24:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/08/23 20:55:14 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/21 05:20:02 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define LEN 10
 # define LEN_BUF 1000
 # define BUFF_SIZE 1000
+# define TTERMINAL "/dev/ttys001"
 
 typedef struct		s_fdlist
 {
@@ -156,6 +157,7 @@ int					ft_iswhitespace(int c);
 int					ft_isspace(int c);
 void				ft_swap_pt(void **pt1, void **pt2);
 int					ft_sqrt(int nb);
+void				ft_debug(char *format, ...);
 
 /*
 ** Functions Created To Create Printf

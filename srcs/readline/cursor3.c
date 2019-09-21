@@ -6,7 +6,7 @@
 /*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 20:27:51 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/22 12:22:04 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/21 06:31:39 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,30 +92,41 @@ void		next_word(t_line *line, int direction)
 	}
 }
 
-void		update_line(t_line *line, char *tmp, char buf)
+void		print_line(t_line *line, char *tmp, char buf)
 {
 	int		i;
-	int		index;
-	int		current_index;
-	int		current_rows;
 
-	i = -1;
-	current_rows = get_current_rows(line);
 	tputs(tgetstr("sc", NULL), 1, ft_putchar);
 	tputs(tgetstr("cd", NULL), 1, ft_putchar);
-	index = line->index;
-	current_index = line->current_index;
-	line->top = line->index;
+	i = -1;
+	line->count_down = 0;
+	line->current_row = get_current_row(tgetnum("li"));
 	if (buf != 0 && buf != -1)
 		print_newchar(line, buf);
 	while (tmp[++i] != '\0')
 		print_newchar(line, tmp[i]);
-	if (buf != -1)
+}
+
+void		update_line(t_line *line, char *tmp, char buf)
+{
+	int		index;
+	int		current_index;
+	int		current_rows;
+	int		total_tabs;
+
+	current_rows = get_current_rows(line);
+	index = line->index;
+	current_index = line->current_index;
+	total_tabs = line->total_tabs;
+	line->top = line->index;
+	print_line(line, tmp, buf);
+	if (buf != -1) // had -1 mabkitch 3a9al lach tatsla7
 	{
 		tputs(tgetstr("rc", NULL), 1, ft_putchar);
 		line->index = index;
 		line->current_index = current_index;
+		line->total_tabs = total_tabs;
 	}
-	if (buf != 0 && decision_top_down_left(line, current_rows))
-		tputs(tgetstr("up", NULL), 1, ft_putchar);
+	if (buf != 0)
+		decision_top_down_left(line, current_rows);
 }

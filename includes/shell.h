@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/08/13 16:43:06 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/21 06:31:25 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ typedef struct			s_line
 	int					current_index;
 	t_list				*new_lines;
 	t_list				*head_newlines;
+	int					total_tabs;
+	int					count_down;
+	int					current_row;
 	char				print_msg;
 	t_list				**tail_history;
 	t_list				*index_history;
@@ -163,7 +166,7 @@ void					update_line(t_line *line, char *tmp, char buf);
 void					update_index(t_line *line, char step);
 int						decision_up_down(t_line *line);
 int						get_current_rows(t_line *line);
-int						decision_top_down_left(t_line *line, int current_rows);
+void					decision_top_down_left(t_line *line, int current_rows);
 void					set_new_current_index(t_line *line);
 
 /*
@@ -213,5 +216,14 @@ int						read_line(t_line *line);
 struct termios			*get_termios(void);
 int						init_termios(struct termios term);
 int						init_terms(void);
+
+/*
+**	tab.c
+*/
+int						get_next_tabs(t_line *line);
+int						get_previous_tabs(t_line *line);
+void					move_left_tab(t_line *line);
+void					add_tab(t_line *line);
+void					print_current_tab(t_line *line);
 
 #endif
