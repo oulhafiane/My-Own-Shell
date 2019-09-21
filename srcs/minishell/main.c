@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/17 20:28:52 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/19 20:38:22 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ static void		run_shell(t_list *blt, t_line *line)
 			break ;
 		}
 		free_line();
-		line = init_line();
-		ft_notify();
+		(line = init_line()) ? ft_notify() : 0;
 	}
 	ft_printf(WRONG_READ);
 	free_line();

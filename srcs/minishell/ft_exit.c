@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_notify.c                                        :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/17 19:45:13 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/18 23:42:17 by sid-bell         ###   ########.fr       */
+/*   Created: 2019/09/18 15:28:12 by sid-bell          #+#    #+#             */
+/*   Updated: 2019/09/18 15:28:19 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "jobcontrol.h"
+#include "shell.h"
 
-void	ft_notify(void)
+char		ft_exit(t_token *cmd)
 {
-	t_list		*list;
-	t_list		*tmp;
-	t_container	*container;
+	t_container *container;
 
 	container = ft_getset(NULL);
-	list = container->notify;
-	while (list)
+	if (ft_strcmp(cmd->token, "exit") == 0)
 	{
-		ft_printf("%s\n", list->content);
-		tmp = list;
-		free(list->content);
-		list = list->next;
-		free(tmp);
+		if (container->list && container->time_to_exit)
+			container->time_to_exit = 0;
+		else
+		{
+			free(ft_getset(NULL));
+			free_line();
+			exit(ft_atoi(cmd->next ? cmd->next->token : "0"));
+		}
+		return (1);
 	}
-	container->notify = NULL;
+	else
+		container->time_to_exit = 1;
+	return (0);
 }

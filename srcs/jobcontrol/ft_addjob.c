@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 17:49:23 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/17 20:34:10 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/20 00:29:57 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,31 @@ void	ft_exec_mode(t_token *token, char *forgrounded)
 {
 	while (token)
 	{
-		if ((!token->next || token->next->tok_type & SH_SEMI)
-			&& token->tok_type & 64)
+		if (token->tok_type & SH_IMPER)
 			*forgrounded = 0;
+		if (token->tok_type & SH_SEMI)
+			break ;
 		token = token->next;
 	}
 }
 
-t_job	*ft_newjob(t_token *token, pid_t pid, char *cmd, char wait)
+void	ft_jobname(t_job *job, t_token *token)
+{
+	char	*tmp;
+
+	job->cmd = ft_strdup(token->token);
+	while (token->next)
+	{
+		token = token->next;
+		if (token->tok_type & SH_IMPER || token->tok_type & SH_SEMI)
+			break ;
+		tmp = job->cmd;
+		job->cmd = ft_join("%s %s\n", job->cmd, token->token);
+		free(tmp);
+	}
+}
+
+t_job	*ft_newjob(t_token *token, pid_t pid, char wait)
 {
 	t_job	*job;
 	char	forgrounded;
@@ -61,8 +78,9 @@ t_job	*ft_newjob(t_token *token, pid_t pid, char *cmd, char wait)
 	job->foreground = forgrounded;
 	job->pids = NULL;
 	job->killed = 0;
+	job->notified = 1;
 	job->id = ft_newid();
-	job->cmd = ft_strdup(cmd);
+	ft_jobname(job, token);
 	ft_addprocess(&job, pid, wait);
 	ft_jobgetter(job, 0);
 	return (job);

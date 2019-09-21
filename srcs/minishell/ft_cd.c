@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:50:18 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/19 21:13:29 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/18 16:09:10 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ static int	check_dir(char *home)
 	else if (home != NULL && access(home, X_OK) != 0)
 		ret = ft_printf_fd(2, "%s: Permission denied.\n", home);
 	if (ret != -1)
+	{
+		ft_set_last_rvalue(127);
 		return (-1);
+	}
 	else
 		return (1);
 }

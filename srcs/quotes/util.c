@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 14:32:37 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/09 02:31:54 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/19 21:27:31 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ char		check_pipe(t_token *token)
 		if (token->tok_type & SH_PIPE)
 			return (1);
 		if (token->tok_type & SH_SEMI)
+			return (0);
+		if (token->tok_type == SH_DPIPE)
+			return (0);
+		if (token->tok_type & SH_LOGAND)
 			return (0);
 		token = token->next;
 	}
@@ -85,7 +89,9 @@ char		**list_to_chars(t_token *token)
 	count = 0;
 	while (node)
 	{
-		if ((node->tok_type & SH_SEMI) || (node->tok_type & SH_PIPE))
+		if ((node->tok_type & SH_SEMI) || (node->tok_type & SH_PIPE)
+			|| (node->tok_type & SH_DPIPE || node->tok_type & SH_LOGAND
+			|| node->tok_type & SH_IMPER))
 			break ;
 		if (node->tok_type & SH_WORD)
 			cmds[count++] = ft_strdup(node->token);

@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/21 06:31:25 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/21 06:47:43 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void					shell(t_list *blt, t_list **env, t_token_list *tokens);
 /*
 ** fork.c
 */
-void					handle_errors(char status, char exit_flag);
+void					handle_errors(char status);
 void					forkit(char *path, t_list **env, t_token *token,
 		int pipe[2]);
 
@@ -103,7 +103,8 @@ void					free_env(t_list *lst);
 **	errors.c
 */
 void					print_error(char *error);
-void					run_redirection_with_errors(char *error, t_token *node, int std[2]);
+void					run_redirection_with_errors(char *error,
+							t_token *node, int std[2]);
 
 /*
 **	free.c
@@ -226,4 +227,12 @@ void					move_left_tab(t_line *line);
 void					add_tab(t_line *line);
 void					print_current_tab(t_line *line);
 
+/*
+**	Job Control
+*/
+void					exec_cmd(t_token *token, char **path, t_list **env,
+								int std[2]);
+char					ft_exit(t_token *cmd);
+void					ft_exec(t_list *blt, t_list **env,
+								t_token *node, int std[2]);
 #endif

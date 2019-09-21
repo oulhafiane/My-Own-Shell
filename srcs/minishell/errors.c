@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 15:12:12 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/15 15:50:41 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/20 01:32:22 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,10 @@ void	run_redirection_with_errors(char *error, t_token *node, int std[2])
 	dup2(std[1], 1);
 	fd_backup = -1;
 	if ((status = handle_redirection(node, &fd_backup)) != 0)
-		handle_errors(status, 0);
+		handle_errors(status);
 	print_error(error);
 	if (fd_backup != -1 && fd_backup != -3)
 		close(fd_backup);
 	restore_std();
+	ft_set_last_rvalue(127);
 }

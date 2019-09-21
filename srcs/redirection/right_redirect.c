@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   right_redirect.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/04 16:03:54 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/05/09 01:07:30 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/18 00:09:54 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ char		handle_right_redirect(t_token *token, int *fd_backup)
 	char		status;
 
 	while (token && (token->tok_type & SH_PIPE) == 0 &&
-			(token->tok_type & SH_SEMI) == 0)
+			(token->tok_type & SH_SEMI) == 0 && !(token->tok_type & SH_DPIPE)
+			&& !(token->tok_type & SH_LOGAND))
 	{
 		if ((token->tok_type & SH_REDIRECTION) != 0 && token->next)
 		{

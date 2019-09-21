@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 16:49:44 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/17 20:45:32 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/20 00:30:56 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct			s_job
 	char		killed;
 	char		foreground;
 	t_term		term;
+	char		notified;
 }						t_job;
 
 typedef struct			s_container
@@ -73,10 +74,10 @@ void					ft_deljob(t_job *job, t_container *container);
 void					ft_addprocess(t_job **job, pid_t pid, char wait);
 void					ft_wait(t_job *job);
 t_job					*ft_jobgetter(t_job *job, char reset);
-void					ft_handle_jobs(t_token *token, pid_t pid, char *cmd);
+void					ft_handle_jobs(t_token *token, pid_t pid);
 void					ft_jobs_in_child(void);
 t_job					*ft_newjob(t_token *token, pid_t pid,
-							char *cmd, char wait);
+							char wait);
 t_job					*ft_getjob_byindex(int index);
 void					ft_sort(t_list *list);
 void					ft_sigchld(int sig);
@@ -99,4 +100,7 @@ int						ft_stoped(t_job *job);
 int						ft_terminated(t_job *job);
 void					ft_resetstatus(t_job *job);
 void					ft_check_jobs_status(t_job *current);
+void					ft_set_last_rvalue(int rvalue);
+int						ft_get_last_rvalue(void);
+void					ft_expand_last_status(t_token *token);
 #endif
