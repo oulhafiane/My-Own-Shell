@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 15:26:47 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/20 01:26:26 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/22 05:17:53 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,22 +79,33 @@ void	exec_cmd(t_token *token, char **path, t_list **env,
 	ft_free_strtab(path);
 }
 
-void	ft_exec(t_list *blt, t_list **env, t_token *node, int std[2])
+void	ft_exec(t_list *blt, t_line *line, t_token_list *tokens, int std[2])
 {
 	t_list			*bltin;
 	t_token			*cmd;
 
-	cmd = get_cmd_token(node);
+	cmd = get_cmd_token(tokens->head);
 	if (cmd == NULL)
 	{
-		run_redirection_with_errors(NULL, node, std);
+		run_redirection_with_errors(NULL, tokens->head, std);
 		return ;
 	}
-	ft_expand_last_status(node);
+	add_interns(tokens, &cmd, line);
+	/////////////////////
+	t_list *tmp = line->intern;
+	t_env *ii;
+	while (tmp != NULL)
+	{
+		ii = (t_env*)tmp->content;
+		ft_debug("[%s] = [%s]\n", ii->name, ii->value);
+		tmp = tmp->next;
+	}
+	//////////////////////
+	ft_expand_last_status(tokens->head);
 	if (ft_exit(cmd))
 		ft_putendl("42sh: you have suspended jobs.");
 	else if ((bltin = ft_lstsearch(blt, cmd->token, &check_builtin)) != NULL)
-		run_builtin(env, bltin, node, std);
+		run_builtin(&(line->env), bltin, tokens->head, std);
 	else
-		exec_cmd(node, get_path(*env), env, std);
+		exec_cmd(tokens->head, get_path(line->env), &(line->env), std);
 }

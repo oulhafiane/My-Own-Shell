@@ -6,7 +6,7 @@
 /*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 17:24:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/21 05:20:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/22 04:37:37 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char				*ft_strcat(char *s1, const char *s2);
 char				*ft_strncat(char *s1, char *s2, size_t nb);
 size_t				ft_strlcat(char *dst, char *src, size_t size);
 char				*ft_strchr(const char *s, int c);
+int					ft_strchri(const char *s, int c);
 char				*ft_strrchr(const char *s, int c);
 char				*ft_strstr(const char *haystack, const char *needle);
 char				*ft_strnstr(const char *haystack,

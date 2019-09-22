@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/19 22:49:32 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/22 04:17:20 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		next_and_or(t_token_list *tokens)
 	}
 }
 
-void		pre_run(t_list *blt, t_list **env, t_token_list *tokens)
+void		pre_run(t_list *blt, t_line *line, t_token_list *tokens)
 {
 	int		std[2];
 	int		pp[2];
@@ -70,7 +70,7 @@ void		pre_run(t_list *blt, t_list **env, t_token_list *tokens)
 	std[1] = 1;
 	if ((piping = check_pipe(tokens->head)) && pipe(pp) != -1)
 		std[1] = pp[1];
-	ft_exec(blt, env, tokens->head, std);
+	ft_exec(blt, line, tokens, std);
 	while (piping)
 	{
 		next_pipe(tokens);
@@ -80,18 +80,18 @@ void		pre_run(t_list *blt, t_list **env, t_token_list *tokens)
 		if ((piping = check_pipe(tokens->head)) && pipe(pp) != -1)
 			std[1] = pp[1];
 		if (tokens->head)
-			ft_exec(blt, env, tokens->head, std);
+			ft_exec(blt, line, tokens, std);
 		close(std[0]);
 	}
 	ft_init_wait();
 }
 
-void		shell(t_list *blt, t_list **env, t_token_list *tokens)
+void		shell(t_list *blt, t_line *line, t_token_list *tokens)
 {
 	int			and_or;
 	int			status;
 
-	pre_run(blt, env, tokens);
+	pre_run(blt, line, tokens);
 	while ((and_or = check_and_or(tokens->head)))
 	{
 		next_and_or(tokens);
@@ -99,7 +99,7 @@ void		shell(t_list *blt, t_list **env, t_token_list *tokens)
 		if (((and_or & SH_DPIPE) && status)
 			|| ((and_or & SH_LOGAND) && !status))
 		{
-			pre_run(blt, env, tokens);
+			pre_run(blt, line, tokens);
 		}
 	}
 }

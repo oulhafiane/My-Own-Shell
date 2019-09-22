@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/21 06:47:43 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/09/22 05:16:35 by zoulhafi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct			s_line
 	t_list				*index_history;
 	char				*tmp_history;
 	t_list				*env;
+	t_list				*intern;
 }						t_line;
 
 /*
@@ -72,7 +73,7 @@ void					restore_std();
 /*
 **	shell.c
 */
-void					shell(t_list *blt, t_list **env, t_token_list *tokens);
+void					shell(t_list *blt, t_line *line, t_token_list *tokens);
 
 /*
 ** fork.c
@@ -228,11 +229,17 @@ void					add_tab(t_line *line);
 void					print_current_tab(t_line *line);
 
 /*
+**	intern.c
+*/
+
+void					add_interns(t_token_list *tokens, t_token **token, t_line *line);
+
+/*
 **	Job Control
 */
 void					exec_cmd(t_token *token, char **path, t_list **env,
 								int std[2]);
 char					ft_exit(t_token *cmd);
-void					ft_exec(t_list *blt, t_list **env,
-								t_token *node, int std[2]);
+void					ft_exec(t_list *blt, t_line *line,
+								t_token_list *tokens, int std[2]);
 #endif
