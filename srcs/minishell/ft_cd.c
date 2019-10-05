@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:50:18 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/18 16:09:10 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/05 15:06:38 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,29 +101,31 @@ static int	check_dir(char *home)
 **	before it makes any change.
 */
 
-void		ft_cd(char **args, t_list **env)
+void		ft_cd(char **args, t_params *params)
 {
 	char		*home;
 	char		*new;
 	char		*oldpwd;
+	t_list		*env;
 
+	env = params->tmpenv ? params->tmpenv : ft_getset(0)->env;
 	new = NULL;
 	if (*args == NULL)
-		home = get_home(*env);
+		home = get_home(env);
 	else
 		home = *args;
 	if (home != NULL && ft_strcmp(home, "-") == 0)
 	{
-		oldpwd = get_env_value("OLDPWD", *env);
+		oldpwd = get_env_value("OLDPWD", env);
 		new = oldpwd ? ft_strdup(oldpwd) : ft_strdup(".");
 	}
 	if (new != NULL)
 		home = new;
 	if (check_dir(home) == 1)
 	{
-		change_pwd("OLDPWD", env);
+		change_pwd("OLDPWD", &env);
 		chdir(home);
-		change_pwd("PWD", env);
+		change_pwd("PWD", &env);
 	}
 	if (new != NULL)
 		free(new);

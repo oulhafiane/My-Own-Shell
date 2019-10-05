@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:48:01 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/18 16:09:18 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/30 19:38:04 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@
 **        we should print the new line or not
 */
 
-void		ft_echo(char **args, t_list **env)
+void		ft_echo(char **args)
 {
 	int flag;
 
 	flag = 0;
-	(void)env;
 	if (*args && (*args)[0] == '-' && (*args)[1] == 'n')
 	{
 		flag = 1;

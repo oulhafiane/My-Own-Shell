@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 09:42:19 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/20 00:40:51 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/03 08:58:31 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct			s_string
 
 int						split_tok(t_token_list *list,
 		char **ptr, t_string *str, enum e_token_type type);
-t_token_list			*handle_quote(char **line);
+t_token_list			*handle_quote(char **line, char check);
 
 /*
 ** quote2.c
@@ -136,4 +136,6 @@ int						is_special_char(char c);
 int						is_pipe_at_end(t_token_list *tokens);
 
 char					ft_extra_token(t_token *token);
+
+void					ft_handle_alias(t_token_list *tokens);
 #endif

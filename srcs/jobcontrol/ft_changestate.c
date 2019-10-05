@@ -6,34 +6,44 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 21:51:22 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/18 15:41:26 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/02 14:16:59 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "jobcontrol.h"
 
-t_job	*ft_pid_lookup(pid_t pid, t_proc **procc)
+int		ft_stoped(t_job *job)
 {
-	t_list	*list;
-	t_proc	*proc;
-	t_list	*pids;
+	t_list		*lst;
+	t_proc		*proc;
 
-	list = ft_getset(NULL)->list;
-	while (list)
+	lst = job->pids;
+	while (lst)
 	{
-		pids = ((t_job *)list->content)->pids;
-		while (pids)
-		{
-			proc = pids->content;
-			if (proc->pid == pid)
-			{
-				*procc = proc;
-				return (list->content);
-			}
-			pids = pids->next;
-		}
+		proc = lst->content;
+		if (!proc->stoped && !proc->exited)
+			return (0);
+		lst = lst->next;
 	}
-	return (NULL);
+	job->suspended = 1;
+	return (1);
+}
+
+int		ft_terminated(t_job *job)
+{
+	t_list		*lst;
+	t_proc		*proc;
+
+	lst = job->pids;
+	while (lst)
+	{
+		proc = lst->content;
+		if (!proc->exited)
+			return (0);
+		lst = lst->next;
+	}
+	job->killed = 1;
+	return (1);
 }
 
 void	ft_getstat(t_proc *proc, int status)

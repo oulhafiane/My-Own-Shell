@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:26:35 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/22 05:16:35 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/10/05 21:22:48 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <dirent.h>
 # include <glob.h>
 # include "jobcontrol.h"
+# include "exec.h"
+# define COUNT 1500
 # define BUF_S 1000
 
 typedef struct			s_builtin
@@ -39,48 +41,14 @@ typedef struct			s_env
 	char				*value;
 }						t_env;
 
-typedef struct			s_line
-{
-	char				*command;
-	char				*copy;
-	int					buf_size;
-	int					col;
-	int					top;
-	int					index;
-	int					current_index;
-	t_list				*new_lines;
-	t_list				*head_newlines;
-	int					total_tabs;
-	int					count_down;
-	int					current_row;
-	char				print_msg;
-	t_list				**tail_history;
-	t_list				*index_history;
-	char				*tmp_history;
-	t_list				*env;
-	t_list				*intern;
-}						t_line;
-
 /*
 **	=============================== MINISHELL ==================================
 */
 
 /*
-**	main.c
-*/
-void					restore_std();
-
-/*
 **	shell.c
 */
-void					shell(t_list *blt, t_line *line, t_token_list *tokens);
-
-/*
-** fork.c
-*/
-void					handle_errors(char status);
-void					forkit(char *path, t_list **env, t_token *token,
-		int pipe[2]);
+void					shell(t_list *blt, t_list **env, t_token_list *tokens);
 
 /*
 **	builtin.c
@@ -88,8 +56,7 @@ void					forkit(char *path, t_list **env, t_token *token,
 void					init_builtin(t_list **lst);
 int						check_builtin(t_list *elem, void *obj);
 void					free_builtin(t_list *lst);
-void					run_builtin(t_list **env, t_list *bltin,
-		t_token *node, int std[2]);
+void					run_builtin(t_params *params, void (*f)(), char **cmds, t_token_list *tokens);
 
 /*
 **	env.c
@@ -99,13 +66,6 @@ void					add_env(t_list **lst, char *name, char *value, int end);
 void					init_env(t_list **lst, char **env);
 char					**env_to_tab(t_list *lst);
 void					free_env(t_list *lst);
-
-/*
-**	errors.c
-*/
-void					print_error(char *error);
-void					run_redirection_with_errors(char *error,
-							t_token *node, int std[2]);
 
 /*
 **	free.c
@@ -122,12 +82,11 @@ char					*get_env_value(char *name, t_list *lst);
 /*
 **	builtins commands.
 */
-void					ft_cd(char **args, t_list **env);
-void					ft_echo(char **args, t_list **env);
-void					ft_env(char **args, t_list **env);
-void					ft_setenv(char **args, t_list **env);
-void					ft_unsetenv(char **args, t_list **env);
-void					ft_pwd(char **args, t_list **env);
+void					ft_cd(char **args, t_params *params);
+void					ft_echo(char **args);
+void					ft_env(void);
+void					ft_setenv(char **args);
+void					ft_unset(char **args);
 
 /*
 **	=============================== READLINE ==================================
@@ -228,18 +187,42 @@ void					move_left_tab(t_line *line);
 void					add_tab(t_line *line);
 void					print_current_tab(t_line *line);
 
-/*
-**	intern.c
-*/
 
-void					add_interns(t_token_list *tokens, t_token **token, t_line *line);
-
-/*
-**	Job Control
-*/
 void					exec_cmd(t_token *token, char **path, t_list **env,
 								int std[2]);
-char					ft_exit(t_token *cmd);
-void					ft_exec(t_list *blt, t_line *line,
-								t_token_list *tokens, int std[2]);
+void					ft_exit(char **argv, t_params *params);
+void					ft_exec(t_list *blt, t_list **env,
+								t_token *node, int std[2]);
+void					ft_init_run_builtin(t_list **env,
+							t_list *bltin, t_token *node, int std[2]);
+t_builtin				*ft_is_builtin(char *cmd, t_list *blt);
+char					*getpath(char *cmd, char **path);
+char					ft_isnumber(char *str);
+void					ft_fork(t_params *params, char *file,
+							t_command *cmd, t_builtin *blt);
+void					ft_alias(char **args);
+void					ft_unalias(char **cmd);
+t_map					*ft_get_alias(char *key, t_list *list);
+void					ft_show_aliases(char *key);
+void					ft_free_aliases(void);
+void					ft_hash();
+void					ft_init_hash(t_list *env);
+void					ft_load(void);
+char					*ft_getvlaue_bykey(char *key, char type);
+void					ft_type(char **args);
+t_map					*ft_getbykey(char *key, char type);
+t_map					*ft_addtohashmap(char *key, char *value, char type);
+void					ft_empty(char freeall);
+int						ft_hash_calc(char *key);
+void					ft_hashdelete_one(char *key, char type);
+void					ft_get_kv(char *str, char **key, char **val);
+void					ft_addexported(t_list **env, char *key, char *val);
+void					ft_export(char **args);
+void					ft_print_hash_list(void);
+char					ft_isintern(char *cmd);
+t_list					*ft_cpyenv(void);
+int						ft_getinterns(t_params *params, t_command *cmd);
+void					ft_set(void);
+void					ft_insert_at(t_token_list *tokens, t_token *new, int index);
+char					*ft_findfile(char *name, char **error);
 #endif

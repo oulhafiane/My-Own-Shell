@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zoulhafi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/09 21:26:42 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/04/22 11:49:28 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/10/05 21:22:28 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,60 +33,28 @@ char		*get_env_value(char *name, t_list *lst)
 }
 
 /*
-**	check usage of setenv builtin command.
-*/
-
-static int	check_setenv_args(char **args, t_list **lst)
-{
-	if (ft_strtablen(args) > 2)
-	{
-		ft_printf_fd(2, "setenv: Too many arguments.\n");
-		return (-1);
-	}
-	if (*args == NULL)
-	{
-		ft_env(args, lst);
-		return (-1);
-	}
-	if (ft_isalpha(**args) == 0)
-	{
-		ft_printf_fd(2, "setenv: Variable name must begin with a letter.\n");
-		return (-1);
-	}
-	else if (ft_str_isalnum(*args) == 0)
-	{
-		ft_printf_fd(2, "setenv: Variable name must contain ");
-		ft_printf_fd(2, "alphanumeric characters.\n");
-		return (-1);
-	}
-	return (1);
-}
-
-/*
 **	a builtin command, it add new environment variable
 **	to the list t_list that contains t_env elements.
 */
 
-void		ft_setenv(char **args, t_list **lst)
+void		ft_addexported(t_list **lst, char *key, char *val)
 {
-	t_list	*cpy;
 	t_env	*env;
+	t_list	*cpy;
 
-	if (check_setenv_args(args, lst) == -1)
-		return ;
 	cpy = *lst;
 	while (cpy)
 	{
 		env = (t_env*)cpy->content;
-		if (ft_strcmp(env->name, *args) == 0)
+		if (ft_strcmp(env->name, key) == 0)
 		{
 			free(env->value);
-			env->value = args[1] ? ft_strdup(args[1]) : ft_strdup("");
+			env->value = val ? ft_strdup(val) : ft_strdup("");
 			return ;
 		}
 		cpy = cpy->next;
 	}
-	add_env(lst, args[0], args[1], 1);
+	add_env(lst, key, val, 1);
 }
 
 /*
@@ -94,7 +62,7 @@ void		ft_setenv(char **args, t_list **lst)
 **	from the list t_list that contains t_env elements.
 */
 
-void		ft_unsetenv(char **args, t_list **lst)
+void		ft_unset(char **args)
 {
 	t_list	*cpy;
 	t_list	*previous;
@@ -103,40 +71,23 @@ void		ft_unsetenv(char **args, t_list **lst)
 	i = -1;
 	while (args[++i] != NULL)
 	{
-		cpy = *lst;
+		cpy = ft_getset(0)->env;
 		previous = NULL;
 		while (cpy != NULL)
 		{
 			if (ft_strcmp(((t_env*)cpy->content)->name, args[i]) == 0)
 			{
 				if (previous == NULL)
-					*lst = cpy->next;
+					ft_getset(0)->env = cpy->next;
 				else
 					previous->next = cpy->next;
 				free_elem_env(cpy);
 				break ;
 			}
+			if (ft_getbykey(args[i], INTERN))
+				ft_hashdelete_one(args[i], INTERN);
 			previous = cpy;
 			cpy = cpy->next;
 		}
-	}
-}
-
-/*
-**	a builtin command, it prints all environment variables
-*/
-
-void		ft_env(char **args, t_list **lst)
-{
-	t_list	*cpy;
-	t_env	*env;
-
-	(void)args;
-	cpy = *lst;
-	while (cpy)
-	{
-		env = (t_env*)cpy->content;
-		ft_printf("%s=%s\n", env->name, env->value);
-		cpy = cpy->next;
 	}
 }

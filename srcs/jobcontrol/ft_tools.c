@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/10 02:58:39 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/08/14 23:36:20 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/03 13:51:32 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,10 @@ int		ft_lstcount(t_list *list)
 	return (count);
 }
 
-void	restore_std(void)
+char	ft_isjobseperator(enum e_token_type type)
 {
-	int fd;
-
-	fd = open("/dev/tty", O_RDWR);
-	dup2(fd, 0);
-	dup2(fd, 1);
-	dup2(fd, 2);
-	close(fd);
+	return (type & SH_DPIPE
+			|| type & SH_LOGAND
+			|| type & SH_SEMI
+			|| type & SH_IMPER);
 }

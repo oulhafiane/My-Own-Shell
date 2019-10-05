@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 16:48:10 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/22 02:37:02 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/10/04 15:58:43 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,40 +39,27 @@ void		ft_init_jobcontrol(void)
 	container->list = NULL;
 	container->current = NULL;
 	container->notify = NULL;
+	container->last = NULL;
+	container->last_aliases = NULL;
 	container->last_status = 0;
+	container->interractive = 1;
 	container->time_to_exit = 1;
 	tcgetattr(0, &container->term);
 	ft_getset(container);
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGTTOU, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
-	signal(SIGHUP, SIG_IGN);
+	ft_ignore_signlas();
 }
 
-void		ft_resetsignals(void)
-{
-	signal(SIGTSTP, SIG_DFL);
-	signal(SIGTTOU, SIG_DFL);
-	signal(SIGTTIN, SIG_DFL);
-	signal(SIGHUP, SIG_DFL);
-	signal(SIGCHLD, SIG_DFL);
-}
-
-void		ft_handle_jobs(t_token *token, pid_t pid)
+void		ft_handle_jobs(t_token_list *token, pid_t pid)
 {
 	t_job		*job;
 	t_stat		st;
-	char		wait;
 
 	ft_bzero(&st, sizeof(t_stat));
-	fstat(1, &st);
-	restore_std();
-	wait = S_ISFIFO(st.st_mode) ? 0 : 1;
 	job = ft_jobgetter(NULL, GET_JOB);
 	if (!job)
-		job = ft_newjob(token, pid, wait);
+		job = ft_newjob(token, pid);
 	else
-		ft_addprocess(&job, pid, wait);
+		ft_addprocess(&job, pid);
 }
 
 void		ft_jobs_in_child(void)

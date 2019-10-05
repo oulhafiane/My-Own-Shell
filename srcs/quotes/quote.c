@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/29 16:03:33 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/19 22:58:19 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/03 08:58:22 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ static int			stringtok(const char *line, t_token_list *list)
 	return (ret_with_str_free(&str, 1));
 }
 
-t_token_list		*handle_quote(char **line)
+t_token_list		*handle_quote(char **line, char check)
 {
 	t_token_list	*list;
 	char			*ptr;
@@ -134,7 +134,8 @@ t_token_list		*handle_quote(char **line)
 		}
 		free_tokens(list);
 	}
-	if (check_syntax_error(list))
+	ft_handle_alias(list);
+	if (check && check_syntax_error(list))
 		return (NULL);
 	*line = ptr;
 	return (list);

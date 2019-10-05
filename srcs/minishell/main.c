@@ -6,13 +6,13 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 10:57:10 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/22 05:14:21 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/10/05 19:15:46 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static int		search_semi(t_list *blt, t_line *line, t_token_list *tokens)
+static int	search_semi(t_list *blt, t_list **env, t_token_list *tokens)
 {
 	t_token		*ptr;
 
@@ -22,7 +22,7 @@ static int		search_semi(t_list *blt, t_line *line, t_token_list *tokens)
 		if ((ptr->tok_type & SH_SEMI) != 0)
 		{
 			tokens->head = ptr->next;
-			shell(blt, line, tokens);
+			shell(blt, env, tokens);
 		}
 		ptr = ptr->next;
 	}
@@ -43,41 +43,7 @@ static int		search_semi(t_list *blt, t_line *line, t_token_list *tokens)
 **  free_strtab    : frees all strings (char**) returned by ft_strsplit_ws.
 */
 
-void			print_tokens(t_token_list *tokens)
-{
-	t_token		*token;
-	int			i;
-	char		type[1000];
-
-	token = tokens->head;
-	ft_debug("==========\n");
-	i = -1;
-	while (++i < tokens->node_count)
-	{
-		ft_memset(type, 0, 1000);
-		if ((token->tok_type & SH_WORD) != 0)
-			ft_strcat(type, "| word ");
-		if ((token->tok_type & SH_PIPE) != 0)
-			ft_strcat(type, "| pipe ");
-		if ((token->tok_type & SH_REDIRECTION) != 0)
-			ft_strcat(type, "| redirection ");
-		if ((token->tok_type & SH_SEMI) != 0)
-			ft_strcat(type, "| semi ");
-		if ((token->tok_type & SH_QUOTED) != 0)
-			ft_strcat(type, "| quoted ");
-		if ((token->tok_type & SH_DPIPE) != 0)
-			ft_strcat(type, "| doublePipe ");
-		if ((token->tok_type & SH_IMPER) != 0)
-			ft_strcat(type, "| imper ");
-		if ((token->tok_type & SH_LOGAND) != 0)
-			ft_strcat(type, "| logand ");
-		ft_debug("%s => %s\n", token->token, type);
-		token = token->next;
-	}
-	ft_debug("==========\n");
-}
-
-static void		run_shell(t_list *blt, t_line *line)
+static void	run_shell(t_list *blt, t_line *line)
 {
 	t_token_list	*tokens;
 	t_token			*head;
@@ -87,17 +53,18 @@ static void		run_shell(t_list *blt, t_line *line)
 		while (1)
 		{
 			if (ft_str_isnull(line->command) ||
-				(tokens = handle_quote(&line->command)) == NULL)
+				(tokens = handle_quote(&line->command, 1)) == NULL)
 				break ;
-			print_tokens(tokens);
 			add_history(line);
+			ft_free_lst(ft_getset(0)->last_aliases);
+			ft_getset(0)->last_aliases = NULL;
 			if (parse_heredoc(tokens) != 0 && free_token_list(tokens))
 				continue ;
 			head = tokens->head;
-			shell(blt, line, tokens);
-			search_semi(blt, line, tokens);
-			tokens->head = head;
-			free_token_list(tokens);
+			shell(blt, &(line->env), tokens);
+			search_semi(blt, &(line->env), tokens);
+			// tokens->head = head;
+			// free_token_list(tokens);
 			break ;
 		}
 		free_line();
@@ -107,15 +74,6 @@ static void		run_shell(t_list *blt, t_line *line)
 	free_line();
 }
 
-void	free_all(t_line *new_line, t_list *env, t_list *blt, t_list *intern)
-{
-	free(new_line->copy);
-	//free_gnl(0);
-	free_env(env);
-	free_env(intern);
-	free_builtin(blt);
-}
-
 /*
 **	The Main Function of Minishell
 **	it initiates the builtins and environment lists,
@@ -123,9 +81,16 @@ void	free_all(t_line *new_line, t_list *env, t_list *blt, t_list *intern)
 **	after frees all memory allocated on the heap
 */
 
-int				main(int ac, char **av, char **ev)
+void		ft_init(t_list **env, t_list **blt, char **ev)
 {
-	t_list		*intern;
+	init_env(env, ev);
+	ft_init_jobcontrol();
+	ft_init_hash(*env);
+	init_builtin(blt);
+}
+
+int			main(int ac, char **av, char **ev)
+{
 	t_list		*env;
 	t_list		*blt;
 	t_list		*history;
@@ -136,17 +101,17 @@ int				main(int ac, char **av, char **ev)
 	blt = NULL;
 	env = NULL;
 	history = NULL;
-	ft_init_jobcontrol();
-	init_env(&env, ev);
-	init_env(&intern, ev);
-	init_builtin(&blt);
+	ft_init(&env, &blt, ev);
 	signals();
 	new_line = init_line();
 	new_line->tail_history = &history;
 	new_line->env = env;
-	new_line->intern = intern;
 	new_line->copy = NULL;
+	ft_getset(NULL)->line = new_line;
 	run_shell(blt, new_line);
-	free_all(new_line, env, blt, intern);
+	free(new_line->copy);
+	free_gnl(0);
+	free_env(env);
+	free_builtin(blt);
 	return (0);
 }

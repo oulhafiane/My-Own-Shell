@@ -6,100 +6,37 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 01:27:30 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/22 04:17:20 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/10/05 14:53:58 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-/*
-**	the command given need to be executed without searching in $PATH
-**	because it's have with it the path like : /bin/ls
-**	the function check if it's exist and it's permission to execute is OK
-**	then sends it to forkit function
-**	otherwise, it prints an error msg.
-*/
-
-/*
-**	the command given to be search in all paths stored
-**  in environment variable $PATH
-**	then if it's exist it checks it's permission to execute
-**	then sends it to forkit function
-**	otherwise, it prints an error msg.
-*/
-
-int			check_and_or(t_token *token)
+void	shell(t_list *blt, t_list **env, t_token_list *tokens)
 {
-	while (token)
-	{
-		if (token->tok_type & SH_SEMI)
-			return (0);
-		if (token->tok_type == SH_DPIPE)
-			return (SH_DPIPE);
-		if (token->tok_type & SH_LOGAND)
-			return (SH_LOGAND);
-		token = token->next;
-	}
-	return (0);
-}
+	t_params	params;
+	char		forgrounded;
 
-void		next_and_or(t_token_list *tokens)
-{
-	t_token		*token;
-
-	token = tokens->head;
-	while (token)
-	{
-		if ((token->tok_type & SH_DPIPE) ||
-			(token->tok_type & SH_SEMI) || token->tok_type & SH_LOGAND)
-		{
-			tokens->head = token->next;
-			return ;
-		}
-		token = token->next;
-	}
-}
-
-void		pre_run(t_list *blt, t_line *line, t_token_list *tokens)
-{
-	int		std[2];
-	int		pp[2];
-	char	piping;
-
-	std[0] = 0;
-	std[1] = 1;
-	if ((piping = check_pipe(tokens->head)) && pipe(pp) != -1)
-		std[1] = pp[1];
-	ft_exec(blt, line, tokens, std);
-	while (piping)
-	{
-		next_pipe(tokens);
-		std[0] = pp[0];
-		std[1] = 1;
-		close(pp[1]);
-		if ((piping = check_pipe(tokens->head)) && pipe(pp) != -1)
-			std[1] = pp[1];
-		if (tokens->head)
-			ft_exec(blt, line, tokens, std);
-		close(std[0]);
-	}
+	blt = NULL;
+	if (!tokens->head)
+		return ;
+	ft_getset(0)->env = *env;
+	params.commands = NULL;
+	signal(SIGCHLD, SIG_DFL);
+	ft_expand_last_status(tokens->head);
+	params.tokens = tokens;
+	params.forkforbuiltin = 0;
+	params.tmpenv = NULL;
+	params.fd = dup(1);
+	params.argv_index = 0;
+	forgrounded = 1;
+	ft_convert(tokens->head, &params);
+	ft_exec_mode(tokens->head, &forgrounded);
+	if ((params.commands && params.commands->next) || !forgrounded)
+		params.forkforbuiltin = 1;
+	ft_exec_job(&params, params.commands);
 	ft_init_wait();
-}
-
-void		shell(t_list *blt, t_line *line, t_token_list *tokens)
-{
-	int			and_or;
-	int			status;
-
-	pre_run(blt, line, tokens);
-	while ((and_or = check_and_or(tokens->head)))
-	{
-		next_and_or(tokens);
-		status = ft_get_last_rvalue();
-		if (((and_or & SH_DPIPE) && status)
-			|| ((and_or & SH_LOGAND) && !status))
-		{
-			pre_run(blt, line, tokens);
-		}
-	}
+	ft_free_cmds(params.commands);
+	close(params.fd);
+	signal(SIGCHLD, ft_sigchld);
 }

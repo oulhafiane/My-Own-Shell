@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   til_dol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoutik <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 12:42:14 by amoutik           #+#    #+#             */
-/*   Updated: 2019/05/09 11:52:03 by amoutik          ###   ########.fr       */
+/*   Updated: 2019/09/27 15:15:27 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int		handle_tilda(char **ptr, t_string *str)
 	j = 0;
 	head = *ptr;
 	env_list = get_t_line()->env;
-	if ((ft_isprint(*(head + 1)) && *(head + 1) != '/') || str->len > 0)
+	if (*(head + 1) && (!ft_isspace(*(head + 1)) && (*(head + 1) != '/')))
 		return (0);
 	if ((home = get_env_value("HOME", env_list)) == NULL)
 		home = "";

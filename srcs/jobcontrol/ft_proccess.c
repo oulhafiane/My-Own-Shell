@@ -6,13 +6,38 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/10 03:02:45 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/08/15 08:28:41 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/03 13:52:00 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "jobcontrol.h"
 
-void	ft_addprocess(t_job **job, pid_t pid, char wait)
+t_job	*ft_pid_lookup(pid_t pid, t_proc **procc)
+{
+	t_list	*list;
+	t_proc	*proc;
+	t_list	*pids;
+
+	list = ft_getset(NULL)->list;
+	while (list)
+	{
+		pids = ((t_job *)list->content)->pids;
+		while (pids)
+		{
+			proc = pids->content;
+			if (proc->pid == pid)
+			{
+				*procc = proc;
+				return (list->content);
+			}
+			pids = pids->next;
+		}
+		list = list->next;
+	}
+	return (NULL);
+}
+
+void	ft_addprocess(t_job **job, pid_t pid)
 {
 	t_proc *process;
 
@@ -20,8 +45,6 @@ void	ft_addprocess(t_job **job, pid_t pid, char wait)
 	process->pid = pid;
 	process->exited = 0;
 	process->stoped = 0;
-	process->wait = wait;
-	process->waiting = 0;
 	ft_lstadd(&(*job)->pids, ft_lstnew(process, 0));
 }
 

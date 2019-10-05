@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/02 17:49:23 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/20 00:29:57 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/02 14:16:35 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ void	ft_addjob(t_job *job, t_container *container)
 		return ;
 	ft_lstadd(&container->list, ft_lstnew(job, 0));
 	ft_sort(container->list);
-	list = container->list;
 }
 
 void	ft_exec_mode(t_token *token, char *forgrounded)
 {
+	*forgrounded = 1;
 	while (token)
 	{
 		if (token->tok_type & SH_IMPER)
@@ -54,6 +54,8 @@ void	ft_jobname(t_job *job, t_token *token)
 	while (token->next)
 	{
 		token = token->next;
+		if (token->tok_type & SH_DPIPE || token->tok_type & SH_LOGAND)
+			break ;
 		if (token->tok_type & SH_IMPER || token->tok_type & SH_SEMI)
 			break ;
 		tmp = job->cmd;
@@ -62,14 +64,12 @@ void	ft_jobname(t_job *job, t_token *token)
 	}
 }
 
-t_job	*ft_newjob(t_token *token, pid_t pid, char wait)
+t_job	*ft_newjob(t_token_list *tokens, pid_t pid)
 {
 	t_job	*job;
 	char	forgrounded;
 
-	forgrounded = 1;
-	ft_exec_mode(token, &forgrounded);
-	signal(SIGCHLD, SIG_DFL);
+	ft_exec_mode(tokens->head, &forgrounded);
 	job = malloc(sizeof(t_job));
 	job->pids = NULL;
 	setpgid(pid, pid);
@@ -79,9 +79,10 @@ t_job	*ft_newjob(t_token *token, pid_t pid, char wait)
 	job->pids = NULL;
 	job->killed = 0;
 	job->notified = 1;
+	job->tokens = tokens;
 	job->id = ft_newid();
-	ft_jobname(job, token);
-	ft_addprocess(&job, pid, wait);
+	ft_jobname(job, tokens->head);
+	ft_addprocess(&job, pid);
 	ft_jobgetter(job, 0);
 	return (job);
 }

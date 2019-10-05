@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 11:26:41 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/20 01:32:11 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/05 21:23:02 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,18 @@ void		init_builtin(t_list **lst)
 {
 	add_builtin(lst, "echo", &ft_echo);
 	add_builtin(lst, "cd", &ft_cd);
-	add_builtin(lst, "env", &ft_env);
-	add_builtin(lst, "pwd", &ft_pwd);
-	add_builtin(lst, "setenv", &ft_setenv);
-	add_builtin(lst, "unsetenv", &ft_unsetenv);
+	add_builtin(lst, "export", &ft_export);
+	add_builtin(lst, "unset", &ft_unset);
 	add_builtin(lst, "fg", &ft_fg);
 	add_builtin(lst, "bg", &ft_bg);
 	add_builtin(lst, "jobs", &ft_jobs);
+	add_builtin(lst, "exit", &ft_exit);
+	add_builtin(lst, "alias", &ft_alias);
+	add_builtin(lst, "unalias", &ft_unalias);
+	add_builtin(lst, "hash", &ft_hash);
+	add_builtin(lst, "type", &ft_type);
+	add_builtin(lst, "set", &ft_set);
+	ft_getset(NULL)->builtins = *lst;
 }
 
 /*
@@ -85,25 +90,11 @@ void		free_builtin(t_list *lst)
 ** Running a builtin command
 */
 
-void		run_builtin(t_list **env, t_list *bltin, t_token *node, int std[2])
+void		run_builtin(t_params *params, void (*f)(),
+				char **cmds, t_token_list *tokens)
 {
-	char	**cmds;
-	char	status;
-	int		fd_backup;
-
-	dup2(std[0], 0);
-	dup2(std[1], 1);
-	fd_backup = -1;
-	if ((status = handle_redirection(node, &fd_backup)) == 0 &&
-			bltin && (*(cmds = list_to_chars(node)) != NULL))
-	{
-		ft_set_last_rvalue(0);
-		((t_builtin*)bltin->content)->f(cmds + 1, env);
-		ft_free_strtab(cmds);
-	}
-	else
-		handle_errors(status);
-	if (fd_backup != -1 && fd_backup != -3)
-		close(fd_backup);
-	restore_std();
+	ft_set_last_rvalue(0);
+	f(cmds + 1, params);
+	if (!check_pipe(tokens->head))
+		ft_runnext(tokens, 0);
 }

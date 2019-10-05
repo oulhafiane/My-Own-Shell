@@ -6,44 +6,23 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/08 23:03:34 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/18 15:49:46 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/03 14:09:11 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "jobcontrol.h"
 
-int		ft_stoped(t_job *job)
+char	*ft_stopped_action(t_job *job, t_job *current, int status)
 {
-	t_list		*lst;
-	t_proc		*proc;
+	t_container *container;
+	char		*st;
 
-	lst = job->pids;
-	while (lst)
-	{
-		proc = lst->content;
-		if (proc->wait && !proc->stoped && !proc->exited)
-			return (0);
-		lst = lst->next;
-	}
-	job->suspended = 1;
-	return (1);
-}
-
-int		ft_terminated(t_job *job)
-{
-	t_list		*lst;
-	t_proc		*proc;
-
-	lst = job->pids;
-	while (lst)
-	{
-		proc = lst->content;
-		if (proc->wait && !proc->exited)
-			return (0);
-		lst = lst->next;
-	}
-	job->killed = 1;
-	return (1);
+	container = ft_getset(0);
+	st = ft_join("[%d] + Stopped %s\n", job->id, job->cmd);
+	ft_addjob(job, container);
+	(job == current) ? container->current = job : 0;
+	ft_runnext(job->tokens, WEXITSTATUS(status));
+	return (st);
 }
 
 void	ft_check_job(t_job *job, t_job *current, t_container *container)
@@ -61,13 +40,10 @@ void	ft_check_job(t_job *job, t_job *current, t_container *container)
 		if (job != current || WIFSIGNALED(status))
 			st = ft_join("[%d] + %s %s\n", job->id,
 				ft_strsignal(WTERMSIG(status)), job->cmd);
+		ft_runnext(job->tokens, WEXITSTATUS(status));
 	}
 	else if (!job->killed && ft_stoped(job))
-	{
-		st = ft_join("[%d] + suspended %s\n", job->id, job->cmd);
-		ft_addjob(job, container);
-		(job == current) ? container->current = job : 0;
-	}
+		st = ft_stopped_action(job, current, status);
 	if (st)
 		ft_lstadd(&container->notify, ft_lstnew(st, 0));
 	job->notified = 1;

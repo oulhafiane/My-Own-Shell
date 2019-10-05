@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/10 03:06:16 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/08/15 08:27:25 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/02 14:14:33 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	ft_free_job(t_job *job)
 	while (pids)
 	{
 		proc = pids->content;
-		kill(proc->pid, SIGKILL);
 		tmp = pids->next;
 		free(pids->content);
 		free(pids);

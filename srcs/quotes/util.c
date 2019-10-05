@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/07 14:32:37 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/19 21:27:31 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/09/28 00:09:23 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,13 @@ char		**list_to_chars(t_token *token)
 			|| (node->tok_type & SH_DPIPE || node->tok_type & SH_LOGAND
 			|| node->tok_type & SH_IMPER))
 			break ;
-		if (node->tok_type & SH_WORD)
+		if (node->tok_type & SH_REDIRECTION)
+		{
+			node = node->next;
+			if (!node)
+				break ;
+		}
+		else if (node->tok_type & SH_WORD)
 			cmds[count++] = ft_strdup(node->token);
 		node = node->next;
 	}

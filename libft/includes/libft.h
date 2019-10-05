@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sid-bell <idbellasaid@gmail.com>           +#+  +:+       +#+        */
+/*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 17:24:38 by zoulhafi          #+#    #+#             */
-/*   Updated: 2019/09/22 04:37:37 by zoulhafi         ###   ########.fr       */
+/*   Updated: 2019/10/05 21:15:10 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@
 # define LEN 10
 # define LEN_BUF 1000
 # define BUFF_SIZE 1000
-# define TTERMINAL "/dev/ttys001"
-
+#define TTERMINAL "/dev/ttys001"
 typedef struct		s_fdlist
 {
 	int				fd;
@@ -55,7 +54,6 @@ char				*ft_strcat(char *s1, const char *s2);
 char				*ft_strncat(char *s1, char *s2, size_t nb);
 size_t				ft_strlcat(char *dst, char *src, size_t size);
 char				*ft_strchr(const char *s, int c);
-int					ft_strchri(const char *s, int c);
 char				*ft_strrchr(const char *s, int c);
 char				*ft_strstr(const char *haystack, const char *needle);
 char				*ft_strnstr(const char *haystack,
@@ -158,7 +156,6 @@ int					ft_iswhitespace(int c);
 int					ft_isspace(int c);
 void				ft_swap_pt(void **pt1, void **pt2);
 int					ft_sqrt(int nb);
-void				ft_debug(char *format, ...);
 
 /*
 ** Functions Created To Create Printf
@@ -198,7 +195,8 @@ void				putstr_pr(char *str, int flags[LEN]);
 int					putstr_w(wchar_t *str, int flags[LEN]);
 void				init_s(char s[5]);
 char				**get_static_str(void);
-
+int					ft_strchri(const char *s, int c);
+void				ft_debug(char *format, ...);
 /*
 ** Functions Created To Create Get_Next_line
 */
