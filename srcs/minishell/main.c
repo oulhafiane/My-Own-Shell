@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-static int	search_semi(t_list *blt, t_list **env, t_token_list *tokens)
+int	search_semi(t_list *blt, t_list **env, t_token_list *tokens)
 {
 	t_token		*ptr;
 
@@ -48,6 +48,7 @@ static void	run_shell(t_list *blt, t_line *line)
 	t_token_list	*tokens;
 	t_token			*head;
 
+	(void)head;
 	while (read_line(line) == 0)
 	{
 		while (1)
@@ -87,6 +88,7 @@ void		ft_init(t_list **env, t_list **blt, char **ev)
 	ft_init_jobcontrol();
 	ft_init_hash(*env);
 	init_builtin(blt);
+	g_blt = *blt;
 }
 
 int			main(int ac, char **av, char **ev)

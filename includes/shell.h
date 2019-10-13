@@ -41,6 +41,8 @@ typedef struct			s_env
 	char				*value;
 }						t_env;
 
+t_list *g_blt;
+
 /*
 **	=============================== MINISHELL ==================================
 */
@@ -48,6 +50,7 @@ typedef struct			s_env
 /*
 **	shell.c
 */
+int						search_semi(t_list *blt, t_list **env, t_token_list *tokens);
 void					shell(t_list *blt, t_list **env, t_token_list *tokens);
 
 /*

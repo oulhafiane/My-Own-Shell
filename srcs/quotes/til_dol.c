@@ -12,6 +12,80 @@
 
 #include "shell.h"
 
+char *get_subshell_line(char *head)
+{
+	int i;
+	char queue[100];
+
+	i = 0;
+	while (*head)
+	{
+		if (*head == ')' && i == 0)
+			return (head);
+		if (*head == '(')
+			queue[i++] = '(';
+		else if (*head == ')' && queue[(i) ? i - 1 : 0] == '(')
+			i--;
+		if (*head == '"' && queue[(i) ? i - 1 : 0] == '"')
+			i--;
+		else if(*head == '"' && queue[(i) ? i - 1 : 0] != '\'')
+			queue[i++] = '"';
+		if (*head == '\'' && queue[(i) ? i - 1 : 0] =='\'')
+			i--;
+		else if (*head == '\'' && queue[(i) ? i - 1 : 0] != '"')
+			queue[i++] = '\'';
+		if (*head == '\\')
+			head++;
+		head++;
+	}
+	return (NULL);
+}
+
+void	run_shell(char *line)
+{
+	t_token_list	*tokens;
+	t_token			*head;
+
+	(void)head;
+	while (1)
+	{
+		if (ft_str_isnull(line) ||
+			(tokens = handle_quote(&line, 1)) == NULL)
+			break;
+		head = tokens->head;
+		shell(g_blt, &(get_t_line()->env), tokens);
+		search_semi(g_blt, &(get_t_line()->env), tokens);
+		//tokens->head = head;
+		//free_token_list(tokens);
+		break;
+	}
+}
+
+int handle_subshell(char **ptr, t_string *str)
+{
+	char *tail;
+	char *line;
+	int pip[2];
+	char *redirection;
+	char c;
+
+	if ((tail = get_subshell_line(*ptr + 2)) == NULL)
+		return (0);
+	line = ft_strndup(*ptr + 2, tail - (*ptr + 2));
+	*ptr = tail + 1;
+	pipe(pip);
+	tail = ft_itoa(pip[1]);
+	redirection = ft_strjoin(" >&", tail);
+	line = ft_strjoin_free(line, redirection);
+	run_shell(line);
+	close(pip[1]);
+	while (read(pip[0], &c, 1) > 0)
+		push(str, c);
+	str->string[--str->len] = '\0';
+	free(tail);
+	return (1);
+}
+
 int		handle_dollar(char **ptr, t_string *str)
 {
 	char	*head;
@@ -20,6 +94,8 @@ int		handle_dollar(char **ptr, t_string *str)
 	t_list	*env_list;
 
 	head = *ptr;
+	if (*(++head) == '(')
+		return handle_subshell(ptr, str);
 	env_list = get_t_line()->env;
 	if (!ft_isalnum(*(head + 1)))
 		return (0);

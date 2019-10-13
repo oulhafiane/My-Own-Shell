@@ -17,7 +17,7 @@ void	shell(t_list *blt, t_list **env, t_token_list *tokens)
 	t_params	params;
 	char		forgrounded;
 
-	blt = NULL;
+	(void)blt;
 	if (!tokens->head)
 		return ;
 	ft_getset(0)->env = *env;

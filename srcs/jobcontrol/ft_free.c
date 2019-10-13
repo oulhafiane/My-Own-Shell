@@ -19,6 +19,7 @@ void	ft_free_job(t_job *job)
 	t_proc		*proc;
 
 	pids = job->pids;
+	(void)proc;
 	while (pids)
 	{
 		proc = pids->content;

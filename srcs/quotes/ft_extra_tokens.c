@@ -18,6 +18,7 @@ void		ft_addsemicolon(t_token *token)
 	t_token *new;
 
 	t = token->next;
+	(void)t;
 	new = malloc(sizeof(t_token));
 	new->next = token->next;
 	new->token = ft_strdup(";");
