@@ -41,24 +41,71 @@ char *get_subshell_line(char *head)
 	return (NULL);
 }
 
+void *ft_env_dup(t_list *node)
+{
+	t_env *env;
+	t_env *new;
+
+	new = (t_env *)malloc(sizeof(t_env));
+	env = (t_env*)node->content;
+	new->name = ft_strdup(env->name);
+	new->value = ft_strdup(env->value);
+	return (void *)new;
+}
+
+t_list *ft_map_lst(t_list *root, void *(*f)(t_list *node))
+{
+	t_list *lst;
+	t_list *new;
+
+	lst = NULL;
+	if (root)
+		lst = (t_list *)malloc(sizeof(t_list));
+	new = lst;
+	while (root)
+	{
+		lst->content = f(root);
+		lst->next = NULL;
+		if (root->next)
+			lst->next = (t_list *)malloc(sizeof(t_list));
+		root = root->next;
+		lst = lst->next;
+	}
+	return new;
+}
+
+void	ft_env_del(void *content, size_t size)
+{
+	t_env *env;
+
+	(void)size;
+	env = (t_env *)content;
+	free(env->name);
+	free(env->value);
+	free(env);
+}
+
 void	run_shell(char *line)
 {
 	t_token_list	*tokens;
 	t_token			*head;
+	t_list			*env;
 
 	(void)head;
+	env = ft_map_lst(get_t_line()->env, &ft_env_dup);
 	while (1)
 	{
 		if (ft_str_isnull(line) ||
 			(tokens = handle_quote(&line, 1)) == NULL)
 			break;
 		head = tokens->head;
-		shell(g_blt, &(get_t_line()->env), tokens);
-		search_semi(g_blt, &(get_t_line()->env), tokens);
+		shell(g_blt, &env, tokens);
+		search_semi(g_blt, &env, tokens);
 		//tokens->head = head;
 		//free_token_list(tokens);
 		break;
 	}
+	ft_lstdel(&env, &ft_env_del);
 }
 
 int handle_subshell(char **ptr, t_string *str)
