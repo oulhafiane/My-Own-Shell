@@ -16,7 +16,10 @@ static void		parse_string(char **doc, char *line, char flag_dollar)
 {
 	char		*str;
 	t_string	str_dollar;
+	t_token_list *list;
 
+	list = (t_token_list *)malloc(sizeof(t_token_list));
+	list->head = NULL;
 	if (flag_dollar && ft_strchr(line, '$'))
 	{
 		str_dollar.string = NULL;
@@ -24,7 +27,7 @@ static void		parse_string(char **doc, char *line, char flag_dollar)
 		while (*line)
 		{
 			if (*line == '$')
-				handle_dollar(&line, &str_dollar);
+				handle_dollar(list, &line, &str_dollar);
 			push(&str_dollar, *line);
 			line++;
 		}
@@ -33,10 +36,7 @@ static void		parse_string(char **doc, char *line, char flag_dollar)
 	}
 	else
 		str = ft_strdup(line);
-	if (*doc != NULL)
-		*doc = ft_strjoin_pre_free(*doc, "\n", str);
-	else
-		*doc = ft_strdup(str);
+	*doc = (*doc != NULL) ? ft_strjoin_pre_free(*doc, "\n", str) : ft_strdup(str);
 	ft_strdel(&str);
 }
 

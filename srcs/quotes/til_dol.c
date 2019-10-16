@@ -108,32 +108,53 @@ void	run_shell(char *line)
 	ft_lstdel(&env, &ft_env_del);
 }
 
-int handle_subshell(char **ptr, t_string *str)
+char *clean_line(char **ptr, int out)
 {
 	char *tail;
 	char *line;
-	int pip[2];
 	char *redirection;
-	char c;
 
 	if ((tail = get_subshell_line(*ptr + 2)) == NULL)
-		return (0);
+		return (NULL);
 	line = ft_strndup(*ptr + 2, tail - (*ptr + 2));
 	*ptr = tail + 1;
-	pipe(pip);
-	tail = ft_itoa(pip[1]);
+	tail = ft_itoa(out);
 	redirection = ft_strjoin(" >&", tail);
-	line = ft_strjoin_free(line, redirection);
-	run_shell(line);
-	close(pip[1]);
-	while (read(pip[0], &c, 1) > 0)
-		push(str, c);
-	str->string[--str->len] = '\0';
 	free(tail);
+	line = ft_strjoin_free(line, redirection);
+	free(redirection);
+	return line;
+}
+
+int handle_subshell(t_token_list *list, char **ptr)
+{
+	char *line;
+	int pip[2];
+	t_token	*token;
+	t_token_list *tokens;
+
+	pipe(pip);
+	if ((line = clean_line(ptr, pip[1])) == NULL)
+		return (0);
+	run_shell(line);
+	free(line);
+	close(pip[1]);
+	line = (char *)malloc(sizeof(char) * 65000);
+	pip[1] = read(pip[0], line, 65000);
+	line[pip[1] - 1] = '\0';
+	token = list->head;
+	while (token && token->next)
+		token = token->next;
+	tokens = handle_quote(&line, 1);
+	(token) ? token -> next = tokens->head : 0;
+	(!token) ? list->head = tokens->head : 0;
+	list->tail =  tokens->tail;
+	free(line);
+	free(tokens);
 	return (1);
 }
 
-int		handle_dollar(char **ptr, t_string *str)
+int		handle_dollar(t_token_list *list, char **ptr, t_string *str)
 {
 	char	*head;
 	char	*tmp;
@@ -142,7 +163,7 @@ int		handle_dollar(char **ptr, t_string *str)
 
 	head = *ptr;
 	if (*(++head) == '(')
-		return handle_subshell(ptr, str);
+		return handle_subshell(list, ptr);
 	env_list = get_t_line()->env;
 	if (!ft_isalnum(*(head + 1)))
 		return (0);

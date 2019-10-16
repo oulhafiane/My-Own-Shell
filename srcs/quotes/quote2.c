@@ -98,7 +98,7 @@ int				split_quote(t_token_list *list, char **ptr,
 			escaped_char(ptr, str);
 		else if (!inquote && is_quote(**ptr) && ++inquote)
 			quote = **ptr;
-		else if (**ptr == '$' && quote != '\'' && handle_dollar(ptr, str))
+		else if (**ptr == '$' && quote != '\'' && handle_dollar(list, ptr, str))
 			continue;
 		else if (**ptr && **ptr != quote)
 			push(str, *(*ptr));

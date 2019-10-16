@@ -85,7 +85,7 @@ int						insert_token(t_token_list *list,
 ** til_dol.c
 */
 
-int						handle_dollar(char **ptr, t_string *str);
+int						handle_dollar(t_token_list *list, char **ptr, t_string *str);
 int						handle_tilda(char **ptr, t_string *str);
 
 /*

@@ -52,7 +52,7 @@ int					split_tok(t_token_list *list,
 			if (split_quote(list, ptr, str, type | SH_QUOTED))
 				return (0);
 		}
-		else if ((**ptr && **ptr == '$' && handle_dollar(ptr, str)) ||
+		else if ((**ptr && **ptr == '$' && handle_dollar(list, ptr, str)) ||
 				(**ptr && **ptr == '~' && handle_tilda(ptr, str)))
 			;
 		else if (**ptr && !ft_isspace(**ptr))
