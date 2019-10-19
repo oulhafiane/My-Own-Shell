@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 12:42:14 by amoutik           #+#    #+#             */
-/*   Updated: 2019/09/27 15:15:27 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/18 23:56:25 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,21 +108,15 @@ void	run_shell(char *line)
 	ft_lstdel(&env, &ft_env_del);
 }
 
-char *clean_line(char **ptr, int out)
+char *clean_line(char **ptr)
 {
 	char *tail;
 	char *line;
-	char *redirection;
 
 	if ((tail = get_subshell_line(*ptr + 2)) == NULL)
 		return (NULL);
 	line = ft_strndup(*ptr + 2, tail - (*ptr + 2));
 	*ptr = tail + 1;
-	tail = ft_itoa(out);
-	redirection = ft_strjoin(" >&", tail);
-	free(tail);
-	line = ft_strjoin_free(line, redirection);
-	free(redirection);
 	return line;
 }
 
@@ -132,25 +126,48 @@ int handle_subshell(t_token_list *list, char **ptr)
 	int pip[2];
 	t_token	*token;
 	t_token_list *tokens;
+	pid_t	pid;
 
 	pipe(pip);
-	if ((line = clean_line(ptr, pip[1])) == NULL)
+	if ((line = clean_line(ptr)) == NULL)
 		return (0);
-	run_shell(line);
+	if (!(pid = fork()))
+	{
+		ft_getset(0)->interractive = 0;
+		close(pip[0]);
+		dup2(pip[1], 1);
+		run_shell(line);
+		exit(0);
+	}
+	waitpid(pid, 0, 0);
 	free(line);
 	close(pip[1]);
 	line = (char *)malloc(sizeof(char) * 65000);
 	pip[1] = read(pip[0], line, 65000);
-	line[pip[1] - 1] = '\0';
 	token = list->head;
-	while (token && token->next)
+	while(token){
+		ft_putendl(token->token);
 		token = token->next;
-	tokens = handle_quote(&line, 1);
-	(token) ? token -> next = tokens->head : 0;
-	(!token) ? list->head = tokens->head : 0;
-	list->tail =  tokens->tail;
+	}
+	if (pip[1] > 0)
+	{
+		line[pip[1]] = '\0';
+		token = list->head;
+		while (token && token->next)
+			token = token->next;
+		tokens = handle_quote(&line, 1);
+		(token) ? token -> next = tokens->head : 0;
+		(!token) ? list->head = tokens->head : 0;
+		list->tail =  tokens->tail;
+		token = tokens->head;
+		while (token)
+		{
+			token->tok_type = SH_WORD;
+			token = token->next;
+		}
+		free(tokens);
+	}
 	free(line);
-	free(tokens);
 	return (1);
 }
 

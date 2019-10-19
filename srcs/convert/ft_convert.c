@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 15:28:16 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/09/30 17:52:09 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/19 00:13:15 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,16 @@ void		ft_convert(t_token *node, t_params *params)
 			node = node->next;
 			cmd = ft_newcmd(node);
 			ft_addcmd(cmd, params);
+			if (ft_getset(0)->interractive)
+				ft_printf("addcmd\n");
 		}
 		if ((node->tok_type & SH_SEMI) || (node->tok_type & SH_DPIPE
 			|| node->tok_type & SH_LOGAND || node->tok_type & SH_IMPER))
 			break ;
 		if (node->tok_type & SH_REDIRECTION)
 		{
+			if (ft_getset(0)->interractive)
+		ft_printf("add red\n");
 			ft_getredirections(node->token, node->next->token, cmd);
 			if (!(node = node->next))
 				break ;

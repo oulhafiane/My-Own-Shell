@@ -6,7 +6,7 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 23:23:51 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/10/05 15:17:23 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/16 21:55:07 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		ft_getfddst(char *token, char *next, char **file);
 int		ft_getfdsrc(char **token, int type);
 int		ft_gettype(char *str);
 void	ft_getredirections(char *token, char *next, t_command *cmd);
-void	ft_restorestd(char stdin, char stdout, char stderr);
+void	ft_restorestd(char stdin, char stdout, char stderr, int pipfd);
 void	ft_free_array(char **args);
 void	ft_free_cmds(t_list *lst);
 void	ft_free_lst(t_list *lst);

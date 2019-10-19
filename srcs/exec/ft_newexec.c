@@ -6,18 +6,19 @@
 /*   By: sid-bell <sid-bell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 23:05:30 by sid-bell          #+#    #+#             */
-/*   Updated: 2019/10/05 14:07:24 by sid-bell         ###   ########.fr       */
+/*   Updated: 2019/10/16 21:55:54 by sid-bell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include <sys/resource.h>
 
-int		ft_pipe(int *pipefd, t_list *lst, t_command *cmd)
+int		ft_pipe(t_params *p, int *pipefd, t_list *lst, t_command *cmd)
 {
 	pipefd[0] = -1;
 	pipefd[1] = -1;
-	ft_restorestd(0, 1, 1);
+
+	ft_restorestd(0, 1, 1, p->fd);
 	if (lst->next || cmd->heredoc)
 	{
 		pipe(pipefd);
@@ -70,7 +71,7 @@ void	ft_exec_job(t_params *params, t_list *lst)
 		cmd = lst->content;
 		dup2(fds[0], 0);
 		close(fds[0]);
-		params->pipe_stdin = ft_pipe(fds, lst, cmd);
+		params->pipe_stdin = ft_pipe(params, fds, lst, cmd);
 		if (cmd->heredoc || ft_redirect(params->fd, cmd->redirections))
 		{
 			if (ft_heredoc(cmd))
@@ -82,6 +83,6 @@ void	ft_exec_job(t_params *params, t_list *lst)
 			status = 0;
 		lst = lst->next;
 	}
-	ft_restorestd(1, 1, 1);
+	ft_restorestd(1, 1, 1, params->fd);
 	status ? 0 : ft_runnext(params->tokens, 1);
 }
