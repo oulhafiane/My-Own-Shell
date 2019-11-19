@@ -24,6 +24,10 @@
 # include <sys/ioctl.h>
 # include <dirent.h>
 # include <glob.h>
+# include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+
 # define BUF_S 1000
 
 typedef struct			s_builtin

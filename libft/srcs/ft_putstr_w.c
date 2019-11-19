@@ -15,7 +15,6 @@
 static int	ft_putstr_wf(wchar_t *str, int flag)
 {
 	int		i;
-	int		j;
 	int		r;
 	char	s[5];
 
@@ -26,7 +25,6 @@ static int	ft_putstr_wf(wchar_t *str, int flag)
 		init_s(s);
 		if ((str[i] < 0xD800 || str[i] >= 0xE000) && to_w(str[i], s) > 0)
 		{
-			j = -1;
 			if (r + ft_strlen(s) > (size_t)flag)
 				return (0);
 			ft_putstrr(s);

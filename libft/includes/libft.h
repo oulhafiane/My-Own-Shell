@@ -15,6 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdarg.h>
+# include <stdint.h>
 # define LEN 10
 # define LEN_BUF 1000
 # define BUFF_SIZE 1000

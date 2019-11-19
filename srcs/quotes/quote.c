@@ -38,9 +38,7 @@ static int			is_special_token(t_token_list *list, char **ptr,
 int					split_tok(t_token_list *list,
 					char **ptr, t_string *str, enum e_token_type type)
 {
-	int				flag;
 
-	flag = 0;
 	while (**ptr && !ft_isspace(**ptr))
 	{
 		if (!is_special_token(list, ptr, str, &type))
@@ -68,9 +66,6 @@ int					split_tok(t_token_list *list,
 static int			split_special(t_token_list *list,
 					char **ptr, t_string *str)
 {
-	int	flag;
-
-	flag = 0;
 	while (**ptr == '|')
 		push(str, *(*ptr)++);
 	if (str->len == 1)

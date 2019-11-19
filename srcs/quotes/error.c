@@ -67,7 +67,7 @@ static int	redirection_error(t_token *token, char *ptr)
 
 static int	semi_pipe_error(t_token *current, t_token_list *list)
 {
-	int type;
+	unsigned int type;
 
 	type = current->tok_type;
 	if (current == list->head || ((current->next &&
