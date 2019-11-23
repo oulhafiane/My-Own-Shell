@@ -96,3 +96,46 @@ char	free_token_list(t_token_list *list)
 	free(list);
 	return (1);
 }
+
+/*
+	insert a token in a specific place
+	t_token *new: if allocation failed we are in trouble
+		returning null is must though
+*/
+
+t_token	*insert_token_indexed(t_token *current, char *str, enum e_token_type type)
+{
+	t_token *next;
+	t_token *new;
+
+	next = NULL;
+	if ((new = (t_token *)malloc(sizeof(t_token))) == NULL)
+		return (NULL);
+	if (current && current->next)
+		next = current->next;
+	new->token = str;
+	new->tok_type = type;
+	new->next = next;
+	current->next = new;
+	return new;
+}
+
+
+/*
+	print list of token
+	this function to be deleted later on
+*/
+
+void print_tokens(t_token_list *list)
+{
+	t_token *current;
+
+	current = list->head;
+	while (current)
+	{
+		if (current->tok_type == SH_GLOBE)
+			ft_printf("===== %s is SH_GLOBE\n", current->token);
+		ft_printf("=== %s\n", current->token);
+		current = current->next;
+	}
+}

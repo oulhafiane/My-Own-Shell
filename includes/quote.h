@@ -30,6 +30,7 @@ enum					e_token_type
 	SH_SEMI = 8,
 	SH_QUOTED = 16,
 	SH_DPIPE = 32,
+	SH_GLOBE = 64
 };
 
 typedef struct			s_token
@@ -94,6 +95,7 @@ void					push_token(t_token_list *list,
 		char *tok, enum e_token_type type);
 void					delete_token(t_token_list *list, t_token *tofind);
 char					free_token_list(t_token_list *list);
+t_token					*insert_token_indexed(t_token *current, char *str, enum e_token_type type);
 
 /*
 ** free_string.c
@@ -133,4 +135,7 @@ char					**list_to_chars(t_token *token);
 int						is_special_char(char c);
 int						is_pipe_at_end(t_token_list *tokens);
 
+
+//To be deleted
+void					print_tokens(t_token_list *list);
 #endif

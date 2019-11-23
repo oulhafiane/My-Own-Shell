@@ -70,7 +70,10 @@ static void		escaped_char(char **ptr, t_string *str)
 		if (escaped == 0)
 			push(str, *(++(*ptr)));
 		else
+		{
+			// push(str, *(*ptr));
 			(*ptr)++;
+		}
 	}
 }
 

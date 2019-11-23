@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "quote.h"
+#include "globing.h"
 
 static int			is_special_token(t_token_list *list, char **ptr,
 					t_string *str, enum e_token_type *type)
@@ -35,6 +36,18 @@ static int			is_special_token(t_token_list *list, char **ptr,
 	return (1);
 }
 
+/*
+	Check if a string is Glob
+*/
+
+int					is_globing(char **ptr,
+								 enum e_token_type *type)
+{
+	if (**ptr && (**ptr == '*' || **ptr == '[' || **ptr == '?' || **ptr == ']'))
+		*type = SH_GLOBE;
+	return 1;
+}
+
 int					split_tok(t_token_list *list,
 					char **ptr, t_string *str, enum e_token_type type)
 {
@@ -43,8 +56,10 @@ int					split_tok(t_token_list *list,
 	{
 		if (!is_special_token(list, ptr, str, &type))
 			break ;
+		is_globing(ptr, &type);
 		if (**ptr == '\\')
 		{
+			push(str, *(*ptr));
 			if (*(++(*ptr)) != EOS)
 				push(str, *(*ptr)++);
 		}
@@ -116,6 +131,33 @@ static int			stringtok(const char *line, t_token_list *list)
 	return (ret_with_str_free(&str, 1));
 }
 
+// Handle Globing function
+// should be moved later on to another file for the norm
+
+void				handle_globing(t_token_list *list)
+{
+	t_token *current;
+	t_glob g;
+	g.gl_pathc = 0;
+	size_t i = 0;
+
+	if (list && list->head)
+		current = list->head;
+	while (current)
+	{
+		if (current->tok_type == SH_GLOBE)
+		{
+			_glob(current->token, GLOB_DOOFFS, &error_func, &g);
+			while (i < g.gl_pathc)
+			{
+				current = insert_token_indexed(current, g.gl_pathv[i], SH_WORD);
+				i++;
+			} 
+		}
+		current = current->next;
+	}
+}
+
 t_token_list		*handle_quote(char **line)
 {
 	t_token_list	*list;
@@ -135,8 +177,11 @@ t_token_list		*handle_quote(char **line)
 		}
 		free_tokens(list);
 	}
+	//Handle Globing in here
+	handle_globing(list);
 	if (check_syntax_error(list))
 		return (NULL);
+	// print_tokens(list);
 	*line = ptr;
 	return (list);
 }
