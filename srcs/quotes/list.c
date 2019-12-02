@@ -135,6 +135,8 @@ void print_tokens(t_token_list *list)
 	{
 		if (current->tok_type == SH_GLOBE)
 			ft_printf("===== %s is SH_GLOBE\n", current->token);
+		else if (current->tok_type & SH_EXPORT)
+			ft_printf("%s - SH_EXPORT \n", current->token);
 		ft_printf("=== %s\n", current->token);
 		current = current->next;
 	}

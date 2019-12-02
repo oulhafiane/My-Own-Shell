@@ -30,7 +30,8 @@ enum					e_token_type
 	SH_SEMI = 8,
 	SH_QUOTED = 16,
 	SH_DPIPE = 32,
-	SH_GLOBE = 64
+	SH_GLOBE = 64,
+	SH_EXPORT = 128
 };
 
 typedef struct			s_token

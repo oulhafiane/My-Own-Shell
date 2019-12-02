@@ -74,6 +74,9 @@ int					split_tok(t_token_list *list,
 		else if (**ptr && !ft_isspace(**ptr))
 			push(str, *(*ptr)++);
 	}
+	if(fnmatch("[a-zA-Z]*=[a-zA-Z0-9]*", str->string, 0) == 0 && 
+		(list->node_count == 0 || ft_strcmp(list->head->token, "export") == 0))
+		type = type | SH_EXPORT;
 	insert_token(list, str, type);
 	return (1);
 }
@@ -150,12 +153,55 @@ void				handle_globing(t_token_list *list)
 			_glob(current->token, GLOB_DOOFFS, &error_func, &g);
 			while (i < g.gl_pathc)
 			{
-				current = insert_token_indexed(current, g.gl_pathv[i], SH_WORD);
+				current = insert_token_indexed(current, g.gl_pathv[i], SH_WORD | SH_GLOBE);
 				i++;
 			} 
 		}
 		current = current->next;
 	}
+}
+
+/* Remove slashes from string and re-assign it to token structure */
+
+char				*remove_slashes(char *token)
+{
+	t_string str;
+	str.string = NULL;
+	char *tmp;
+
+	new_string(&str);
+	tmp = token;
+	while(*token)
+	{
+		if (*token == '\\')
+			token++;
+		push(&str, *token);
+		token++;
+	}
+	free(tmp);
+	return str.string;
+}		
+
+/*
+** (initial call) Remove slashes once you finished parsing
+*/
+
+void				init_remove_slashes(t_token_list *list)
+{
+
+	t_token *current;
+
+	if (list->head)
+		current = list->head;
+	else
+		return ;
+	while (current)
+	{
+		if (current->tok_type == SH_WORD)
+			current->token = remove_slashes(current->token);
+		current = current->next;
+	}
+
 }
 
 t_token_list		*handle_quote(char **line)
@@ -179,6 +225,7 @@ t_token_list		*handle_quote(char **line)
 	}
 	//Handle Globing in here
 	handle_globing(list);
+	init_remove_slashes(list); // This will ensure no slash is missed
 	if (check_syntax_error(list))
 		return (NULL);
 	// print_tokens(list);
