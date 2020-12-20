@@ -1,4 +1,4 @@
-NAME = 42sh
+NAME = 21sh
 
 SRC = srcs
 BIN = bin
