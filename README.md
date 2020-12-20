@@ -1,3 +1,7 @@
+# Installation And Execution
+make
+./21sh
+
 # 1337-42-21sh
 You’ll have to start from your minishell and make it stronger to get little by
 littler closer to a real functionnal shell. You’ll add couple of features such as
