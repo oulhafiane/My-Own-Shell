@@ -1,5 +1,5 @@
 # Installation And Execution
-make
+make  
 ./21sh
 
 # 1337-42-21sh
