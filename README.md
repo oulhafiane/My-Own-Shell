@@ -41,4 +41,4 @@ analysis”, “lexer”, “syntactic analysis”, “parser”, “semantics a
 of course “abstract syntax tree” (or “AST”).
 
 # For more informations
-Read : https://cdn.intra.42.fr/pdf/pdf/3512/21sh.en.pdf
+Read : https://github.com/oulhafiane/1337-42-21sh/blob/master/21sh.en.pdf
