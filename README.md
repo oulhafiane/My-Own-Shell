@@ -40,5 +40,10 @@ Here are couple of key words that i suggest you to properly understand: “lexic
 analysis”, “lexer”, “syntactic analysis”, “parser”, “semantics analysis”,“interpreter”, and
 of course “abstract syntax tree” (or “AST”).
 
+![img0](https://github.com/oulhafiane/1337-42-21sh/blob/master/ressources/1.png)
+![img1](https://github.com/oulhafiane/1337-42-21sh/blob/master/ressources/2.png)
+![img2](https://github.com/oulhafiane/1337-42-21sh/blob/master/ressources/3.png)
+![img3](https://github.com/oulhafiane/1337-42-21sh/blob/master/ressources/4.png)
+
 # For more informations
 Read : https://github.com/oulhafiane/1337-42-21sh/blob/master/21sh.en.pdf
