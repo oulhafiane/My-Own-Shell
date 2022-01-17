@@ -3,7 +3,8 @@
 make  
 ./21sh
 
-# 1337-42-21sh
+# My Own Shell
+21sh is a school project that helps you create your own functional shell.  
 You’ll have to start from your minishell and make it stronger to get little by
 littler closer to a real functionnal shell. You’ll add couple of features such as
 multi-commande management, redirections as well as line edition that will allow you to
